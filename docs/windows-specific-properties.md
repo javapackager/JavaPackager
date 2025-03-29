@@ -21,7 +21,7 @@
     <copyright>${organizationName}</copyright>
     <productName>${name}</productName>
     <internalName>${name}</internalName>
-    <txtShortcutName>${name}</txtShortcutName>
+    <shortcutName>${name}</shortcutName>
     <originalFilename>${name}.exe</originalFilename>
 
     <!-- choose EXE creation tool -->
