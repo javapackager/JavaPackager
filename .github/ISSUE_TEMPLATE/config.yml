@@ -1,8 +1,5 @@
 blank_issues_enabled: false
 contact_links:
   - name: Documentation
-    url: https://github.com/fvarrui/JavaPackager/tree/master/docs
+    url: https://github.com/javapackager/JavaPackager/blob/master/README.md
     about: Check the documentation before opening an issue.
-  - name: General questions
-    url: https://github.com/fvarrui/JavaPackager#readme
-    about: Usage questions, examples, and quickstart in the README.
