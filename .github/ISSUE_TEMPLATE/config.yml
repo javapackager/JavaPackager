@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Documentation
+    url: https://github.com/javapackager/JavaPackager/blob/master/README.md
+    about: Check the documentation before opening an issue.

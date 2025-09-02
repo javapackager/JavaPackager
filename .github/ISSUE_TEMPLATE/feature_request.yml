@@ -1,0 +1,55 @@
+name: Feature request
+description: Suggest a new feature or improvement
+labels:
+  - enhancement
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for suggesting an improvement. Tell us the problem and your proposed solution.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem to solve
+      description: What need or pain point motivates this feature?
+      placeholder: Describe the problem or use case.
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: Explain how you would like it to work.
+      placeholder: Detail the proposed change and expected behavior.
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      placeholder: What other options did you consider?
+
+  - type: textarea
+    id: impact
+    attributes:
+      label: Impact and scope
+      placeholder: Affected users, compatibility, risks, etc.
+
+  - type: input
+    id: version
+    attributes:
+      label: JavaPackager version (if applicable)
+      placeholder: e.g., 1.7.5
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Checklist
+      options:
+        - label: I searched for existing similar issues
+          required: true
+        - label: I am willing to contribute a PR
+          required: false

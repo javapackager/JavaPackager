@@ -1,0 +1,111 @@
+name: Bug report
+description: Report a bug to help us improve
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to file a bug. Please fill in the details below.
+
+  - type: input
+    id: version
+    attributes:
+      label: JavaPackager version
+      description: Exact version used (e.g., 1.7.5). If built from source, include the commit.
+      placeholder: e.g., 1.7.5
+    validations:
+      required: true
+
+  - type: dropdown
+    id: os
+    attributes:
+      label: Operating system
+      options:
+        - Windows
+        - macOS
+        - Linux
+        - Other
+    validations:
+      required: true
+
+  - type: input
+    id: os_version
+    attributes:
+      label: OS version
+      placeholder: e.g., Windows 11 23H2, Ubuntu 22.04, macOS 14.5
+
+  - type: dropdown
+    id: build_tool
+    attributes:
+      label: Build tool
+      options:
+        - Gradle
+        - Maven
+        - Other / N/A
+    validations:
+      required: true
+
+  - type: input
+    id: jdk
+    attributes:
+      label: JDK version
+      placeholder: e.g., Temurin 21.0.3+9, Oracle JDK 17.0.10
+    validations:
+      required: true
+
+  - type: textarea
+    id: short_description
+    attributes:
+      label: Short description
+      description: What happens in one or two sentences?
+      placeholder: Clear and concise description of the problem.
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: Provide minimal, reproducible steps.
+      placeholder: |
+        1. Step one
+        2. Step two
+        3. Observed result
+      render: text
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+      placeholder: What did you expect to happen?
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+      placeholder: What actually happens?
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs and output
+      description: Paste relevant output or attach files.
+      placeholder: Add logs, stack traces, console output, etc.
+      render: text
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Checklist
+      options:
+        - label: I searched for existing related issues
+          required: true
+        - label: I can provide a minimal reproducible example if needed
+          required: false
