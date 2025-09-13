@@ -5,6 +5,7 @@ import static io.github.fvarrui.javapackager.utils.CommandUtils.execute;
 import java.io.File;
 
 import io.github.fvarrui.javapackager.model.Platform;
+import io.github.fvarrui.javapackager.utils.CommandUtils;
 import io.github.fvarrui.javapackager.utils.Logger;
 import io.github.fvarrui.javapackager.utils.VelocityUtils;
 import io.github.fvarrui.javapackager.utils.XMLUtils;
@@ -32,7 +33,7 @@ public class GenerateMsi extends ArtifactGenerator<WindowsPackager> {
 			return true;
 		}
 		
-		return false;		
+		return false;
 	}
 	
 	@Override
@@ -53,17 +54,23 @@ public class GenerateMsi extends ArtifactGenerator<WindowsPackager> {
 
 		// prettify wxs
 		XMLUtils.prettify(wxsFile);
-	
-		// candle wxs file
-		Logger.info("Compiling file " + wxsFile);
-		File wixobjFile = new File(assetsFolder, name + ".wixobj");
-		execute("candle", "-out", wixobjFile, wxsFile);
-		Logger.info("WIXOBJ file generated in " + wixobjFile +  "!");
 
-		// lighting wxs file
-		Logger.info("Linking file " + wixobjFile);
 		File msiFile = new File(outputDirectory, name + "_" + version + ".msi");
-		execute("light", "-sw1076", "-spdb", "-out", msiFile, wixobjFile);
+		// We can rely on the MSM generation to populate this
+		if(packager.getWixMajorVersion() == 3) {
+			// candle wxs file
+			Logger.info("Compiling file " + wxsFile);
+			File wixobjFile = new File(assetsFolder, name + ".wixobj");
+			execute("candle", "-arch", "x64", "-out", wixobjFile, wxsFile);
+			Logger.info("WIXOBJ file generated in " + wixobjFile + "!");
+
+			// lighting wxs file
+			Logger.info("Linking file " + wixobjFile);
+			execute("light", "-sw1076", "-spdb", "-out", msiFile, wixobjFile);
+		} else {
+			Logger.info("Building file " + wxsFile);
+			CommandUtils.execute("wix", "build", "-pdbtype", "none", "-arch", "x64", "-out", msiFile, wxsFile);
+		}
 
 		// setup file
 		if (!msiFile.exists()) {

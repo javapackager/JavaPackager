@@ -937,12 +937,12 @@ public class PackagerSettings {
 				+ ", customizedJre=" + customizedJre + ", jrePath=" + jrePath + ", jdkPath=" + jdkPath
 				+ ", additionalResources=" + additionalResources + ", modules=" + modules + ", additionalModules="
 				+ additionalModules + ", platform=" + platform + ", envPath=" + envPath + ", vmArgs=" + vmArgs
-				+ ", runnableJar=" + runnableJar + ", copyDependencies=" + copyDependencies + ", jreDirectoryName="
-				+ jreDirectoryName + ", winConfig=" + winConfig + ", linuxConfig=" + linuxConfig + ", macConfig="
-				+ macConfig + ", createTarball=" + createTarball + ", tarballName=" + tarballName + ", createZipball="
-				+ createZipball + ", zipballName=" + zipballName + ", extra=" + extra + ", useResourcesAsWorkingDir="
-				+ useResourcesAsWorkingDir + ", assetsDir=" + assetsDir + ", classpath=" + classpath
-				+ ", jreMinVersion=" + jreMinVersion + ", manifest=" + manifest + ", additionalModulePaths="
+				+ ", appArgs=" + appArgs + ",runnableJar=" + runnableJar + ", copyDependencies=" + copyDependencies
+				+ ", jreDirectoryName=" + jreDirectoryName + ", winConfig=" + winConfig + ", linuxConfig=" + linuxConfig
+				+ ", macConfig=" + macConfig + ", createTarball=" + createTarball + ", tarballName=" + tarballName
+				+ ", createZipball=" + createZipball + ", zipballName=" + zipballName + ", extra=" + extra
+				+ ", useResourcesAsWorkingDir=" + useResourcesAsWorkingDir + ", assetsDir=" + assetsDir+ ", classpath="
+				+ classpath	+ ", jreMinVersion=" + jreMinVersion + ", manifest=" + manifest + ", additionalModulePaths="
 				+ additionalModulePaths + ", fileAssociations=" + fileAssociations + ", packagingJdk=" + packagingJdk
 				+ ", scripts=" + scripts + ", arch=" + arch + ", templates=" + templates + "]";
 	}
