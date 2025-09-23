@@ -40,12 +40,13 @@ public class GenerateAppImage extends ArtifactGenerator<LinuxPackager> {
 		File appFolder = packager.getAppFolder();
 		File outputFolder = packager.getOutputDirectory();
 		String name = packager.getName();
+        String version = packager.getVersion();
 		File executable = packager.getExecutable();
 		File assetsFolder = packager.getAssetsFolder();
 		File iconFile = packager.getIconFile();
 
 		// output AppImage file
-		File appImage = new File(outputFolder, name + ".AppImage");
+		File appImage = new File(outputFolder, name + "_" + version + ".AppImage");
 		
 		// AppDir folder
 		File appDir = new File(assetsFolder, "AppDir");
