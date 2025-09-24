@@ -11,9 +11,8 @@ import java.io.File;
 import java.io.IOException;
 
 public class GenerateAppImage extends ArtifactGenerator<LinuxPackager> {
-	
-	private static final int IMAGETOOL_VERSION = 13;
-	private static final String IMAGETOOL_URL = "https://github.com/AppImage/AppImageKit/releases/download/" + IMAGETOOL_VERSION + "/appimagetool-%s.AppImage";
+
+	private static final String IMAGETOOL_URL = "https://github.com/AppImage/appimagetool/releases/download/continuous/appimagetool-%s.AppImage";
 	
 	public GenerateAppImage() {
 		super("AppImage");
@@ -41,12 +40,13 @@ public class GenerateAppImage extends ArtifactGenerator<LinuxPackager> {
 		File appFolder = packager.getAppFolder();
 		File outputFolder = packager.getOutputDirectory();
 		String name = packager.getName();
+        String version = packager.getVersion();
 		File executable = packager.getExecutable();
 		File assetsFolder = packager.getAssetsFolder();
 		File iconFile = packager.getIconFile();
 
 		// output AppImage file
-		File appImage = new File(outputFolder, name + ".AppImage");
+		File appImage = new File(outputFolder, name + "_" + version + ".AppImage");
 		
 		// AppDir folder
 		File appDir = new File(assetsFolder, "AppDir");
