@@ -7,6 +7,7 @@ import io.github.fvarrui.javapackager.utils.CommandUtils;
 import io.github.fvarrui.javapackager.utils.Logger;
 import io.github.fvarrui.javapackager.utils.VelocityUtils;
 import io.github.fvarrui.javapackager.utils.XMLUtils;
+import org.codehaus.plexus.util.cli.CommandLineException;
 
 /**
  * Creates an MSI file including all app folder's content only for Windows so app
@@ -40,6 +41,19 @@ public class GenerateMsm extends ArtifactGenerator<WindowsPackager> {
 			return packager.getMsmFile();
 		}
 
+		try {
+			String version = CommandUtils.execute("wix", "-version");
+			packager.setWixMajorVersion(Integer.parseInt(version.split("\\.")[0]));
+		} catch(CommandLineException ex) {
+			try {
+				CommandUtils.execute("candle", "-?");
+				CommandUtils.execute("light", "-?");
+				packager.setWixMajorVersion(3);
+			} catch(CommandLineException ex2) {
+				throw new Exception("Either 'wix' or 'candle' and 'light' must be on PATH");
+			}
+		}
+
 		File assetsFolder = packager.getAssetsFolder();
 		String name = packager.getName();
 		File outputDirectory = packager.getOutputDirectory();
@@ -53,16 +67,21 @@ public class GenerateMsm extends ArtifactGenerator<WindowsPackager> {
 		// prettify wxs
 		XMLUtils.prettify(wxsFile);
 
-		// candle wxs file
-		Logger.info("Compiling file " + wxsFile);
-		File wixobjFile = new File(assetsFolder, name + ".msm.wixobj");
-		CommandUtils.execute("candle", "-out", wixobjFile, wxsFile);
-		Logger.info("WIXOBJ file generated in " + wixobjFile + "!");
-
-		// lighting wxs file
-		Logger.info("Linking file " + wixobjFile);
 		File msmFile = new File(outputDirectory, name + "_" + version + ".msm");
-		CommandUtils.execute("light", "-sw1076", "-spdb", "-out", msmFile, wixobjFile);
+		if(packager.getWixMajorVersion() == 3) {
+			// candle wxs file
+			Logger.info("Compiling file " + wxsFile);
+			File wixobjFile = new File(assetsFolder, name + ".msm.wixobj");
+			CommandUtils.execute("candle", "-arch", "x64", "-out", wixobjFile, wxsFile);
+			Logger.info("WIXOBJ file generated in " + wixobjFile + "!");
+
+			// lighting wxs file
+			Logger.info("Linking file " + wixobjFile);
+			CommandUtils.execute("light", "-sw1076", "-spdb", "-out", msmFile, wixobjFile);
+		} else {
+			Logger.info("Building file " + wxsFile);
+			CommandUtils.execute("wix", "build", "-pdbtype", "none", "-arch", "x64", "-out", msmFile, wxsFile);
+		}
 
 		// setup file
 		if (!msmFile.exists()) {

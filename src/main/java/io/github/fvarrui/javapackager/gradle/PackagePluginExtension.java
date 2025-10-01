@@ -51,6 +51,7 @@ public class PackagePluginExtension extends PackagerSettings {
 		this.organizationEmail = "";
 		this.useResourcesAsWorkingDir = true;
 		this.vmArgs = new ArrayList<>();
+		this.appArgs = new ArrayList<>();
 		this.winConfig = new WindowsConfig();
 		this.outputDirectory = project.getBuildDir();
 		this.scripts = new Scripts();

@@ -19,6 +19,7 @@ public class WindowsPackager extends Packager {
 	
 	private File manifestFile;
 	private File msmFile;
+	private int wixMajorVersion;
 	
 	public File getManifestFile() {
 		return manifestFile;
@@ -28,8 +29,16 @@ public class WindowsPackager extends Packager {
 		return msmFile;
 	}
 
+	public int getWixMajorVersion() {
+		return wixMajorVersion;
+	}
+
 	public void setMsmFile(File msmFile) {
 		this.msmFile = msmFile;
+	}
+
+	public void setWixMajorVersion(int wixMajorVersion) {
+		this.wixMajorVersion = wixMajorVersion;
 	}
 	
 	public WindowsPackager() {		

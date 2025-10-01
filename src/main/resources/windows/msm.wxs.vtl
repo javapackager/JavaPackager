@@ -19,7 +19,7 @@
 		#end
 		</Directory>
 	#else
-		<Component Id="_${id}" Guid="${guid}" Win64="yes">
+		<Component Id="_${id}" Guid="${guid}">
 	    #if($file.equals(${info.executable}))
 	    	<File Id="EXEFILE" Name="${file.name}" KeyPath="yes" Source="${file}">
 				<Shortcut Id="ApplicationStartMenuShortcut" Name="${info.winConfig.shortcutName}" Description="${info.description}" Directory="ProgramMenuFolder" />
@@ -32,15 +32,26 @@
 		</Component>
 	#end
 #end
+#if($info.wixMajorVersion == 3)
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
-	<Module Id="${name}_Module" Codepage="1252" Language="1033" Version="${info.winConfig.productVersion}">
+#end
+<Wix xmlns="#if($info.wixMajorVersion > 3)http://wixtoolset.org/schemas/v4/wxs#{else}http://schemas.microsoft.com/wix/2006/wi#end">
+	<Module Id="${name}_Module" Codepage="1252" Language="1033" Version="${info.winConfig.productVersion}"
+	    #if($info.wixMajorVersion > 3)
+	    Guid="${GUID.randomUUID()}" InstallerVersion="${installedVersion}"
+	    #end
+	    >
+	    #if($info.wixMajorVersion == 3)
 		<Package Id="${GUID.randomUUID()}" Manufacturer="${info.organizationName}" InstallerVersion="${installedVersion}" Languages="1033" Platform="${info.arch.toMsiArchitecture()}" SummaryCodepage="1252" Description="${info.description}"/>
+		#end
+
+        #if($info.wixMajorVersion == 3)
 		<Directory Id="TARGETDIR" Name="SourceDir">
+		#end
 			#list(${info.appFolder})
-			<Directory Id="ProgramMenuFolder" />
+			#if($info.wixMajorVersion == 3)<Directory Id="ProgramMenuFolder" />#end
 #if ($info.winConfig.registry)
-			<Component Id="RegistryEntries" Guid="${GUID.randomUUID()}">
+			<Component Id="RegistryEntries" Guid="${GUID.randomUUID()}" #if($info.wixMajorVersion > 3)Directory="TARGETDIR"#end>
 #foreach ($entry in $info.winConfig.registry.entries)
 				<RegistryKey Root="${entry.root}" Key="${entry.subkey}" ForceDeleteOnUninstall="yes">
 					<RegistryValue 
@@ -56,6 +67,8 @@
 #end
 			</Component>
 #end
+        #if($info.wixMajorVersion == 3)
 		</Directory>
+		#end
 	</Module>
 </Wix>

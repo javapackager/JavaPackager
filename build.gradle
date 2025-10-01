@@ -13,7 +13,7 @@ repositories {
 	mavenLocal()
 	mavenCentral()
 	maven { 
-		url 'https://plugins.gradle.org/m2/'
+		url = uri('https://plugins.gradle.org/m2/')
 	}
 }
 
@@ -67,8 +67,10 @@ group = 'io.github.fvarrui'
 version = '1.7.7-SNAPSHOT'
 description = 'Hybrid Maven/Gradle plugin to package Java applications as native Windows, Mac OS X or GNU/Linux executables and create installers for them'
 
-sourceCompatibility = JavaVersion.VERSION_1_8
-targetCompatibility = JavaVersion.VERSION_1_8
+java {
+	sourceCompatibility = JavaVersion.VERSION_1_8
+	targetCompatibility = JavaVersion.VERSION_1_8
+}
 
 compileJava.options.encoding = 'UTF-8'
 
