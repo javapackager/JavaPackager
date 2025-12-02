@@ -230,9 +230,9 @@ public class MacPackager extends Packager {
 		File appStubFile = new File(macOSFolder, "universalJavaApplicationStub");
 		String universalJavaApplicationStubResource = null;
 		switch (macConfig.getMacStartup()) {
-			case UNIVERSAL:	universalJavaApplicationStubResource = "universalJavaApplicationStub"; break;
-			case X86_64:	universalJavaApplicationStubResource = "universalJavaApplicationStub.x86_64"; break;
-			case ARM64: 	universalJavaApplicationStubResource = "universalJavaApplicationStub.arm64"; break;
+			case UNIVERSAL:	universalJavaApplicationStubResource = "nativeJavaApplicationStub"; break;
+			case X86_64:	universalJavaApplicationStubResource = "nativeJavaApplicationStub.x86_64"; break;
+			case ARM64: 	universalJavaApplicationStubResource = "nativeJavaApplicationStub.arm64"; break;
 			case SCRIPT: 	universalJavaApplicationStubResource = "universalJavaApplicationStub.sh"; break;
 		}
 		// unixStyleNewLinux=true if startup is a script (this will replace '\r\n' with '\n')
