@@ -93,7 +93,7 @@ public class GenerateRpm extends ArtifactGenerator<LinuxPackager> {
 		builder.build(outputDirectory);
 
 		// renames generated RPM file if created
-		String suffix = "-1." + arch + ".rpm";
+		String suffix = "-1." + getRpmArchString(arch) + ".rpm";
 		File originalRpm = new File(outputDirectory, name + "-" + version + suffix);
 		File rpm = null;
 		if (originalRpm.exists()) {
@@ -128,5 +128,11 @@ public class GenerateRpm extends ArtifactGenerator<LinuxPackager> {
 			}
 		}
 	}
+
+    private String getRpmArchString(Architecture arch) {
+        if (arch == null) return "null";
+
+        return arch.toString().toLowerCase(); // Without Locale to match the redline_rpm way of handling conversion
+    }
 
 }
