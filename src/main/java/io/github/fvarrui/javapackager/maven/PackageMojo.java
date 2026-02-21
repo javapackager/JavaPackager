@@ -1,7 +1,7 @@
 package io.github.fvarrui.javapackager.maven;
 
+import static org.apache.commons.lang3.ObjectUtils.getIfNull;
 import static org.apache.commons.lang3.StringUtils.defaultIfBlank;
-import static org.apache.commons.lang3.ObjectUtils.defaultIfNull;
 import static org.twdata.maven.mojoexecutor.MojoExecutor.executionEnvironment;
 
 import java.io.File;
@@ -352,7 +352,7 @@ public class PackageMojo extends AbstractMojo {
 						.additionalModulePaths(additionalModulePaths)
 						.additionalResources(additionalResources)
 						.administratorRequired(administratorRequired)
-						.arch(defaultIfNull(arch, Arch.getDefault()))
+						.arch(getIfNull(arch, Arch.getDefault()))
 						.assetsDir(assetsDir)
 						.bundleJre(bundleJre)
 						.classpath(classpath)

@@ -65,7 +65,7 @@ public class CreateZipball extends ArtifactGenerator<Packager> {
 				copySpec.include(appFolder.getName() + "/" + executable.getName());
 				copySpec.include(appFolder.getName() + "/" + jreDirectoryName + "/bin/*");
 				copySpec.include(appFolder.getName() + "/scripts/*");
-				copySpec.setFileMode(0755);
+				copySpec.filePermissions(p -> p.unix("755"));
 			});
 			
 		}
@@ -88,7 +88,7 @@ public class CreateZipball extends ArtifactGenerator<Packager> {
 				copySpec.include(appFile.getName() + "/Contents/MacOS/universalJavaApplicationStub");
 				copySpec.include(appFile.getName() + "/Contents/PlugIns/" + jreDirectoryName + "/Contents/Home/bin/*");
 				copySpec.include(appFile.getName() + "/Contents/Resources/scripts/*");				
-				copySpec.setFileMode(0755);
+				copySpec.filePermissions(p -> p.unix("755"));
 			});
 			
 		}

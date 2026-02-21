@@ -94,7 +94,7 @@ public class LinuxConfig implements Serializable {
 	 */
 	public void setDefaults(Packager packager) {
 		this.setCategories((categories == null || categories.isEmpty()) ? Collections.singletonList("Utility") : categories);
-		this.setInstallationPath(ObjectUtils.defaultIfNull(installationPath, "/opt"));
+		this.setInstallationPath(ObjectUtils.getIfNull(installationPath, "/opt"));
 	}
 
 }
