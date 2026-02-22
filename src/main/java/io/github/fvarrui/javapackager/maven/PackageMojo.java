@@ -352,7 +352,7 @@ public class PackageMojo extends AbstractMojo {
 						.additionalModulePaths(additionalModulePaths)
 						.additionalResources(additionalResources)
 						.administratorRequired(administratorRequired)
-						.arch(getIfNull(arch, Arch.getDefault()))
+						.arch(getIfNull(arch, Arch::getDefault))
 						.assetsDir(assetsDir)
 						.bundleJre(bundleJre)
 						.classpath(classpath)
@@ -404,11 +404,11 @@ public class PackageMojo extends AbstractMojo {
 		} catch (Exception e) {
 
 			throw new MojoExecutionException(e.getMessage(), e);
-			
+
 		}
 		
 
 	}
 
-	
+
 }
