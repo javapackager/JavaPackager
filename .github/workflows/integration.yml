@@ -1,0 +1,23 @@
+name: Integration Tests
+on:
+  push:
+  pull_request:
+
+jobs:
+  test_macos:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+      - name: Build javapackager
+        run: ./gradlew publishToMavenLocal
+      - name: Run gradle integration tests
+        working-directory: integration/gradle/app
+        run: ./gradlew test
+      # TODO: Add maven integration tests
+  # TODO windows
+  # TODO linux
