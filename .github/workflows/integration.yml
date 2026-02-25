@@ -16,7 +16,7 @@ jobs:
       - name: Build javapackager
         run: ./gradlew publishToMavenLocal
       - name: Run gradle integration tests
-        working-directory: integration/gradle/app
+        working-directory: integration/gradle
         run: ./testMacos.sh
       # TODO: Add maven integration tests
   # TODO windows
