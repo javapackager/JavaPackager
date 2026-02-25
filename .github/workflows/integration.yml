@@ -17,7 +17,7 @@ jobs:
         run: ./gradlew publishToMavenLocal
       - name: Run gradle integration tests
         working-directory: integration/gradle/app
-        run: ./gradlew test
+        run: ./testMacos.sh
       # TODO: Add maven integration tests
   # TODO windows
   # TODO linux
