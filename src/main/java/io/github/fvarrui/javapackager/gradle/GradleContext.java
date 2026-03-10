@@ -44,7 +44,7 @@ public class GradleContext extends Context<Logger> {
 	
 	@Override
 	public File getBuildDir() {
-		return project.getBuildDir();
+		return project.getLayout().getBuildDirectory().getAsFile().get();
 	}
 
 	@Override

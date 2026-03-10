@@ -1,6 +1,6 @@
 package io.github.fvarrui.javapackager.model;
 
-import static org.apache.commons.lang3.ObjectUtils.defaultIfNull;
+import static org.apache.commons.lang3.ObjectUtils.getIfNull;
 
 import java.io.File;
 import java.io.Serializable;
@@ -305,16 +305,16 @@ public class MacConfig implements Serializable {
 	 * @param packager Packager
 	 */
 	public void setDefaults(Packager packager) {
-		this.setWindowX(defaultIfNull(this.getWindowX(), 10));
-		this.setWindowY(defaultIfNull(this.getWindowY(), 60));
-		this.setWindowWidth(defaultIfNull(this.getWindowWidth(), 540));
-		this.setWindowHeight(defaultIfNull(this.getWindowHeight(), 360));
-		this.setIconSize(defaultIfNull(this.getIconSize(), 128));
-		this.setTextSize(defaultIfNull(this.getTextSize(), 16));
-		this.setIconX(defaultIfNull(this.getIconX(), 52));
-		this.setIconY(defaultIfNull(this.getIconY(), 116));
-		this.setAppsLinkIconX(defaultIfNull(this.getAppsLinkIconX(), 360));
-		this.setAppsLinkIconY(defaultIfNull(this.getAppsLinkIconY(), 116));
-		this.setAppId(defaultIfNull(this.getAppId(), packager.getMainClass()));
+		this.setWindowX(getIfNull(this.getWindowX(), () -> 10));
+		this.setWindowY(getIfNull(this.getWindowY(), () -> 60));
+		this.setWindowWidth(getIfNull(this.getWindowWidth(), () -> 540));
+		this.setWindowHeight(getIfNull(this.getWindowHeight(), () -> 360));
+		this.setIconSize(getIfNull(this.getIconSize(), () -> 128));
+		this.setTextSize(getIfNull(this.getTextSize(), () -> 16));
+		this.setIconX(getIfNull(this.getIconX(), () -> 52));
+		this.setIconY(getIfNull(this.getIconY(), () -> 116));
+		this.setAppsLinkIconX(getIfNull(this.getAppsLinkIconX(), () -> 360));
+		this.setAppsLinkIconY(getIfNull(this.getAppsLinkIconY(), () -> 116));
+		this.setAppId(getIfNull(this.getAppId(), packager::getMainClass));
 	}
 }
