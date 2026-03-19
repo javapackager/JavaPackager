@@ -18,6 +18,8 @@ jobs:
       - name: Run gradle integration tests
         working-directory: integration/gradle
         run: ./testMacos.sh
-      # TODO: Add maven integration tests
+      - name: Run maven integration tests
+        working-directory: integration/maven
+        run: ./testMacos.sh
   # TODO windows
   # TODO linux
