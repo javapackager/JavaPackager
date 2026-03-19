@@ -1,0 +1,50 @@
+buildscript {
+    repositories {
+        mavenLocal()
+    }
+    dependencies {
+        classpath 'io.github.fvarrui:javapackager:1.7.7-SNAPSHOT'
+    }
+}
+
+plugins {
+    id 'application'
+}
+apply plugin: 'io.github.fvarrui.javapackager.plugin'
+
+version = '1.0.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // Include a dependency to ensure that dependency packaging works correctly
+    implementation 'org.apache.commons:commons-lang3:3.20.0'
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+application {
+    mainClass = 'org.example.App'
+}
+
+tasks.register("packageForMac", io.github.fvarrui.javapackager.gradle.PackageTask) {
+    dependsOn(tasks.build)
+
+    mainClass = 'org.example.App'
+    bundleJre = true
+    generateInstaller = true
+    administratorRequired = false
+    platform = "mac"
+    macConfig {
+        appId = "org.example.javapackagerdemo"
+        generateDmg = true
+        generatePkg = true
+        macStartup = io.github.fvarrui.javapackager.model.MacStartup.UNIVERSAL
+    }
+}
