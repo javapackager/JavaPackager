@@ -10,6 +10,8 @@ import static org.twdata.maven.mojoexecutor.MojoExecutor.plugin;
 import static org.twdata.maven.mojoexecutor.MojoExecutor.version;
 
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 
 import io.github.fvarrui.javapackager.model.Platform;
 import io.github.fvarrui.javapackager.packagers.ArtifactGenerator;
@@ -35,6 +37,8 @@ public class CreateZipball extends ArtifactGenerator<Packager> {
 	protected File doApply(Packager packager) {
 		
 		File assetsFolder = packager.getAssetsFolder();
+		String name = packager.getName();
+		String version = packager.getVersion();
 		Platform platform = packager.getPlatform();
 		File outputDirectory = packager.getOutputDirectory(); 
 
@@ -69,11 +73,11 @@ public class CreateZipball extends ArtifactGenerator<Packager> {
 			File finalFile = new File(outputDirectory, finalName + "." + format);
 
 			// gets desired file name
-			String zipName = packager.getZipballName() != null ? packager.getZipballName() : finalName + "-" + platform;
+			String zipName = packager.getZipballName() != null ? packager.getZipballName() : name + "-" + version + "-" + platform;
 			File zipFile = new File(outputDirectory, zipName + "." + format);
 			
-			// rename generated to desired
-			finalFile.renameTo(zipFile);
+			// rename generated to desired, replacing an archive left by a previous build
+			Files.move(finalFile.toPath(), zipFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
 			
 			return zipFile;
 			

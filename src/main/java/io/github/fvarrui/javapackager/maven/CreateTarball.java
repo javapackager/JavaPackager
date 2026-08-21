@@ -10,6 +10,8 @@ import static org.twdata.maven.mojoexecutor.MojoExecutor.plugin;
 import static org.twdata.maven.mojoexecutor.MojoExecutor.version;
 
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 
 import io.github.fvarrui.javapackager.model.Platform;
 import io.github.fvarrui.javapackager.packagers.ArtifactGenerator;
@@ -35,6 +37,8 @@ public class CreateTarball extends ArtifactGenerator<Packager> {
 	protected File doApply(Packager packager) {
 		
 		File assetsFolder = packager.getAssetsFolder();
+		String name = packager.getName();
+		String version = packager.getVersion();
 		Platform platform = packager.getPlatform();
 		File outputDirectory = packager.getOutputDirectory(); 
 
@@ -69,11 +73,11 @@ public class CreateTarball extends ArtifactGenerator<Packager> {
 			File finalFile = new File(outputDirectory, finalName + "." + format);
 
 			// get desired file name
-			String tarName = packager.getTarballName() != null ? packager.getTarballName() : finalName + "-" + platform;
+			String tarName = packager.getTarballName() != null ? packager.getTarballName() : name + "-" + version + "-" + platform;
 			File tarFile = new File(outputDirectory, tarName + "." + format);
 			
-			// rename generated to desired
-			finalFile.renameTo(tarFile);
+			// rename generated to desired, replacing an archive left by a previous build
+			Files.move(finalFile.toPath(), tarFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
 			
 			return tarFile;
 			
