@@ -108,6 +108,12 @@ public class GenerateDmg extends ArtifactGenerator<MacPackager> {
 								.map(s -> s.split(" ")[0])
 								.findFirst();
 		optDeviceName.ifPresent(deviceName -> Logger.info("- Device name: " + deviceName));
+		// whole disk of the image (first line, e.g. /dev/disk4): with APFS, detaching the volume may leave it attached
+		Optional<String> optImageDevice = Arrays.stream(result.split("\n"))
+								.map(StringUtils::normalizeSpace)
+								.filter(s -> s.startsWith("/dev/"))
+								.map(s -> s.split(" ")[0])
+								.findFirst();
 		
 		// pause to prevent occasional "Can't get disk" (-1728) issues 
 		// https://github.com/seltzered/create-dmg/commit/5fe7802917bb85b40c0630b026d33e421db914ea
@@ -147,8 +153,13 @@ public class GenerateDmg extends ArtifactGenerator<MacPackager> {
 		execute("SetFile", "-a", "C", mountFolder);
 		
 		// unmounts
-		Logger.info("Unmounting volume: " + mountFolder);
-		detach(mountFolder);
+		if (optImageDevice.isPresent()) {
+			Logger.info("Detaching image: " + optImageDevice.get());
+			detachImage(new File(optImageDevice.get()));
+		} else {
+			Logger.info("Unmounting volume: " + mountFolder);
+			detach(mountFolder);
+		}
 		
 		// compress image
 		Logger.info("Compressing disk image...");
@@ -173,6 +184,28 @@ public class GenerateDmg extends ArtifactGenerator<MacPackager> {
 			} catch (Exception e) {
 				if (attempt == HDIUTIL_ATTEMPTS) throw e;
 				Logger.warn("hdiutil " + arguments[0] + " failed (attempt " + attempt + " of " + HDIUTIL_ATTEMPTS + "), retrying: " + e.getMessage());
+				ThreadUtils.sleep(attempt * 5000L);
+			}
+		}
+	}
+
+	/**
+	 * Detaches the image's whole disk (e.g. /dev/disk4), retrying if it's busy and forcing it on the last attempt:
+	 * it's our own image, and "hdiutil convert" fails while it's still attached. Done as soon as the device is gone.
+	 */
+	private void detachImage(File device) throws Exception {
+		for (int attempt = 1; device.exists(); attempt++) {
+			try {
+				if (attempt == HDIUTIL_ATTEMPTS) {
+					execute("hdiutil", "detach", device, "-force");
+				} else {
+					execute("hdiutil", "detach", device);
+				}
+				return;
+			} catch (Exception e) {
+				if (!device.exists()) return;
+				if (attempt == HDIUTIL_ATTEMPTS) throw e;
+				Logger.warn("hdiutil detach failed (attempt " + attempt + " of " + HDIUTIL_ATTEMPTS + "), retrying: " + e.getMessage());
 				ThreadUtils.sleep(attempt * 5000L);
 			}
 		}

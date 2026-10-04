@@ -23,3 +23,10 @@ DMG generation sometimes fails with `hdiutil: create failed - Resource busy`. Th
 
 - `hdiutil detach -force` was considered and rejected: the only `detach` failure so far resolved itself (see above), and the first `detach` could unmount a user's own volume that happens to have the same name. If logs show `detach` failing all 5 attempts, add `-force` only to the final `detach`.
 - `hdiutil create -srcfolder` unmounts internally and can't be forced. Avoiding that needs a blank image + `ditto` + our own `detach`, which means computing the image size. Only worth doing if `create` keeps failing despite the retries.
+
+## Follow-up: image left attached (APFS)
+
+- Problem: `hdiutil convert` then failed all 5 attempts with "Resource temporarily unavailable" (runs 37219554202, 37223368959).
+- Cause: on APFS images, `hdiutil detach /Volumes/<name>` unmounts the volume but can fail to eject the image's disk ("couldn't eject disk4 - Resource busy"). `detach()` took the missing mount folder as success, so the image stayed attached and `convert` couldn't open it.
+- Solution: `GenerateDmg` takes the image's whole disk from the `attach` output (first `/dev/diskN` line) and detaches that device (`detachImage`), retrying while `/dev/diskN` exists and adding `-force` on the last attempt (safe: it's our own image). `detach(mountFolder)` is only the fallback if the device can't be parsed, and still unmounts a stale volume before attaching.
+- Verification: the macOS smoke tests, which failed intermittently on `convert`.
