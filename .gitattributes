@@ -1,2 +1,4 @@
 # shell scripts must keep LF line endings (they fail with CRLF, also in Git Bash on Windows)
 *.sh text eol=lf
+# Windows batch scripts keep CRLF in the working copy, as Gradle recommends
+*.bat text eol=crlf
