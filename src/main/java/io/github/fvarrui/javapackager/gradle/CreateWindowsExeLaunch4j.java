@@ -27,7 +27,7 @@ public class CreateWindowsExeLaunch4j extends AbstractCreateWindowsExe {
 	@Override
 	protected File doApply(WindowsPackager packager) throws Exception {
 
-		List<String> vmArgs = packager.getVmArgs();
+		List<String> vmArgs = quoteVmArgs(packager.getVmArgs());
 		WindowsConfig winConfig = packager.getWinConfig();
 		File executable = packager.getExecutable();
 		String mainClass = packager.getMainClass();

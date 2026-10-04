@@ -1,6 +1,8 @@
 package io.github.fvarrui.javapackager.packagers;
 
 import java.io.File;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import io.github.fvarrui.javapackager.model.Platform;
 import io.github.fvarrui.javapackager.model.WindowsExeCreationTool;
@@ -101,6 +103,17 @@ public abstract class AbstractCreateWindowsExe extends ArtifactGenerator<Windows
 		}
 		
 		return executable;
+	}
+
+	/**
+	 * Quotes VM args containing whitespaces, as Launch4j joins them into a single command line
+	 * @param vmArgs VM args
+	 * @return VM args, quoted if needed
+	 */
+	protected static List<String> quoteVmArgs(List<String> vmArgs) {
+		return vmArgs.stream()
+				.map(arg -> arg.chars().anyMatch(Character::isWhitespace) && !arg.contains("\"") ? "\"" + arg + "\"" : arg)
+				.collect(Collectors.toList());
 	}
 
 }
