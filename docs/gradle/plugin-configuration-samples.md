@@ -9,7 +9,7 @@
 Add next task to your `build.gradle` file:
 
 ```groovy
-task packageMyApp(type: io.github.fvarrui.javapackager.gradle.PackageTask, dependsOn: build) {
+task packageMyApp(type: io.github.javapackager.gradle.PackageTask, dependsOn: build) {
 	mainClass = 'fvarrui.sample.Main'
 }
 ```
@@ -30,7 +30,7 @@ And run `gradle package`.
 ## Bundle with a customized JRE
 
 ```groovy
-task packageMyApp(type: io.github.fvarrui.javapackager.gradle.PackageTask, dependsOn: build) {
+task packageMyApp(type: io.github.javapackager.gradle.PackageTask, dependsOn: build) {
 	mainClass = 'fvarrui.sample.Main'
 	bundleJre = true
 }
@@ -41,7 +41,7 @@ task packageMyApp(type: io.github.fvarrui.javapackager.gradle.PackageTask, depen
 ## Bundle with a full  JRE
 
 ```groovy 
-task packageMyApp(type: io.github.fvarrui.javapackager.gradle.PackageTask, dependsOn: build) {
+task packageMyApp(type: io.github.javapackager.gradle.PackageTask, dependsOn: build) {
 	mainClass = 'fvarrui.sample.Main'
 	bundleJre = true
 	customizedJre = false
@@ -51,7 +51,7 @@ task packageMyApp(type: io.github.fvarrui.javapackager.gradle.PackageTask, depen
 ## Bundle with an existing JRE
 
 ```groovy
-task packageMyApp(type: io.github.fvarrui.javapackager.gradle.PackageTask, dependsOn: build) {
+task packageMyApp(type: io.github.javapackager.gradle.PackageTask, dependsOn: build) {
 	mainClass = 'fvarrui.sample.Main'
 	bundleJre = true
 	jrePath = file('C:\Program Files\Java\jre1.8.0_231')
@@ -61,7 +61,7 @@ task packageMyApp(type: io.github.fvarrui.javapackager.gradle.PackageTask, depen
 ## Bundle your own fat JAR
 
 ```groovy
-task packageMyApp(type: io.github.fvarrui.javapackager.gradle.PackageTask, dependsOn: build) {
+task packageMyApp(type: io.github.javapackager.gradle.PackageTask, dependsOn: build) {
 	mainClass = 'fvarrui.sample.Main'
 	bundleJre = true
 	runnableJar = file('path/to/your/own/fat.jar')
@@ -76,11 +76,11 @@ javapackager {
     // common configuration
 	mainClass = 'fvarrui.sample.Main'
 }
-task packageMyAppWithJRE(type: io.github.fvarrui.javapackager.gradle.PackageTask, dependsOn: build) {
+task packageMyAppWithJRE(type: io.github.javapackager.gradle.PackageTask, dependsOn: build) {
 	name = 'Sample'
 	bundleJre = true
 }
-task packageMyAppWithoutJRE(type: io.github.fvarrui.javapackager.gradle.PackageTask, dependsOn: build) {
+task packageMyAppWithoutJRE(type: io.github.javapackager.gradle.PackageTask, dependsOn: build) {
 	name = 'Sample-nojre'
 	bundleJre = false
 }
@@ -100,17 +100,17 @@ javapackager {
 	bundleJre = true
 	generateInstaller = false
 }
-task packageMyAppForLinux(type: io.github.fvarrui.javapackager.gradle.PackageTask, dependsOn: build) {
+task packageMyAppForLinux(type: io.github.javapackager.gradle.PackageTask, dependsOn: build) {
 	platform = linux
 	createTarball = true
 	jdkPath = file('X:\\path\to\linux\jdk')
 }
-task packageMyAppForMac(type: io.github.fvarrui.javapackager.gradle.PackageTask, dependsOn: build) {
+task packageMyAppForMac(type: io.github.javapackager.gradle.PackageTask, dependsOn: build) {
 	platform = mac
 	createTarball = true
 	jdkPath = file('X:\\path\to\mac\jdk')
 }
-task packageMyAppForWindows(type: io.github.fvarrui.javapackager.gradle.PackageTask, dependsOn: build) {
+task packageMyAppForWindows(type: io.github.javapackager.gradle.PackageTask, dependsOn: build) {
 	platform = windows
 	createZipball = true
 }

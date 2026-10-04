@@ -13,7 +13,7 @@ Publish 1.7.7 from `devel`, with release notes that warn about the breaking chan
 
 - Migrate release publishing to the Central Portal.
 - Write the release notes. Breaking changes first:
-  - `groupId` is now `io.github.javapackager` (ADR-003).
+  - `groupId`, Java packages and Gradle plugin id are now `io.github.javapackager` (ADR-003).
   - `macStartup` defaults to `UNIVERSAL`; `<macStartup>SCRIPT</macStartup>` restores the old launcher (ADR-002).
 - Close the issues labelled `fixed` once the release is out.
 

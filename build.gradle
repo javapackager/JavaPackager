@@ -24,9 +24,9 @@ gradlePlugin {
 
 	plugins {
 		create("javaPackagerPlugin") {
-			id = 'io.github.fvarrui.javapackager.plugin'
+			id = 'io.github.javapackager'
 			displayName = 'JavaPackager'
-			implementationClass = 'io.github.fvarrui.javapackager.gradle.PackagePlugin'
+			implementationClass = 'io.github.javapackager.gradle.PackagePlugin'
 			tags.set(['java', 'packager', 'gradle-plugin', 'maven-plugin', 'native', 'installer', 'debian-packages', 'rpm-packages', 'dmg', 'maven', 'gradle', 'distribution', 'javapackager', 'linux-executables', 'deb', 'rpm', 'native-windows', 'java-applications', 'pkg', 'msi'])
 		}
 	}

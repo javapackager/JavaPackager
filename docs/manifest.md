@@ -28,7 +28,7 @@ manifest {
     	'Created-By': 'Peter'
     ]
     sections = [
-        new io.github.fvarrui.javapackager.model.ManifestSection ([
+        new io.github.javapackager.model.ManifestSection ([
             name: "foo/",
             entries: [
             	'Implementation-Version': 'foo1'

@@ -9,7 +9,7 @@ JavaPackager is a hybrid plugin for **Maven** and **Gradle** which provides an e
 > See [JavaPackager changes and fixes](https://github.com/fvarrui/JavaPackager/releases).
 
 > [!WARNING]
-> Since 1.7.7 the plugin's `groupId` is `io.github.javapackager` (it was `io.github.fvarrui` up to 1.7.6). Update it in your `pom.xml` or `build.gradle` when upgrading.
+> Since 1.7.7 the plugin's `groupId` is `io.github.javapackager`, the Gradle plugin id is `io.github.javapackager` and the Gradle task type is `io.github.javapackager.gradle.PackageTask` (up to 1.7.6: `io.github.fvarrui`, `io.github.fvarrui.javapackager.plugin` and `io.github.fvarrui.javapackager.gradle.PackageTask`). Update them in your `pom.xml` or `build.gradle` when upgrading.
 
 ## Project maintainers needed
 
@@ -93,13 +93,13 @@ buildscript {
     }
 }
 
-apply plugin: 'io.github.fvarrui.javapackager.plugin'
+apply plugin: 'io.github.javapackager'
 ```
 
 Create your packaging task:
 
 ```groovy
-task packageMyApp(type: io.github.fvarrui.javapackager.gradle.PackageTask, dependsOn: build) {
+task packageMyApp(type: io.github.javapackager.gradle.PackageTask, dependsOn: build) {
     // mandatory
     mainClass = 'path.to.your.mainClass'
     // optional
@@ -307,7 +307,7 @@ And then bundle this file with your app:
 
 ## How to use SNAPSHOT versions
 
-[Here](https://central.sonatype.com/repository/maven-snapshots//io/github/fvarrui/javapackager/) you can find the uploaded JavaPackager SNAPSHOT versions.
+[Here](https://central.sonatype.com/repository/maven-snapshots/io/github/javapackager/javapackager/) you can find the uploaded JavaPackager SNAPSHOT versions.
 
 ### Maven
 

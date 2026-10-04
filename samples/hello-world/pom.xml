@@ -5,7 +5,7 @@
 
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>io.github.fvarrui.samples</groupId>
+	<groupId>io.github.javapackager.samples</groupId>
 	<artifactId>hello-world</artifactId>
 	<version>1.0.0</version>
 	<name>HelloWorld</name>
@@ -33,7 +33,7 @@
 							<goal>package</goal>
 						</goals>
 						<configuration>
-							<mainClass>io.github.fvarrui.samples.HelloWorld</mainClass>
+							<mainClass>io.github.javapackager.samples.HelloWorld</mainClass>
 							<bundleJre>true</bundleJre>
 							<generateInstaller>true</generateInstaller>
 							<administratorRequired>${administratorRequired}</administratorRequired>
