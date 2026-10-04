@@ -15,5 +15,5 @@
 
 - The script is edited here like any other resource, and its MIT license header (Copyright Tobias Fischer) must be kept. A header line records that it has been maintained here since 1.7.7.
 - Any fix to the script must be checked by the `SCRIPT` jobs of `.github/workflows/smoke-tests.yml`.
-- Known limitation still open: `VMOptions` are read as a single string, so a `vmArg` containing spaces is split in `SCRIPT` mode.
-- Follow-up, not decided here: whether `macStartup` should default to `UNIVERSAL` instead of `SCRIPT`.
+- The script now reads the `Arguments` and `VMOptions` arrays one element per line, so values with spaces are kept whole.
+- `macStartup` defaults to `UNIVERSAL` since 1.7.7 (ADR-002), so the script is now opt-in.

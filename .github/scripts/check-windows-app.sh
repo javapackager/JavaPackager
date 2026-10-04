@@ -27,6 +27,7 @@ if [ -f "$EXE" ]; then
 	echo "$OUTPUT"
 	echo "------------------"
 	if echo "$OUTPUT" | grep -q "JavaPackager smoke test OK"; then pass "app runs"; else fail "app did not print the expected line"; fi
+	if echo "$OUTPUT" | grep -qF "smoke.prop=hello world"; then pass "vmArgs received"; else fail "vmArgs not received as configured"; fi
 fi
 
 # installers (Inno Setup, WiX)

@@ -42,7 +42,7 @@ public class MacConfig implements Serializable {
 	private String keyChainProfile;
 	private InfoPlist infoPlist = new InfoPlist();
 	private boolean hardenedCodesign = true;
-	private MacStartup macStartup = MacStartup.SCRIPT;
+	private MacStartup macStartup = MacStartup.UNIVERSAL;
 
 	public File getIcnsFile() {
 		return icnsFile;

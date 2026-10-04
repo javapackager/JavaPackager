@@ -215,9 +215,13 @@ if [ $exitcode -eq 0 ]; then
 	JVMClassPath=$(eval echo "${JVMClassPath}")
 
 	# read the JVM Options in either Array or String style
+	JVMDefaultOptionsArr=()
 	JVMDefaultOptions_RAW=$(plist_get_java ':VMOptions' | xargs)
 	if [[ $JVMDefaultOptions_RAW == *Array* ]] ; then
-		JVMDefaultOptions=$(plist_get_java ':VMOptions' | grep "    " | sed 's/^ */ /g' | tr -d '\n' | xargs)
+		# one element per line (PlistBuddy indents them with 4 spaces), so options with spaces are kept whole
+		# expand variables $APP_PACKAGE, $APP_ROOT, $JAVAROOT, $USER_HOME in each option
+		while IFS= read -r JVMDefaultOption; do JVMDefaultOptionsArr+=("$(eval echo "${JVMDefaultOption}")"); done < <(plist_get_java ':VMOptions' | sed -e '1d' -e '$d' -e 's/^    //')
+		JVMDefaultOptions=""
 	else
 		JVMDefaultOptions=${JVMDefaultOptions_RAW}
 	fi
@@ -922,13 +926,14 @@ stub_logger "[WorkingDirectory] ${WorkingDirectory}"
 # - main class
 # - main class arguments
 # - passthrough arguments from Terminal or Drag'n'Drop to Finder icon
-stub_logger "[Exec] \"$JAVACMD\" -cp \"${JVMClassPath}\" ${JVMSplashFile:+ -splash:\"${ResourcesFolder}/${JVMSplashFile}\"} -Xdock:icon=\"${ResourcesFolder}/${CFBundleIconFile}\" -Xdock:name=\"${CFBundleName}\" ${JVMOptionsArr:+$(printf "'%s' " "${JVMOptionsArr[@]}") }${JVMDefaultOptions:+$JVMDefaultOptions }${JVMMainClass}${MainArgsArr:+ $(printf "'%s' " "${MainArgsArr[@]}")}${ArgsPassthru:+ $(printf "'%s' " "${ArgsPassthru[@]}")}"
+stub_logger "[Exec] \"$JAVACMD\" -cp \"${JVMClassPath}\" ${JVMSplashFile:+ -splash:\"${ResourcesFolder}/${JVMSplashFile}\"} -Xdock:icon=\"${ResourcesFolder}/${CFBundleIconFile}\" -Xdock:name=\"${CFBundleName}\" ${JVMOptionsArr:+$(printf "'%s' " "${JVMOptionsArr[@]}") }${JVMDefaultOptionsArr:+$(printf "'%s' " "${JVMDefaultOptionsArr[@]}") }${JVMDefaultOptions:+$JVMDefaultOptions }${JVMMainClass}${MainArgsArr:+ $(printf "'%s' " "${MainArgsArr[@]}")}${ArgsPassthru:+ $(printf "'%s' " "${ArgsPassthru[@]}")}"
 exec "${JAVACMD}" \
 		-cp "${JVMClassPath}" \
 		${JVMSplashFile:+ -splash:"${ResourcesFolder}/${JVMSplashFile}"} \
 		-Xdock:icon="${ResourcesFolder}/${CFBundleIconFile}" \
 		-Xdock:name="${CFBundleName}" \
 		${JVMOptionsArr:+"${JVMOptionsArr[@]}" }\
+		${JVMDefaultOptionsArr:+"${JVMDefaultOptionsArr[@]}" }\
 		${JVMDefaultOptions:+$JVMDefaultOptions }\
 		"${JVMMainClass}"\
 		${MainArgsArr:+ "${MainArgsArr[@]}"}\
