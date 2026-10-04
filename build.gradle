@@ -121,16 +121,14 @@ publishing {
 								appendNode('configuration').appendNode('goalPrefix', 'javapackager')
 							}
 						}
-				asNode().appendNode('repositories').appendNode('repository')
-						.with {
-							appendNode('id', 'gradle')
-							appendNode('name', 'Gradle Plugin Portal')
-							appendNode('url', 'https://plugins.gradle.org/m2/')
-						}
 				// Maven provides its own API to plugins: maven-plugin-api and maven-core must be 'provided' and
-				// mojo-executor and jdeb (also Maven plugins) must not bring other Maven versions
+				// mojo-executor and jdeb (also Maven plugins) must not bring other Maven versions.
+				// The launch4j Gradle library is only used by the Gradle plugin and only published on the
+				// Gradle Plugin Portal, so it's left out of the POM: Maven users only need Maven Central (#444).
 				// (Gradle consumers use the .module file, so they are not affected)
-				asNode().dependencies.dependency.each { dep ->
+				def dependencies = asNode().dependencies[0]
+				dependencies.dependency.findAll { it.groupId.text() == 'edu.sc.seis.launch4j' }.each { dependencies.remove(it) }
+				dependencies.dependency.each { dep ->
 					def artifactId = dep.artifactId.text()
 					if (artifactId in ['maven-plugin-api', 'maven-core']) {
 						dep.scope[0].value = 'provided'

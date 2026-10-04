@@ -30,6 +30,8 @@ jobs:
             tool: gradle
     env:
       OUT: samples/hello-world/${{ matrix.tool == 'gradle' && 'build' || 'target' }}
+      # empty local Maven repo: the plugin is installed there and the sample resolves everything else like a user would (#444)
+      M2_REPO: ${{ github.workspace }}/build/m2-smoke
 
     steps:
       - uses: actions/checkout@v5
@@ -41,7 +43,7 @@ jobs:
           cache: gradle
 
       - name: Build and install plugin to Maven local
-        run: ./gradlew publishToMavenLocal --no-daemon
+        run: ./gradlew publishToMavenLocal --no-daemon "-Dmaven.repo.local=$M2_REPO"
 
       - name: Get plugin version
         id: plugin
@@ -51,13 +53,13 @@ jobs:
         working-directory: samples/hello-world
         run: |
           if [ "${{ matrix.tool }}" = gradle ]; then
-            ../../gradlew package --no-daemon \
+            ../../gradlew package --no-daemon "-Dmaven.repo.local=$M2_REPO" \
               -PjavapackagerVersion=${{ steps.plugin.outputs.version }} \
               -PmacStartup=${{ matrix.macStartup }} \
               -PadministratorRequired=${{ matrix.admin }} \
               2>&1 | tee build.log
           else
-            mvn -B package \
+            mvn -B "-Dmaven.repo.local=$M2_REPO" package \
               -Djavapackager.version=${{ steps.plugin.outputs.version }} \
               -DmacStartup=${{ matrix.macStartup }} \
               -DadministratorRequired=${{ matrix.admin }} \
@@ -89,6 +91,8 @@ jobs:
         tool: [ maven, gradle ]
     env:
       OUT: samples/hello-world/${{ matrix.tool == 'gradle' && 'build' || 'target' }}
+      # empty local Maven repo: the plugin is installed there and the sample resolves everything else like a user would (#444)
+      M2_REPO: ${{ github.workspace }}/build/m2-smoke
 
     steps:
       - uses: actions/checkout@v5
@@ -103,7 +107,7 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y libfuse2t64
 
       - name: Build and install plugin to Maven local
-        run: ./gradlew publishToMavenLocal --no-daemon
+        run: ./gradlew publishToMavenLocal --no-daemon "-Dmaven.repo.local=$M2_REPO"
 
       - name: Get plugin version
         id: plugin
@@ -113,9 +117,9 @@ jobs:
         working-directory: samples/hello-world
         run: |
           if [ "${{ matrix.tool }}" = gradle ]; then
-            ../../gradlew package --no-daemon -PjavapackagerVersion=${{ steps.plugin.outputs.version }} 2>&1 | tee build.log
+            ../../gradlew package --no-daemon "-Dmaven.repo.local=$M2_REPO" -PjavapackagerVersion=${{ steps.plugin.outputs.version }} 2>&1 | tee build.log
           else
-            mvn -B package -Djavapackager.version=${{ steps.plugin.outputs.version }} 2>&1 | tee build.log
+            mvn -B "-Dmaven.repo.local=$M2_REPO" package -Djavapackager.version=${{ steps.plugin.outputs.version }} 2>&1 | tee build.log
           fi
           exit "${PIPESTATUS[0]}"
 
@@ -144,6 +148,8 @@ jobs:
         tool: [ maven, gradle ]
     env:
       OUT: samples/hello-world/${{ matrix.tool == 'gradle' && 'build' || 'target' }}
+      # empty local Maven repo: the plugin is installed there and the sample resolves everything else like a user would (#444)
+      M2_REPO: ${{ github.workspace }}/build/m2-smoke
     defaults:
       run:
         shell: bash
@@ -170,7 +176,7 @@ jobs:
           echo "$USERPROFILE\\.dotnet\\tools" >> "$GITHUB_PATH"
 
       - name: Build and install plugin to Maven local
-        run: ./gradlew publishToMavenLocal --no-daemon
+        run: ./gradlew publishToMavenLocal --no-daemon "-Dmaven.repo.local=$M2_REPO"
 
       - name: Get plugin version
         id: plugin
@@ -182,9 +188,9 @@ jobs:
           command -v iscc
           wix --version
           if [ "${{ matrix.tool }}" = gradle ]; then
-            ../../gradlew package --no-daemon -PjavapackagerVersion=${{ steps.plugin.outputs.version }} 2>&1 | tee build.log
+            ../../gradlew package --no-daemon "-Dmaven.repo.local=$M2_REPO" -PjavapackagerVersion=${{ steps.plugin.outputs.version }} 2>&1 | tee build.log
           else
-            mvn -B package -Djavapackager.version=${{ steps.plugin.outputs.version }} 2>&1 | tee build.log
+            mvn -B "-Dmaven.repo.local=$M2_REPO" package -Djavapackager.version=${{ steps.plugin.outputs.version }} 2>&1 | tee build.log
           fi
           exit "${PIPESTATUS[0]}"
 
