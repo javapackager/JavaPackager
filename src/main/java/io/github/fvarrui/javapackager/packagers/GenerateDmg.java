@@ -96,7 +96,7 @@ public class GenerateDmg extends ArtifactGenerator<MacPackager> {
 
 		if (mountFolder.exists()) {
 			Logger.info("Unmounting volume: " + mountFolder);
-			hdiutil("detach", mountFolder);
+			detach(mountFolder);
 		}
 		
 		// mounts image
@@ -148,7 +148,7 @@ public class GenerateDmg extends ArtifactGenerator<MacPackager> {
 		
 		// unmounts
 		Logger.info("Unmounting volume: " + mountFolder);
-		hdiutil("detach", mountFolder);
+		detach(mountFolder);
 		
 		// compress image
 		Logger.info("Compressing disk image...");
@@ -177,5 +177,23 @@ public class GenerateDmg extends ArtifactGenerator<MacPackager> {
 			}
 		}
 	}
-	
+
+	/**
+	 * Unmounts a volume, retrying if it's busy. A busy volume may still get unmounted
+	 * a moment later, so it's done as soon as the mount folder is gone.
+	 */
+	private void detach(File mountFolder) throws Exception {
+		for (int attempt = 1; mountFolder.exists(); attempt++) {
+			try {
+				execute("hdiutil", "detach", mountFolder);
+				return;
+			} catch (Exception e) {
+				if (!mountFolder.exists()) return;
+				if (attempt == HDIUTIL_ATTEMPTS) throw e;
+				Logger.warn("hdiutil detach failed (attempt " + attempt + " of " + HDIUTIL_ATTEMPTS + "), retrying: " + e.getMessage());
+				ThreadUtils.sleep(attempt * 5000L);
+			}
+		}
+	}
+
 }
