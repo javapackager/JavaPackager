@@ -37,9 +37,16 @@
 							<bundleJre>true</bundleJre>
 							<generateInstaller>true</generateInstaller>
 							<administratorRequired>${administratorRequired}</administratorRequired>
+							<appArgs>
+								<appArg>--foo</appArg>
+								<appArg>hello world</appArg>
+							</appArgs>
 							<macConfig>
 								<macStartup>${macStartup}</macStartup>
 							</macConfig>
+							<winConfig>
+								<headerType>console</headerType>
+							</winConfig>
 						</configuration>
 					</execution>
 				</executions>

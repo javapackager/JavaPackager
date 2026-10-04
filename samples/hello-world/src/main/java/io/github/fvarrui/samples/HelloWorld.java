@@ -9,6 +9,7 @@ public class HelloWorld {
 		System.out.println("JavaPackager smoke test OK");
 		System.out.println("os.arch=" + System.getProperty("os.arch"));
 		System.out.println("java.version=" + System.getProperty("java.version"));
+		System.out.println("args=" + java.util.Arrays.toString(args));
 	}
 
 }

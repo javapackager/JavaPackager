@@ -53,6 +53,7 @@ if [ "$ADMIN" != "true" ] && [ -x "$EXE" ]; then
 	echo "------------------"
 	if echo "$OUTPUT" | grep -q "JavaPackager smoke test OK"; then pass "app runs"; else fail "app did not print the expected line"; fi
 	if echo "$OUTPUT" | grep -q "os.arch=aarch64"; then pass "JVM runs natively on arm64"; else fail "JVM is not running as arm64 (Rosetta?)"; fi
+	if echo "$OUTPUT" | grep -qF "args=[--foo, hello world]"; then pass "appArgs received"; else fail "appArgs not received as configured"; fi
 fi
 
 # installers (DMG customization runs osascript, issues #474/#377)
