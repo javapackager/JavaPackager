@@ -4,6 +4,7 @@
 - Indent Java with tabs.
 - Build with the wrapper and a JDK 17+: `./gradlew build`. There are no unit tests: changes are verified by the smoke tests (`.github/workflows/smoke-tests.yml`), which package `samples/hello-world` on every platform.
 - Any change must keep working in both Maven and Gradle. Build-tool-specific code goes only in `maven/` or `gradle/`, behind `Context`.
+- The Gradle plugin uses no deprecated Gradle API, so it keeps working on the next Gradle major: `Boolean` task properties use `getX()`, not `isX()`; no `Task.getProject()` at execution time; `register()`, not `create()`. Check with `./gradlew -p samples/hello-world package --warning-mode all`.
 - A new configuration property is wired in: `PackagerSettings` (field + fluent setter + getter), `PackageMojo` (`@Parameter` + fluent call in `execute()`), `PackageTask` (annotated field + fluent call in `createPackager()` with `defaultIfNull(taskValue, extension.getX())`), and documented in `README.md` or `docs/*-specific-properties.md`.
 - Platform-specific options go in `WindowsConfig`, `MacConfig` or `LinuxConfig`, not in `PackagerSettings`.
 - New artifacts are `ArtifactGenerator` subclasses. Platform and external-tool checks go in `skip()`, not in `doApply()`.
