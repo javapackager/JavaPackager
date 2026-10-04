@@ -50,4 +50,4 @@ The app JAR with a manifest pointing to `mainClass`, created by the plugin unles
 
 ## Mac startup
 
-macOS launcher type (`macStartup`, default `UNIVERSAL` since 1.7.7): `UNIVERSAL`, `X86_64`, `ARM64` (bundled `nativeJavaApplicationStub` binaries) or `SCRIPT` (`universalJavaApplicationStub.sh`). The launcher is always copied into the app as `Contents/MacOS/universalJavaApplicationStub`.
+macOS launcher type (`macStartup`, default `UNIVERSAL` since 2.0.0): `UNIVERSAL`, `X86_64`, `ARM64` (bundled `nativeJavaApplicationStub` binaries) or `SCRIPT` (`universalJavaApplicationStub.sh`). The launcher is always copied into the app as `Contents/MacOS/universalJavaApplicationStub`.

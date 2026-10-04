@@ -13,7 +13,7 @@
 # @url       https://github.com/tofi86/universalJavaApplicationStub              #
 # @date      2023-02-04                                                          #
 # @version   3.3.0                                                               #
-# Maintained in JavaPackager since 1.7.7 (originally from tofi86's repo)         #
+# Maintained in JavaPackager since 2.0.0 (originally from tofi86's repo)         #
 #                                                                                #
 ##################################################################################
 #                                                                                #

@@ -1,11 +1,12 @@
-# Release 1.7.7
+# Release 2.0.0
 
 ## Goal
 
-Publish 1.7.7 from `devel`, with release notes that warn about the breaking changes.
+Publish 2.0.0 from `devel`, with release notes that warn about the breaking changes.
 
 ## Context
 
+- Major version (after 1.7.6) because of the breaking changes below: users must edit their build to upgrade.
 - `devel` has many fixes since 1.7.6, found or verified by the smoke tests (see the `fix-*` notes).
 - Releases still use OSSRH (`nexus-staging` plugin), which was shut down. Snapshots already go to the Central Portal.
 
@@ -19,5 +20,5 @@ Publish 1.7.7 from `devel`, with release notes that warn about the breaking chan
 
 ## Acceptance
 
-- `io.github.javapackager:javapackager:1.7.7` is on Maven Central.
+- `io.github.javapackager:javapackager:2.0.0` is on Maven Central.
 - The release notes list the breaking changes and the fixed issues.

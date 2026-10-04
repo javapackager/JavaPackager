@@ -2,7 +2,7 @@
 
 ## Decision
 
-Since 1.7.7, `macConfig.macStartup` defaults to `UNIVERSAL` (the native launcher `nativeJavaApplicationStub`, a universal x86_64 + arm64 binary) instead of `SCRIPT` (`universalJavaApplicationStub.sh`).
+Since 2.0.0, `macConfig.macStartup` defaults to `UNIVERSAL` (the native launcher `nativeJavaApplicationStub`, a universal x86_64 + arm64 binary) instead of `SCRIPT` (`universalJavaApplicationStub.sh`).
 
 ## Motivation
 
@@ -13,6 +13,6 @@ Since 1.7.7, `macConfig.macStartup` defaults to `UNIVERSAL` (the native launcher
 
 ## Consequences
 
-- Behavior change for users who don't set `macStartup`: it must be listed in the 1.7.7 release notes, explaining that `<macStartup>SCRIPT</macStartup>` restores the old launcher.
+- Behavior change for users who don't set `macStartup`: it must be listed in the 2.0.0 release notes, explaining that `<macStartup>SCRIPT</macStartup>` restores the old launcher.
 - `SCRIPT` stays supported and tested in CI.
 - The launcher file keeps the name `Contents/MacOS/universalJavaApplicationStub`, so custom templates that reference it keep working.

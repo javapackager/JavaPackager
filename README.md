@@ -9,7 +9,7 @@ JavaPackager is a hybrid plugin for **Maven** and **Gradle** which provides an e
 > See [JavaPackager changes and fixes](https://github.com/fvarrui/JavaPackager/releases).
 
 > [!WARNING]
-> Since 1.7.7 the plugin's `groupId` is `io.github.javapackager`, the Gradle plugin id is `io.github.javapackager` and the Gradle task type is `io.github.javapackager.gradle.PackageTask` (up to 1.7.6: `io.github.fvarrui`, `io.github.fvarrui.javapackager.plugin` and `io.github.fvarrui.javapackager.gradle.PackageTask`). Update them in your `pom.xml` or `build.gradle` when upgrading.
+> Since 2.0.0 the plugin's `groupId` is `io.github.javapackager`, the Gradle plugin id is `io.github.javapackager` and the Gradle task type is `io.github.javapackager.gradle.PackageTask` (up to 1.7.6: `io.github.fvarrui`, `io.github.fvarrui.javapackager.plugin` and `io.github.fvarrui.javapackager.gradle.PackageTask`). Update them in your `pom.xml` or `build.gradle` when upgrading.
 
 ## Project maintainers needed
 

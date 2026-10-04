@@ -2,7 +2,7 @@
 
 ## Decision
 
-Since 1.7.7, everything that named `io.github.fvarrui` moves to `io.github.javapackager`, in one clean break with no compatibility aliases:
+Since 2.0.0, everything that named `io.github.fvarrui` moves to `io.github.javapackager`, in one clean break with no compatibility aliases:
 
 - Maven coordinates: `io.github.javapackager:javapackager` (was `io.github.fvarrui:javapackager`).
 - Java packages: `io.github.javapackager.*` (was `io.github.fvarrui.javapackager.*`), e.g. the Gradle task type `io.github.javapackager.gradle.PackageTask`.
@@ -17,8 +17,8 @@ Since 1.7.7, everything that named `io.github.fvarrui` moves to `io.github.javap
 
 ## Consequences
 
-- Breaking change for every user. Maven: update the `groupId`. Gradle: update the `classpath` coordinates, `apply plugin:` and `type:` of their tasks. It must be the first item in the 1.7.7 release notes, and the README warns about it.
+- Breaking change for every user. Maven: update the `groupId`. Gradle: update the `classpath` coordinates, `apply plugin:` and `type:` of their tasks. It must be the first item in the 2.0.0 release notes, and the README warns about it.
 - Releases up to 1.7.6 stay available under `io.github.fvarrui`.
 - No Maven relocation POM is published under `io.github.fvarrui`, since that namespace isn't available in the current account.
-- Publishing to the Gradle Plugin Portal under the new id would need ownership of `io.github.javapackager` there. The README already uses the Maven Central (`buildscript`) mode, so this doesn't block 1.7.7.
-- Releases still need to be migrated from OSSRH (`nexus-staging`) to the Central Portal before 1.7.7.
+- Publishing to the Gradle Plugin Portal under the new id would need ownership of `io.github.javapackager` there. The README already uses the Maven Central (`buildscript`) mode, so this doesn't block 2.0.0.
+- Releases still need to be migrated from OSSRH (`nexus-staging`) to the Central Portal before 2.0.0.

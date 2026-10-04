@@ -13,7 +13,7 @@
 
 ## Consequences
 
-- The script is edited here like any other resource, and its MIT license header (Copyright Tobias Fischer) must be kept. A header line records that it has been maintained here since 1.7.7.
+- The script is edited here like any other resource, and its MIT license header (Copyright Tobias Fischer) must be kept. A header line records that it has been maintained here since 2.0.0.
 - Any fix to the script must be checked by the `SCRIPT` jobs of `.github/workflows/smoke-tests.yml`.
 - The script now reads the `Arguments` and `VMOptions` arrays one element per line, so values with spaces are kept whole.
-- `macStartup` defaults to `UNIVERSAL` since 1.7.7 (ADR-002), so the script is now opt-in.
+- `macStartup` defaults to `UNIVERSAL` since 2.0.0 (ADR-002), so the script is now opt-in.
