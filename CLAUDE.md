@@ -34,5 +34,6 @@ Publishing uses a Central Portal user token in the `ossrhUsername`/`ossrhPasswor
 | `triage-issues` (with the `issue-triager` agent) | Classify open GitHub issues against `devel`, in parallel, read-only |
 | `issue-update` | Draft and post "fixed in devel", "please test" or "released" comments, with labels |
 | `check-deps` | Find outdated dependencies, check Java 8 bytecode and declared vs resolved versions |
+| `publish-snapshot` | Publish the current `devel` build as a `-SNAPSHOT` (after green CI) and verify it |
 | `release` | Release notes, `releaseToCentral`, verification and closing issues |
 | `minispec-feature`, `minispec-bugfix`, `minispec-adr`, `minispec-implement` | MiniSpec notes and implementation |
