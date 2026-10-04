@@ -112,7 +112,21 @@ publishing {
 							appendNode('id', 'gradle')
 							appendNode('name', 'Gradle Plugin Portal')
 							appendNode('url', 'https://plugins.gradle.org/m2/')
-						}						
+						}
+				// Maven provides its own API to plugins: maven-plugin-api must be 'provided' and
+				// mojo-executor and jdeb (also Maven plugins) must not bring other Maven versions
+				// (Gradle consumers use the .module file, so they are not affected)
+				asNode().dependencies.dependency.each { dep ->
+					def artifactId = dep.artifactId.text()
+					if (artifactId == 'maven-plugin-api') {
+						dep.scope[0].value = 'provided'
+					} else if (artifactId in ['mojo-executor', 'jdeb']) {
+						dep.appendNode('exclusions').appendNode('exclusion').with {
+							appendNode('groupId', 'org.apache.maven')
+							appendNode('artifactId', '*')
+						}
+					}
+				}
 			}
 			pom {
 				name = project.name
