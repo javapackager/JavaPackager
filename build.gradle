@@ -248,6 +248,19 @@ tasks.register('releaseToCentral') {
 	}
 }
 
+tasks.register('updateNativeJavaApplicationStub', Download) {
+	def version = '20251202.010109'
+	group 'Update assets'
+	description 'Downloads the native macOS launchers (nativeJavaApplicationStub) to src/main/resources/mac and overwrites the existing ones.'
+	src([
+			"https://github.com/javapackager/nativeJavaApplicationStub/releases/download/${version}/nativeJavaApplicationStub",
+			"https://github.com/javapackager/nativeJavaApplicationStub/releases/download/${version}/nativeJavaApplicationStub.arm64",
+			"https://github.com/javapackager/nativeJavaApplicationStub/releases/download/${version}/nativeJavaApplicationStub.x86_64"
+	])
+	dest file('src/main/resources/mac')
+	overwrite true
+}
+
 tasks.register('updateWhyJavaLauncher', Download) {
 	def version = '1.1.2'
 	group 'Update assets'
