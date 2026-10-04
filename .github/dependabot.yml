@@ -1,0 +1,19 @@
+version: 2
+updates:
+  - package-ecosystem: gradle
+    directory: /
+    target-branch: devel
+    schedule:
+      interval: weekly
+
+  - package-ecosystem: github-actions
+    directory: /
+    target-branch: devel
+    schedule:
+      interval: weekly
+
+  - package-ecosystem: maven
+    directory: /samples/hello-world
+    target-branch: devel
+    schedule:
+      interval: weekly

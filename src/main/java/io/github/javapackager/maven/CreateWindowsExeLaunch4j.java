@@ -115,7 +115,7 @@ public class CreateWindowsExeLaunch4j extends AbstractCreateWindowsExe {
 					plugin(
 							groupId("com.akathist.maven.plugins.launch4j"), 
 							artifactId("launch4j-maven-plugin"),
-							version("2.4.1")
+							version("2.7.0")
 					),
 					goal("launch4j"),
 					configuration(pluginConfig.toArray(new Element[0])),

@@ -5,7 +5,7 @@ plugins {
 	id 'com.gradle.plugin-publish' version '1.1.0'
 	id 'io.codearte.nexus-staging' version '0.21.2'
 	id 'eclipse'
-	id 'de.undercouch.download' version '5.0.4'
+	id 'de.undercouch.download' version '5.7.0'
 	id 'signing'
 }
 
@@ -38,29 +38,30 @@ configurations {
 
 dependencies {
 	implementation 'org.apache.maven:maven-plugin-api:3.6.0'
-	implementation 'org.codehaus.plexus:plexus-utils:3.5.1'
-	implementation 'org.twdata.maven:mojo-executor:2.3.0'
-	implementation 'commons-io:commons-io:2.16.1'
-	implementation 'org.apache.commons:commons-lang3:3.11'
-	implementation 'org.apache.commons:commons-collections4:4.3'
-	implementation 'org.apache.commons:commons-compress:1.21'
-	implementation 'org.apache.velocity:velocity-engine-core:2.3'
-	implementation 'org.vafer:jdeb:1.9'
+	implementation 'org.apache.maven:maven-core:3.6.0'
+	// jdeb requires plexus-utils 4, which moved Xpp3Dom to plexus-xml (3.x is the Maven 3 compatible line)
+	implementation 'org.codehaus.plexus:plexus-utils:4.0.2'
+	implementation 'org.codehaus.plexus:plexus-xml:3.1.0'
+	implementation 'org.twdata.maven:mojo-executor:2.4.1'
+	implementation 'commons-io:commons-io:2.22.0'
+	implementation 'org.apache.commons:commons-lang3:3.21.0'
+	implementation 'org.apache.commons:commons-collections4:4.6.0'
+	implementation 'org.apache.commons:commons-compress:1.28.0'
+	implementation 'org.apache.velocity:velocity-engine-core:2.4.1'
+	implementation 'org.vafer:jdeb:1.14'
 	implementation 'net.jsign:jsign-core:6.0'
 	implementation 'org.redline-rpm:redline:1.2.10'
-	implementation 'edu.sc.seis.launch4j:launch4j:3.0.5'
+	implementation 'edu.sc.seis.launch4j:launch4j:3.0.7'
 
-	testImplementation 'junit:junit:4.13.1'
+	compileOnly 'org.apache.maven.plugin-tools:maven-plugin-annotations:3.16.0'
 
-	compileOnly 'org.apache.maven.plugin-tools:maven-plugin-annotations:3.6.0'
-
-	mavenEmbedder 'org.apache.maven:maven-embedder:3.6.0'
-	mavenEmbedder 'org.apache.maven:maven-compat:3.6.0'	
-	mavenEmbedder 'org.slf4j:slf4j-simple:1.7.30'
-	mavenEmbedder 'org.eclipse.aether:aether-connector-basic:1.1.0'
-	mavenEmbedder 'org.eclipse.aether:aether-transport-wagon:1.1.0'
-	mavenEmbedder 'org.apache.maven.wagon:wagon-http:3.4.1'
-	mavenEmbedder 'org.apache.maven.wagon:wagon-provider-api:3.4.1'
+	mavenEmbedder 'org.apache.maven:maven-embedder:3.9.16'
+	mavenEmbedder 'org.apache.maven:maven-compat:3.9.16'	
+	mavenEmbedder 'org.slf4j:slf4j-simple:1.7.36'
+	mavenEmbedder 'org.apache.maven.resolver:maven-resolver-connector-basic:1.9.27'
+	mavenEmbedder 'org.apache.maven.resolver:maven-resolver-transport-wagon:1.9.27'
+	mavenEmbedder 'org.apache.maven.wagon:wagon-http:3.5.3'
+	mavenEmbedder 'org.apache.maven.wagon:wagon-provider-api:3.5.3'
 }
 
 group = 'io.github.javapackager'
@@ -106,6 +107,12 @@ publishing {
 						.with {
 							appendNode('directory', directory)
 							appendNode('outputDirectory', outputDirectory)
+							// keeps the 'javapackager:' goal prefix (maven-plugin-plugin can't compute it from the artifactId)
+							appendNode('plugins').appendNode('plugin').with {
+								appendNode('groupId', 'org.apache.maven.plugins')
+								appendNode('artifactId', 'maven-plugin-plugin')
+								appendNode('configuration').appendNode('goalPrefix', 'javapackager')
+							}
 						}
 				asNode().appendNode('repositories').appendNode('repository')
 						.with {
@@ -113,12 +120,12 @@ publishing {
 							appendNode('name', 'Gradle Plugin Portal')
 							appendNode('url', 'https://plugins.gradle.org/m2/')
 						}
-				// Maven provides its own API to plugins: maven-plugin-api must be 'provided' and
+				// Maven provides its own API to plugins: maven-plugin-api and maven-core must be 'provided' and
 				// mojo-executor and jdeb (also Maven plugins) must not bring other Maven versions
 				// (Gradle consumers use the .module file, so they are not affected)
 				asNode().dependencies.dependency.each { dep ->
 					def artifactId = dep.artifactId.text()
-					if (artifactId == 'maven-plugin-api') {
+					if (artifactId in ['maven-plugin-api', 'maven-core']) {
 						dep.scope[0].value = 'provided'
 					} else if (artifactId in ['mojo-executor', 'jdeb']) {
 						dep.appendNode('exclusions').appendNode('exclusion').with {
@@ -186,7 +193,7 @@ tasks.register('generatePluginDescriptor', JavaExec) {
 			'--errors',
 			'--batch-mode',
 			'--file', generatePomFileForPluginMavenPublication.destination,
-			'org.apache.maven.plugins:maven-plugin-plugin:3.9.0:descriptor',
+			'org.apache.maven.plugins:maven-plugin-plugin:3.16.0:descriptor',
 			'-Dproject.build.sourceEncoding=' + compileJava.options.encoding
 	]
 	doLast {
