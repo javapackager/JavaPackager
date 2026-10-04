@@ -76,7 +76,7 @@ JVMClassPath+=":${classpath}"
 
 AppArguments=()
 #foreach ($appArg in $info.appArgs)
-AppArguments+=("appArg")
+AppArguments+=("$appArg")
 #end
 
 #if ($info.useResourcesAsWorkingDir)
