@@ -6,6 +6,7 @@ import java.util.List;
 
 import net.jsign.WindowsSigner;
 import org.apache.commons.lang3.StringUtils;
+import org.gradle.api.plugins.JavaPluginExtension;
 
 import edu.sc.seis.launch4j.tasks.Launch4jLibraryTask;
 import io.github.javapackager.model.WindowsConfig;
@@ -64,9 +65,8 @@ public class CreateWindowsExeLaunch4j extends AbstractCreateWindowsExe {
 		if (bundleJre) {
 			l4jTask.getBundledJrePath().set(jreDirectoryName);
 		}
-		if (!StringUtils.isBlank(jreMinVersion)) {
-			l4jTask.getJreMinVersion().set(jreMinVersion);
-		}
+		// always set: launch4j's default reads the deprecated JavaPluginConvention
+		l4jTask.getJreMinVersion().set(StringUtils.isBlank(jreMinVersion) ? defaultJreMinVersion() : jreMinVersion);
 		l4jTask.getJvmOptions().addAll(vmArgs);
 		l4jTask.getVersion().set(winConfig.getProductVersion());
 		l4jTask.getTextVersion().set(winConfig.getTxtProductVersion());
@@ -82,6 +82,15 @@ public class CreateWindowsExeLaunch4j extends AbstractCreateWindowsExe {
 		FileUtils.copyFileToFile(getGenericExe(), executable);
 
 		return createBootstrapScript(packager);
+	}
+
+	/**
+	 * Same default as launch4j: the project's target compatibility, as "11.0" or "1.8.0"
+	 */
+	private static String defaultJreMinVersion() {
+		JavaPluginExtension java = Context.getGradleContext().getProject().getExtensions().getByType(JavaPluginExtension.class);
+		String version = java.getTargetCompatibility().toString();
+		return version.matches("\\d+(\\.\\d+)?") ? version + ".0" : version;
 	}
 
 }

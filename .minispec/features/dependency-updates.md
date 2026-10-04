@@ -44,7 +44,7 @@ Step 2: updates within the same major line (one commit, validated by the smoke t
 ## Out of scope (follow-ups, one note each)
 
 - `jsign-core` 6.0 → 7.x: major; check API changes and Java 8 support.
-- `launch4j` (Gradle library) 4.0.0: major.
+- `launch4j` (Gradle library) 4.0.0: major. Done in `gradle-9-deprecations`.
 - `com.gradle.plugin-publish` 1.1.0 → 2.x: major.
 - Gradle wrapper 8.14.3 → 9.x: needs Java 17 to run Gradle.
 - `io.codearte.nexus-staging`: remove when releases move to the Central Portal (`release-2-0-0.md`).

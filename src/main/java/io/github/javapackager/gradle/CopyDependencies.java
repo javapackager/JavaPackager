@@ -33,7 +33,7 @@ public class CopyDependencies extends ArtifactGenerator<Packager> {
 	
 		copyLibsTask = (Copy) project.getTasks().findByName("copyLibs");
 		if (copyLibsTask == null) {
-			copyLibsTask = project.getTasks().create("copyLibs", Copy.class);
+			copyLibsTask = project.getTasks().register("copyLibs", Copy.class).get();
 		}
 		copyLibsTask.setDuplicatesStrategy(Context.getGradleContext().getDuplicatesStrategy());
 		copyLibsTask.from(project.getConfigurations().getByName("runtimeClasspath"));

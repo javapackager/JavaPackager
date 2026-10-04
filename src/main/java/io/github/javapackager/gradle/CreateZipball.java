@@ -99,7 +99,7 @@ public class CreateZipball extends ArtifactGenerator<Packager> {
 	}
 	
 	private Zip createZipTask() {
-		return Context.getGradleContext().getProject().getTasks().create("createZipball_" + UUID.randomUUID(), Zip.class);
+		return Context.getGradleContext().getProject().getTasks().register("createZipball_" + UUID.randomUUID(), Zip.class).get();
 	}
 
 }

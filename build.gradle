@@ -53,7 +53,7 @@ dependencies {
 	implementation 'org.vafer:jdeb:1.14'
 	implementation 'net.jsign:jsign-core:6.0'
 	implementation 'org.redline-rpm:redline:1.2.10'
-	implementation 'edu.sc.seis.launch4j:launch4j:3.0.7'
+	implementation 'edu.sc.seis.launch4j:launch4j:4.0.0'
 
 	compileOnly 'org.apache.maven.plugin-tools:maven-plugin-annotations:3.16.0'
 	compileOnly 'javax.inject:javax.inject:1' // provided by Maven at runtime
@@ -77,6 +77,8 @@ java {
 }
 
 compileJava.options.encoding = 'UTF-8'
+// Java 8 target is deliberate: don't warn that it's obsolete on newer JDKs
+compileJava.options.compilerArgs << '-Xlint:-options'
 
 // suppress javadoc warnings
 javadoc.options.addStringOption('Xdoclint:none', '-quiet')

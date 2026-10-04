@@ -7,7 +7,9 @@ import java.io.File;
 import java.util.List;
 import java.util.Map;
 
+import org.gradle.api.Project;
 import org.gradle.api.file.DuplicatesStrategy;
+import org.gradle.api.provider.Provider;
 import org.gradle.api.tasks.Input;
 import org.gradle.api.tasks.InputDirectory;
 import org.gradle.api.tasks.InputFile;
@@ -77,7 +79,7 @@ public class PackageTask extends AbstractPackageTask {
 	@Optional
 	private Boolean administratorRequired;
 	
-	public Boolean isAdministratorRequired() {
+	public Boolean getAdministratorRequired() {
 		return administratorRequired;
 	}
 	
@@ -113,7 +115,7 @@ public class PackageTask extends AbstractPackageTask {
 	@Optional
 	private Boolean bundleJre;
 	
-	public Boolean isBundleJre() {
+	public Boolean getBundleJre() {
 		return bundleJre;
 	}
 	
@@ -125,7 +127,7 @@ public class PackageTask extends AbstractPackageTask {
 	@Optional
 	private Boolean copyDependencies;
 	
-	public Boolean isCopyDependencies() {
+	public Boolean getCopyDependencies() {
 		return copyDependencies;
 	}
 	
@@ -137,7 +139,7 @@ public class PackageTask extends AbstractPackageTask {
 	@Optional
 	private Boolean createTarball;
 	
-	public Boolean isCreateTarball() {
+	public Boolean getCreateTarball() {
 		return createTarball;
 	}
 	
@@ -149,7 +151,7 @@ public class PackageTask extends AbstractPackageTask {
 	@Optional
 	private Boolean createZipball;
 	
-	public Boolean isCreateZipball() {
+	public Boolean getCreateZipball() {
 		return createZipball;
 	}
 	
@@ -161,7 +163,7 @@ public class PackageTask extends AbstractPackageTask {
 	@Optional
 	private Boolean customizedJre;
 	
-	public Boolean isCustomizedJre() {
+	public Boolean getCustomizedJre() {
 		return customizedJre;
 	}
 	
@@ -221,7 +223,7 @@ public class PackageTask extends AbstractPackageTask {
 	@Optional
 	private Boolean generateInstaller;
 	
-	public Boolean isGenerateInstaller() {
+	public Boolean getGenerateInstaller() {
 		return generateInstaller;
 	}
 	
@@ -233,7 +235,7 @@ public class PackageTask extends AbstractPackageTask {
 	@Optional
 	private Boolean forceInstaller;
 	
-	public Boolean isForceInstaller() {
+	public Boolean getForceInstaller() {
 		return forceInstaller;
 	}
 	
@@ -413,7 +415,7 @@ public class PackageTask extends AbstractPackageTask {
 	@Optional
 	private Boolean useResourcesAsWorkingDir;
 	
-	public Boolean isUseResourcesAsWorkingDir() {
+	public Boolean getUseResourcesAsWorkingDir() {
 		return useResourcesAsWorkingDir;
 	}
 	
@@ -614,13 +616,20 @@ public class PackageTask extends AbstractPackageTask {
 	// ===============
 	// create packager
 	// ===============
-	
+
+	// read at configuration time: Task.getProject() is deprecated at execution time
+	private final PackagePluginExtension extension = getProject().getExtensions().findByType(PackagePluginExtension.class);
+
+	private final Provider<String> projectVersion = projectVersion(getProject());
+
+	private static Provider<String> projectVersion(Project project) {
+		return project.provider(() -> project.getVersion().toString());
+	}
+
 	@SuppressWarnings("unchecked")
 	@Override
 	protected Packager createPackager() throws Exception {
 
-		PackagePluginExtension extension = getProject().getExtensions().findByType(PackagePluginExtension.class);
-		
 		Context.getGradleContext().setDuplicatesStrategy(defaultIfNull(duplicatesStrategy, extension.getDuplicatesStrategy()));
 		
 		return
@@ -666,7 +675,7 @@ public class PackageTask extends AbstractPackageTask {
 					.templates(defaultIfNull(templates, extension.getTemplates()))
 					.useResourcesAsWorkingDir(defaultIfNull(useResourcesAsWorkingDir, extension.isUseResourcesAsWorkingDir()))
 					.url(defaultIfNull(url, extension.getUrl()))
-					.version(defaultIfNull(version, extension.getVersion(), getProject().getVersion().toString()))
+					.version(defaultIfNull(version, extension.getVersion(), projectVersion.get()))
 					.vmArgs(defaultIfNull(vmArgs, extension.getVmArgs()))
 					.appArgs(defaultIfNull(appArgs, extension.getAppArgs()))
 					.winConfig(defaultIfNull(winConfig, extension.getWinConfig()));

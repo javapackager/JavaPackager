@@ -104,7 +104,7 @@ public class CreateTarball extends ArtifactGenerator<Packager> {
 	}
 	
 	private Tar createTarTask() {
-		return Context.getGradleContext().getProject().getTasks().create("createTarball_" + UUID.randomUUID(), Tar.class);
+		return Context.getGradleContext().getProject().getTasks().register("createTarball_" + UUID.randomUUID(), Tar.class).get();
 	}
 
 }
