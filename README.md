@@ -87,6 +87,7 @@ Apply JavaPackager plugin in `build.gradle` using legacy mode (because at the mo
 buildscript {
     repositories {
         mavenCentral()
+        gradlePluginPortal() // needed by the Launch4j dependency
     }
     dependencies {
         classpath 'io.github.javapackager:javapackager:{latest.version}'
@@ -142,8 +143,8 @@ By default it will generate next artifacts in `${outputDirectory} ` folder:
 | `${name}_${version}.deb`                | DEB package file.                                                | All       |                                                                                                  |
 | `${name}_${version}.rpm`                | RPM package file.                                                | All       |                                                                                                  |
 | `${name}_${version}.exe`                | Setup file.                                                      | Windows   | [Inno Setup](http://www.jrsoftware.org/isinfo.php) (`iscc` command must be in PATH variable)     |
-| `${name}_${version}.msi`                | MSI installer file.                                              | Windows   | [WiX Toolset](https://wixtoolset.org/) (`candle` and `light` commands must be in PATH variable)  |
-| `${name}_${version}.msm`                | MSI merge module file.                                           | Windows   | [WiX Toolset](https://wixtoolset.org/) ( `candle` and `light` commands must be in PATH variable) |
+| `${name}_${version}.msi`                | MSI installer file.                                              | Windows   | [WiX Toolset](https://wixtoolset.org/) 3 (`candle` and `light`) or 4+ (`wix`) in PATH variable |
+| `${name}_${version}.msm`                | MSI merge module file.                                           | Windows   | [WiX Toolset](https://wixtoolset.org/) 3 (`candle` and `light`) or 4+ (`wix`) in PATH variable |
 | `${name}_${version}.dmg`                | Disk image file (uses **hdiutil**).                              | MacOS     |                                                                                                  |
 | `${name}_${version}.pkg`                | PKG installer file (uses **pkgbuild**).                          | MacOS     |                                                                                                  |
 | `${name}-${version}-${platform}.zip`    | Zipball containing generated directory `${name}`.                | All       |                                                                                                  |
@@ -391,7 +392,7 @@ Execute next commands in BASH (GNU/Linux or macOS) or CMD (Windows):
 1. Download source code and change to the project directory:
 
 ```bash
-git clone https://github.com/fvarrui/JavaPackager.git [--branch devel]
+git clone https://github.com/javapackager/JavaPackager.git [--branch devel]
 cd JavaPackager
 ```
 
@@ -402,12 +403,19 @@ cd JavaPackager
 ```
 
 > [!IMPORTANT]
-> It is recommended to build the plugin with Java 19.
+> Build the plugin with a JDK 17 or newer (a JRE is not enough). The plugin itself targets Java 8.
 
-## How to release the plugin to Maven Central
+Every push to `devel` and `master` runs the smoke tests (`.github/workflows/smoke-tests.yml`): they package [`samples/hello-world`](samples/hello-world) on GNU/Linux, Windows and macOS and check the generated apps and installers.
 
-Run next command (ommit `./` on Windows):
+## How to publish the plugin to Maven Central
+
+Publishing uses a [Central Portal user token](https://central.sonatype.com/usertoken), set as `ossrhUsername` and `ossrhPassword` in `~/.gradle/gradle.properties`.
+
+To publish a `-SNAPSHOT` version (ommit `./` on Windows):
 
 ```bash
-./gradlew publish closeAndReleaseRepository
+./gradlew publish
 ```
+
+> [!WARNING]
+> Releases (non-SNAPSHOT versions) still use the old OSSRH staging process, which no longer works. They have to be migrated to the Central Portal before the next release.

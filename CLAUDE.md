@@ -19,8 +19,8 @@ Use the wrapper (`./gradlew` or `gradlew.bat` on Windows).
 | `./gradlew publishToMavenLocal` | Install the plugin into `~/.m2` to test it from a sample Maven/Gradle project |
 | `./gradlew updateWhyJavaLauncher` | Re-download `JavaLauncher.exe` into `src/main/resources/windows` |
 
-There are no unit tests, so there is no way to run a single test. `src/it/simple-it` is a leftover Maven invoker skeleton not wired into the Gradle build. Changes are verified by publishing to Maven local and packaging a real project on the affected OS.
+There are no unit tests, so there is no way to run a single test. `src/it/simple-it` is a leftover Maven invoker skeleton not wired into the Gradle build. Changes are verified by the smoke tests in `.github/workflows/smoke-tests.yml`, which run on every push to `devel`/`master`: they package `samples/hello-world` with Maven on GNU/Linux, Windows and macOS (each `macStartup`) and run `.github/scripts/check-*-app.sh`. Build with a JDK 17+ (a JRE can't compile).
 
 `compileJava` triggers `generatePluginDescriptor`, which runs an embedded Maven against the generated POM to produce `META-INF/maven/plugin.xml` from the `@Mojo`/`@Parameter` annotations.
 
-Publishing (OSSRH + Gradle Plugin Portal, signed) requires the `ossrhUsername`/`ossrhPassword` properties; the version is set in `build.gradle`.
+Publishing uses a Central Portal user token in the `ossrhUsername`/`ossrhPassword` properties (`~/.gradle/gradle.properties`). Snapshots go to the Central Portal snapshots repo; releases still need migrating from OSSRH. The version is set in `build.gradle`.

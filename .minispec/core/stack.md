@@ -4,7 +4,7 @@
 
 - Java 8 (source and target compatibility).
 - Gradle 8.14.3 (wrapper), building both the Gradle plugin and the Maven plugin. The plugin supports Gradle 9 consumers.
-- Embedded Maven 3.6 + `maven-plugin-plugin` 3.9.0 to generate the Maven plugin descriptor.
+- Embedded Maven 3.9 + `maven-plugin-plugin` 3.16 to generate the Maven plugin descriptor.
 
 ## Libraries
 

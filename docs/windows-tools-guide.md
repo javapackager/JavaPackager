@@ -1,6 +1,6 @@
 # Windows tools installation guide
 
-As explained in the [docs](https://github.com/fvarrui/JavaPackager#generated-artifacts), you must install [Inno Setup (iscc)](https://jrsoftware.org/isinfo.php) to generate an EXE installer and [WIX Toolset (candle and light)](https://wixtoolset.org/) to generate an MSI file.       
+As explained in the [docs](https://github.com/fvarrui/JavaPackager#generated-artifacts), you must install [Inno Setup (iscc)](https://jrsoftware.org/isinfo.php) to generate an EXE installer and [WiX Toolset](https://wixtoolset.org/) to generate an MSI file. WiX 3 (`candle` and `light`) and WiX 4+ (`wix`) are supported: if `wix` is in `PATH` it's used, otherwise JavaPackager falls back to `candle` and `light`.       
 
 For Inno Setup 5.x, the Unicode version should be used, because the scripts that JavaPacker will be creating as an input will be UTF-8 encoded.
 
@@ -29,3 +29,13 @@ scoop install wixtoolset
 ```
 
 > Both tools will also be available in `PATH`.
+
+## Installing WiX 4+
+
+Chocolatey and Scoop install WiX 3. To use WiX 4 or newer instead, install it as a .NET tool (requires the [.NET SDK](https://dotnet.microsoft.com/download)):
+
+```
+dotnet tool install --global wix
+```
+
+> The `wix` command will be available in `PATH`.

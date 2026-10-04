@@ -2,7 +2,7 @@
 
 - Keep Java 8 compatibility: no APIs or syntax newer than Java 8.
 - Indent Java with tabs.
-- Build with the wrapper: `./gradlew build`. Test changes with `./gradlew publishToMavenLocal` and a real sample project; there are no unit tests.
+- Build with the wrapper and a JDK 17+: `./gradlew build`. There are no unit tests: changes are verified by the smoke tests (`.github/workflows/smoke-tests.yml`), which package `samples/hello-world` on every platform.
 - Any change must keep working in both Maven and Gradle. Build-tool-specific code goes only in `maven/` or `gradle/`, behind `Context`.
 - A new configuration property is wired in: `PackagerSettings` (field + fluent setter + getter), `PackageMojo` (`@Parameter` + fluent call in `execute()`), `PackageTask` (annotated field + fluent call in `createPackager()` with `defaultIfNull(taskValue, extension.getX())`), and documented in `README.md` or `docs/*-specific-properties.md`.
 - Platform-specific options go in `WindowsConfig`, `MacConfig` or `LinuxConfig`, not in `PackagerSettings`.

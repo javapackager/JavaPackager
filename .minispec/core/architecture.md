@@ -39,3 +39,5 @@ PackageMojo (Maven) | PackagePlugin + PackageTask (Gradle)
 - `src/main/java/.../javapackager/utils/` — helpers (files, commands, Velocity, JDK, icons, XML).
 - `src/main/resources/{linux,mac,windows}/` — Velocity templates, default icons and bundled native binaries (WinRun4J, `JavaLauncher.exe`, `rcedit-x64.exe`, `nativeJavaApplicationStub*`, `universalJavaApplicationStub.sh`).
 - `docs/` — user documentation for platform-specific properties and samples.
+- `samples/hello-world/` — sample app packaged by the smoke tests.
+- `.github/workflows/` and `.github/scripts/` — smoke tests, dependency submission and the per-platform checks.
