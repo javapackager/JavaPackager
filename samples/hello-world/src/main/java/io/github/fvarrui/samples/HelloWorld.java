@@ -1,0 +1,14 @@
+package io.github.fvarrui.samples;
+
+/**
+ * Sample app used by JavaPackager smoke tests: prints a known line and exits
+ */
+public class HelloWorld {
+
+	public static void main(String[] args) {
+		System.out.println("JavaPackager smoke test OK");
+		System.out.println("os.arch=" + System.getProperty("os.arch"));
+		System.out.println("java.version=" + System.getProperty("java.version"));
+	}
+
+}

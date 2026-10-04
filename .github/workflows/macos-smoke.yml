@@ -1,0 +1,66 @@
+name: macOS smoke tests
+
+on:
+  push:
+    branches: [ devel, master ]
+  pull_request:
+    branches: [ devel, master ]
+  workflow_dispatch:
+
+jobs:
+  macos:
+    name: ${{ matrix.os }} / ${{ matrix.macStartup }}${{ matrix.admin && ' / admin' || '' }}
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+    # administratorRequired is a known failure (issues #473/#398) until fixed
+    continue-on-error: ${{ matrix.admin }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ macos-14, macos-15 ]
+        macStartup: [ UNIVERSAL, ARM64, SCRIPT ]
+        admin: [ false ]
+        include:
+          - os: macos-15
+            macStartup: SCRIPT
+            admin: true
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+          cache: gradle
+
+      - name: Build and install plugin to Maven local
+        run: ./gradlew publishToMavenLocal --no-daemon
+
+      - name: Get plugin version
+        id: plugin
+        run: echo "version=$(./gradlew properties -q --no-daemon | awk '/^version:/ {print $2}')" >> "$GITHUB_OUTPUT"
+
+      - name: Package sample app
+        working-directory: samples/hello-world
+        run: |
+          mvn -B package \
+            -Djavapackager.version=${{ steps.plugin.outputs.version }} \
+            -DmacStartup=${{ matrix.macStartup }} \
+            -DadministratorRequired=${{ matrix.admin }} \
+            2>&1 | tee build.log
+          exit "${PIPESTATUS[0]}"
+
+      - name: Check generated app
+        run: bash .github/scripts/check-macos-app.sh samples/hello-world/target ${{ matrix.macStartup }} ${{ matrix.admin }}
+
+      - name: Upload artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: hello-world-${{ matrix.os }}-${{ matrix.macStartup }}${{ matrix.admin && '-admin' || '' }}
+          path: |
+            samples/hello-world/build.log
+            samples/hello-world/target/*.dmg
+            samples/hello-world/target/*.pkg
+          if-no-files-found: ignore
