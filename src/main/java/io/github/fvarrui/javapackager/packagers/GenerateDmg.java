@@ -22,6 +22,8 @@ import io.github.fvarrui.javapackager.utils.VelocityUtils;
  */
 public class GenerateDmg extends ArtifactGenerator<MacPackager> {
 
+	private static final int HDIUTIL_ATTEMPTS = 3;
+
 	public GenerateDmg() {
 		super("DMG image");
 	}
@@ -90,16 +92,16 @@ public class GenerateDmg extends ArtifactGenerator<MacPackager> {
 		boolean isAarch64 = osArchitecture.equalsIgnoreCase("aarch64");
 		String fileSystem = isAarch64 ? "APFS" : "HFS+";
 		Logger.warn(osArchitecture + " architecture detected. Using " + fileSystem + " filesystem");
-		execute("hdiutil", "create", "-srcfolder", appFolder, "-volname", volumeName, "-ov", "-fs", fileSystem, "-format", "UDRW", tempDmgFile);
+		hdiutil("create", "-srcfolder", appFolder, "-volname", volumeName, "-ov", "-fs", fileSystem, "-format", "UDRW", tempDmgFile);
 
 		if (mountFolder.exists()) {
 			Logger.info("Unmounting volume: " + mountFolder);
-			execute("hdiutil", "detach", mountFolder);
+			hdiutil("detach", mountFolder);
 		}
 		
 		// mounts image
 		Logger.info("Mounting image: " + tempDmgFile.getAbsolutePath());
-		String result = execute("hdiutil", "attach", "-readwrite", "-noverify", "-noautoopen", tempDmgFile);
+		String result = hdiutil("attach", "-readwrite", "-noverify", "-noautoopen", tempDmgFile);
 		Optional<String> optDeviceName = Arrays.stream(result.split("\n"))
 								.filter(s -> s.contains(mountFolder.getAbsolutePath()))
 								.map(StringUtils::normalizeSpace)
@@ -146,11 +148,11 @@ public class GenerateDmg extends ArtifactGenerator<MacPackager> {
 		
 		// unmounts
 		Logger.info("Unmounting volume: " + mountFolder);
-		execute("hdiutil", "detach", mountFolder);
+		hdiutil("detach", mountFolder);
 		
 		// compress image
 		Logger.info("Compressing disk image...");
-		execute("hdiutil", "convert", tempDmgFile, "-ov", "-format", "UDZO", "-imagekey", "zlib-level=9", "-o", dmgFile);
+		hdiutil("convert", tempDmgFile, "-ov", "-format", "UDZO", "-imagekey", "zlib-level=9", "-o", dmgFile);
 		tempDmgFile.delete();
 
 		// checks if dmg file was created
@@ -159,6 +161,21 @@ public class GenerateDmg extends ArtifactGenerator<MacPackager> {
 		}
 		
 		return dmgFile;
+	}
+
+	/**
+	 * Runs hdiutil, retrying if it fails (e.g. "Resource busy" while the image is being scanned)
+	 */
+	private String hdiutil(Object... arguments) throws Exception {
+		for (int attempt = 1; ; attempt++) {
+			try {
+				return execute("hdiutil", arguments);
+			} catch (Exception e) {
+				if (attempt == HDIUTIL_ATTEMPTS) throw e;
+				Logger.warn("hdiutil " + arguments[0] + " failed (attempt " + attempt + " of " + HDIUTIL_ATTEMPTS + "), retrying: " + e.getMessage());
+				ThreadUtils.sleep(attempt * 5000L);
+			}
+		}
 	}
 	
 }
