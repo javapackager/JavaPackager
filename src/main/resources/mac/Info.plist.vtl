@@ -123,15 +123,15 @@
 #else
 			<false/>
 #end
-		</dict>
 #if ($info.appArgs)
-        <key>Arguments</key>
-        <array>
+			<key>Arguments</key>
+			<array>
 #foreach ($appArg in $info.appArgs)
-            <string>$appArg</string>
+				<string>$appArg</string>
 #end
-        </array>
+			</array>
 #end
+		</dict>
 		<key>LSEnvironment</key>
 		<dict>
 #if ($info.bundleJre)

@@ -147,7 +147,7 @@ jobs:
       - name: Package sample app
         working-directory: samples/hello-world
         run: |
-          iscc /? > /dev/null 2>&1 && echo "iscc found" || echo "iscc NOT found"
+          command -v iscc
           wix --version
           mvn -B package -Djavapackager.version=${{ steps.plugin.outputs.version }} 2>&1 | tee build.log
           exit "${PIPESTATUS[0]}"

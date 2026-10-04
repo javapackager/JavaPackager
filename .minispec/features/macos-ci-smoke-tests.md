@@ -17,7 +17,7 @@ Package a sample app on GitHub's Apple Silicon macOS runners and check the resul
 ## Changes
 
 - Add a minimal Maven sample app under `samples/hello-world/` that prints a known line and exits. It takes the plugin version as a property, so CI uses the snapshot built from the repo.
-- Add the workflow `.github/workflows/smoke-tests.yml (job `macos`)`:
+- Add the workflow `.github/workflows/smoke-tests.yml` (job `macos`):
   - Triggers: push and pull request on `devel` and `master`, plus manual dispatch.
   - Builds the plugin with `./gradlew publishToMavenLocal`.
   - Matrix over `macos-14` and `macos-15` and `macStartup` (`UNIVERSAL`, `ARM64`, `SCRIPT`), with one extra job using `administratorRequired=true`.
