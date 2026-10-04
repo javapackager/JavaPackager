@@ -233,18 +233,7 @@ public class BundleJre extends ArtifactGenerator<Packager> {
 		
 		} else if (VersionUtils.getJavaMajorVersion() >= 13) { 
 			
-			String modules = 
-				execute(
-					jdeps, 
-					"-q",
-					"--multi-release", VersionUtils.getJavaMajorVersion(),
-					"--ignore-missing-deps",
-					"--print-module-deps",
-					"--add-modules=ALL-MODULE-PATH",
-					"--module-path=" + StringUtils.join(modulePaths, File.pathSeparator),
-					libsFolder,
-					jarFile
-				);
+			String modules = jdeps(jdeps, "--print-module-deps", modulePaths, libsFolder, jarFile);
 			
 			modulesList = 
 				Arrays.stream(modules.split(","))
@@ -254,18 +243,7 @@ public class BundleJre extends ArtifactGenerator<Packager> {
 			
 		} else if (VersionUtils.getJavaMajorVersion() >= 9) { 
 		
-			String modules = 
-				execute(
-					jdeps.getAbsolutePath(), 
-					"-q",
-					"--multi-release", VersionUtils.getJavaMajorVersion(),
-					"--ignore-missing-deps",					
-					"--list-deps",
-					"--add-modules=ALL-MODULE-PATH",
-					"--module-path=" + StringUtils.join(modulePaths, File.pathSeparator),
-					libsFolder,
-					jarFile
-				);
+			String modules = jdeps(jdeps, "--list-deps", modulePaths, libsFolder, jarFile);
 
 			modulesList = 
 				Arrays.stream(modules.split("\n"))
@@ -294,6 +272,48 @@ public class BundleJre extends ArtifactGenerator<Packager> {
 		return StringUtils.join(modulesList, ",");
 	}
 	
+	/**
+	 * Runs jdeps on the app's JAR and dependencies. The module path is tried first; if jdeps fails there (e.g. two
+	 * JARs, as automatic modules, export the same package: #439), the analysis is repeated on the class path, where
+	 * split packages are allowed
+	 */
+	private String jdeps(File jdeps, String listOption, List<File> modulePaths, File libsFolder, File jarFile) throws Exception {
+		try {
+			return execute(
+				jdeps,
+				"-q",
+				"--multi-release", VersionUtils.getJavaMajorVersion(),
+				"--ignore-missing-deps",
+				listOption,
+				"--add-modules=ALL-MODULE-PATH",
+				"--module-path=" + StringUtils.join(modulePaths, File.pathSeparator),
+				libsFolder,
+				jarFile
+			);
+		} catch (Exception e) {
+			Logger.warn("jdeps failed on the module path, retrying on the class path: " + e.getMessage());
+			List<String> classPath = new ArrayList<>();
+			if (libsFolder != null) {
+				classPath.add(new File(libsFolder, "*").getAbsolutePath());
+			}
+			modulePaths.stream()
+				.filter(path -> !path.equals(jarFile) && !path.equals(libsFolder))
+				.map(File::getAbsolutePath)
+				.forEach(classPath::add);
+			return execute(
+				jdeps,
+				"-q",
+				"--multi-release", VersionUtils.getJavaMajorVersion(),
+				"--ignore-missing-deps",
+				listOption,
+				classPath.isEmpty() ? null : "--class-path",
+				classPath.isEmpty() ? null : StringUtils.join(classPath, File.pathSeparator),
+				libsFolder,
+				jarFile
+			);
+		}
+	}
+
 	private List<File> getModulePaths(File jarFile, File libsFolder, List<File> additionalModulePaths) {
 		List<File> modulePaths = new ArrayList<>();
 		modulePaths.add(jarFile);
