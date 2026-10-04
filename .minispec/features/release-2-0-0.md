@@ -8,11 +8,14 @@ Publish 2.0.0 from `devel`, with release notes that warn about the breaking chan
 
 - Major version (after 1.7.6) because of the breaking changes below: users must edit their build to upgrade.
 - `devel` has many fixes since 1.7.6, found or verified by the smoke tests (see the `fix-*` notes).
-- Releases still use OSSRH (`nexus-staging` plugin), which was shut down. Snapshots already go to the Central Portal.
+- Release publishing migrated to the Central Portal: `./gradlew releaseToCentral` uploads through the OSSRH Staging API in `user_managed` mode, then the release is published manually in the Portal. Not tried yet with a real release.
+- Draft GitHub release `v2.0.0` created, targeting `devel`.
+- 2026-10-04: issues #305, #421, #463, #470, #473, #477 commented and labelled `fixed`; #448, #449, #389, #398 asked to test `2.0.0-SNAPSHOT` (label `feedback`).
 
 ## Changes
 
-- Migrate release publishing to the Central Portal.
+- Set up release signing (GPG key in `~/.gradle/gradle.properties`, public key on a keyserver) and run `releaseToCentral`.
+- Wait for feedback on the macOS issues before publishing.
 - Write the release notes. Breaking changes first:
   - `groupId`, Java packages and Gradle plugin id are now `io.github.javapackager` (ADR-003).
   - `macStartup` defaults to `UNIVERSAL`; `<macStartup>SCRIPT</macStartup>` restores the old launcher (ADR-002).

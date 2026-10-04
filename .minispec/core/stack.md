@@ -23,4 +23,4 @@
 
 ## Publishing
 
-- Maven Central (OSSRH, signed) and Gradle Plugin Portal.
+- Maven Central through the Central Portal: snapshots repo, and releases (signed) through the Portal OSSRH Staging API (`releaseToCentral`).

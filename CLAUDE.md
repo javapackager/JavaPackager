@@ -23,4 +23,4 @@ There are no unit tests, so there is no way to run a single test. `src/it/simple
 
 `compileJava` triggers `generatePluginDescriptor`, which runs an embedded Maven against the generated POM to produce `META-INF/maven/plugin.xml` from the `@Mojo`/`@Parameter` annotations.
 
-Publishing uses a Central Portal user token in the `ossrhUsername`/`ossrhPassword` properties (`~/.gradle/gradle.properties`). Snapshots go to the Central Portal snapshots repo; releases still need migrating from OSSRH. The version is set in `build.gradle`.
+Publishing uses a Central Portal user token in the `ossrhUsername`/`ossrhPassword` properties (`~/.gradle/gradle.properties`). Snapshots: `./gradlew publish` (Central Portal snapshots repo). Releases: `./gradlew releaseToCentral` (Portal OSSRH Staging API, then manual Publish in the Portal). The version is set in `build.gradle`.

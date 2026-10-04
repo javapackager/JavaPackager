@@ -3,7 +3,6 @@ plugins {
 	id 'maven-publish'
 	id 'java-gradle-plugin'
 	id 'com.gradle.plugin-publish' version '1.1.0'
-	id 'io.codearte.nexus-staging' version '0.21.2'
 	id 'eclipse'
 	id 'de.undercouch.download' version '5.7.0'
 	id 'signing'
@@ -87,14 +86,15 @@ java {
 	withJavadocJar()
 }
 
-// OSSRH publication
+// Maven Central publication (Central Portal)
 publishing {
 	repositories {
 		maven {
-            def releasesRepoUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
-            // snapshots go to the Central Portal (OSSRH was shut down); credentials are a Central Portal user token
+            // credentials are a Central Portal user token; releases use the Portal OSSRH Staging API
+            // and must be uploaded to the Portal afterwards (see releaseToCentral)
+            def releasesRepoUrl = "https://ossrh-staging-api.central.sonatype.com/service/local/staging/deploy/maven2/"
             def snapshotsRepoUrl = "https://central.sonatype.com/repository/maven-snapshots/"
-			name = "OSSRH"
+			name = "MavenCentral"
             url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl			
 			credentials {
 				username = project.findProperty("ossrhUsername") ?: ''
@@ -218,12 +218,32 @@ signing {
 		// signing is only required if release artifacts are to be published (snapshots aren't validated)
 		!version.endsWith('SNAPSHOT') && gradle.taskGraph.allTasks.any { it instanceof PublishToMavenRepository }
 	}
-	sign publishing.publications.pluginMaven
+	// all publications (plugin and Gradle plugin marker): Maven Central rejects unsigned release artifacts
+	sign publishing.publications
 }
 
-nexusStaging {
-	username = project.findProperty('ossrhUsername') ?: ''
-	password = project.findProperty('ossrhPassword') ?: ''
+// Publishes a release and uploads it to the Central Portal, where it waits to be published manually
+// (https://central.sonatype.com/publishing/deployments). Snapshots only need 'publish'.
+tasks.register('releaseToCentral') {
+	group 'publishing'
+	description 'Publishes the release to the Central Portal (OSSRH Staging API) and uploads it for manual publishing.'
+	dependsOn 'publish'
+	doLast {
+		if (version.endsWith('SNAPSHOT')) {
+			throw new GradleException("releaseToCentral is for releases; use 'publish' for ${version}")
+		}
+		def token = "${project.findProperty('ossrhUsername') ?: ''}:${project.findProperty('ossrhPassword') ?: ''}".bytes.encodeBase64().toString()
+		def url = new URL("https://ossrh-staging-api.central.sonatype.com/manual/upload/defaultRepository/${project.group}?publishing_type=user_managed")
+		def connection = (HttpURLConnection) url.openConnection()
+		connection.requestMethod = 'POST'
+		connection.setRequestProperty('Authorization', "Bearer ${token}")
+		def status = connection.responseCode
+		def response = (status < 400 ? connection.inputStream : connection.errorStream)?.text
+		if (status >= 400) {
+			throw new GradleException("Central Portal upload failed (HTTP ${status}): ${response}")
+		}
+		logger.lifecycle("Uploaded to the Central Portal (HTTP ${status}). Review and publish it at https://central.sonatype.com/publishing/deployments")
+	}
 }
 
 tasks.register('updateWhyJavaLauncher', Download) {

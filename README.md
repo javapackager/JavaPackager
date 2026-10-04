@@ -417,5 +417,10 @@ To publish a `-SNAPSHOT` version (ommit `./` on Windows):
 ./gradlew publish
 ```
 
-> [!WARNING]
-> Releases (non-SNAPSHOT versions) still use the old OSSRH staging process, which no longer works. They have to be migrated to the Central Portal before the next release.
+To publish a release (a version without `-SNAPSHOT`, signed with your GPG key):
+
+```bash
+./gradlew releaseToCentral
+```
+
+It uploads the release to the Central Portal, where it waits in [Deployments](https://central.sonatype.com/publishing/deployments) until you review it and click **Publish**.

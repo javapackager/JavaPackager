@@ -21,4 +21,4 @@ Since 2.0.0, everything that named `io.github.fvarrui` moves to `io.github.javap
 - Releases up to 1.7.6 stay available under `io.github.fvarrui`.
 - No Maven relocation POM is published under `io.github.fvarrui`, since that namespace isn't available in the current account.
 - Publishing to the Gradle Plugin Portal under the new id would need ownership of `io.github.javapackager` there. The README already uses the Maven Central (`buildscript`) mode, so this doesn't block 2.0.0.
-- Releases still need to be migrated from OSSRH (`nexus-staging`) to the Central Portal before 2.0.0.
+- Releases are published to the Central Portal with `./gradlew releaseToCentral` (OSSRH Staging API), replacing `nexus-staging`.
