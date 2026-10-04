@@ -73,15 +73,20 @@ done
 # (based on javapackager/JavaPackager#487 by Jacob Burroughs). CI only: needs sudo and writes to /Applications
 INSTALLED="/Applications/$NAME.app"
 OPEN_OUT="$(mktemp)"
+OPEN_ERR="$(mktemp)"
 open_installed() {
+	# separate files: open truncates each one, so sharing one would let stderr (launcher logs) overwrite stdout
 	: > "$OPEN_OUT"
-	open -n --stdout "$OPEN_OUT" --stderr "$OPEN_OUT" "$INSTALLED"
+	: > "$OPEN_ERR"
+	open -n --stdout "$OPEN_OUT" --stderr "$OPEN_ERR" "$INSTALLED"
 	for _ in $(seq 1 30); do
 		grep -q "smoke.prop=" "$OPEN_OUT" && break
 		sleep 2
 	done
 	echo "--- app output ($1) ---"
 	cat "$OPEN_OUT"
+	echo "--- stderr ---"
+	cat "$OPEN_ERR"
 	echo "------------------"
 	if grep -q "JavaPackager smoke test OK" "$OPEN_OUT"; then pass "app installed from $1 opens"; else fail "app installed from $1 didn't open"; fi
 	if grep -qF "args=[--foo, hello world]" "$OPEN_OUT"; then pass "appArgs received when opened from $1"; else fail "appArgs not received when opened from $1"; fi
