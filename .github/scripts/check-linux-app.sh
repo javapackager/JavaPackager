@@ -37,5 +37,11 @@ for ext in deb rpm AppImage; do
 	if [ -f "$FILE" ]; then pass "$ext generated: $FILE"; else fail "$ext not generated (see the build log)"; fi
 done
 
+
+# zipball and tarball: ${name}-${version}-${platform} (#489)
+for ext in zip tar.gz; do
+	FILE="$TARGET/${NAME}-${VERSION}-linux.$ext"
+	if [ -f "$FILE" ]; then pass "$ext bundle generated: $FILE"; else fail "$ext bundle not generated: $FILE"; ls "$TARGET"; fi
+done
 echo "$failures check(s) failed"
 [ "$failures" -eq 0 ]

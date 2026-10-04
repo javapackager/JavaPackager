@@ -38,6 +38,8 @@
 							<generateInstaller>true</generateInstaller>
 							<administratorRequired>${administratorRequired}</administratorRequired>
 							<classpath>extra</classpath>
+							<createTarball>true</createTarball>
+							<createZipball>true</createZipball>
 							<vmArgs>
 								<vmArg>-Dsmoke.prop=hello world</vmArg>
 							</vmArgs>

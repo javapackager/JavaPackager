@@ -63,5 +63,53 @@ PKG="$TARGET/${NAME}_${VERSION}.pkg"
 if [ -f "$DMG" ]; then pass "DMG generated: $DMG"; else fail "DMG not generated (see 'DMG image generation failed' in the build log)"; fi
 if [ -f "$PKG" ]; then pass "PKG generated: $PKG"; else fail "PKG not generated"; fi
 
+# zipball and tarball: ${name}-${version}-${platform} (#489)
+for ext in zip tar.gz; do
+	FILE="$TARGET/${NAME}-${VERSION}-mac.$ext"
+	if [ -f "$FILE" ]; then pass "$ext bundle generated: $FILE"; else fail "$ext bundle not generated: $FILE"; ls "$TARGET"; fi
+done
+
+# install the app like a user and open it through Launch Services, as the Finder does
+# (based on javapackager/JavaPackager#487 by Jacob Burroughs). CI only: needs sudo and writes to /Applications
+INSTALLED="/Applications/$NAME.app"
+OPEN_OUT="$(mktemp)"
+open_installed() {
+	: > "$OPEN_OUT"
+	open -n --stdout "$OPEN_OUT" --stderr "$OPEN_OUT" "$INSTALLED"
+	for _ in $(seq 1 30); do
+		grep -q "smoke.prop=" "$OPEN_OUT" && break
+		sleep 2
+	done
+	echo "--- app output ($1) ---"
+	cat "$OPEN_OUT"
+	echo "------------------"
+	if grep -q "JavaPackager smoke test OK" "$OPEN_OUT"; then pass "app installed from $1 opens"; else fail "app installed from $1 didn't open"; fi
+	if grep -qF "args=[--foo, hello world]" "$OPEN_OUT"; then pass "appArgs received when opened from $1"; else fail "appArgs not received when opened from $1"; fi
+	if grep -qF "smoke.prop=hello world" "$OPEN_OUT"; then pass "vmArgs received when opened from $1"; else fail "vmArgs not received when opened from $1"; fi
+}
+if [ "$ADMIN" != "true" ] && [ -f "$DMG" ]; then
+	sudo rm -rf "$INSTALLED"
+	MOUNT="$(mktemp -d)"
+	if hdiutil attach -nobrowse -noautoopen -mountpoint "$MOUNT" "$DMG" > /dev/null; then
+		ditto "$MOUNT/$NAME.app" "$INSTALLED"
+		hdiutil detach "$MOUNT" > /dev/null || hdiutil detach -force "$MOUNT" > /dev/null
+		open_installed DMG
+	else
+		fail "DMG can't be mounted"
+	fi
+fi
+if [ "$ADMIN" != "true" ] && [ -f "$PKG" ]; then
+	sudo rm -rf "$INSTALLED"
+	# the installer relocates the bundle to any existing copy with the same bundle id, so hide the built one
+	mv "$APP" "$APP.built"
+	if sudo installer -pkg "$PKG" -target / > /dev/null; then
+		if [ -d "$INSTALLED" ]; then open_installed PKG; else fail "PKG didn't install $INSTALLED"; fi
+	else
+		fail "PKG can't be installed"
+	fi
+	mv "$APP.built" "$APP"
+fi
+sudo rm -rf "$INSTALLED"
+
 echo "$failures check(s) failed"
 [ "$failures" -eq 0 ]
