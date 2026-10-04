@@ -2,7 +2,7 @@
 ## Minimal config
 ```xml
 <plugin>
-    <groupId>io.github.fvarrui</groupId>
+    <groupId>io.github.javapackager</groupId>
     <artifactId>javapackager</artifactId>
     <version>{latest-plugin-version-here}</version>
     <executions>
@@ -27,7 +27,7 @@ Also, JavaPackager plugin is able to get some properties from `pom.xml`, so you 
     <build>
         <plugins>
             <plugin>
-                <groupId>io.github.fvarrui</groupId>
+                <groupId>io.github.javapackager</groupId>
                 <artifactId>javapackager</artifactId>
                 <version>{latest-plugin-version-here}</version>
                 <executions>
@@ -47,7 +47,7 @@ Also, JavaPackager plugin is able to get some properties from `pom.xml`, so you 
 ## Bundle with a customized JRE
 ```xml
 <plugin>
-    <groupId>io.github.fvarrui</groupId>
+    <groupId>io.github.javapackager</groupId>
     <artifactId>javapackager</artifactId>
     <version>{latest-plugin-version-here}</version>
     <executions>
@@ -68,7 +68,7 @@ Also, JavaPackager plugin is able to get some properties from `pom.xml`, so you 
 ## Bundle with a full  JRE
 ```xml
 <plugin>
-    <groupId>io.github.fvarrui</groupId>
+    <groupId>io.github.javapackager</groupId>
     <artifactId>javapackager</artifactId>
     <version>{latest-plugin-version-here}</version>
     <executions>
@@ -89,7 +89,7 @@ Also, JavaPackager plugin is able to get some properties from `pom.xml`, so you 
 ## Bundle with an existing JRE
 ```xml
 <plugin>
-    <groupId>io.github.fvarrui</groupId>
+    <groupId>io.github.javapackager</groupId>
     <artifactId>javapackager</artifactId>
     <version>{latest-plugin-version-here}</version>
     <executions>
@@ -110,7 +110,7 @@ Also, JavaPackager plugin is able to get some properties from `pom.xml`, so you 
 ## Bundle your own fat JAR
 ```xml
 <plugin>
-    <groupId>io.github.fvarrui</groupId>
+    <groupId>io.github.javapackager</groupId>
     <artifactId>javapackager</artifactId>
     <version>{latest-plugin-version-here}</version>
     <executions>
@@ -132,7 +132,7 @@ Also, JavaPackager plugin is able to get some properties from `pom.xml`, so you 
 ## Multiple executions
 ```xml
 <plugin>
-    <groupId>io.github.fvarrui</groupId>
+    <groupId>io.github.javapackager</groupId>
     <artifactId>javapackager</artifactId>
     <version>{latest-plugin-version-here}</version>
     <configuration>
@@ -170,7 +170,7 @@ E.g. on Windows, last configuration will generate next artifacts:
 ## Bundling for multiple platforms
 ```xml
 <plugin>
-    <groupId>io.github.fvarrui</groupId>
+    <groupId>io.github.javapackager</groupId>
     <artifactId>javapackager</artifactId>
     <version>{latest-plugin-version-here}</version>
     <configuration>

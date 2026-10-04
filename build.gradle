@@ -18,8 +18,8 @@ repositories {
 }
 
 gradlePlugin {
-	website = 'http://github.com/fvarrui/JavaPackager'
-	vcsUrl = 'http://github.com/fvarrui/JavaPackager.git'
+	website = 'http://github.com/javapackager/JavaPackager'
+	vcsUrl = 'http://github.com/javapackager/JavaPackager.git'
 	description = 'Packages Java applications as native Windows, MacOS or GNU/Linux executables and creates installers for them'
 
 	plugins {
@@ -63,7 +63,7 @@ dependencies {
 	mavenEmbedder 'org.apache.maven.wagon:wagon-provider-api:3.4.1'
 }
 
-group = 'io.github.fvarrui'
+group = 'io.github.javapackager'
 version = '1.7.7-SNAPSHOT'
 description = 'Hybrid Maven/Gradle plugin to package Java applications as native Windows, Mac OS X or GNU/Linux executables and create installers for them'
 
@@ -130,11 +130,11 @@ publishing {
 				pom {
 					version = project.version
 					description = project.description
-					url = 'https://github.com/fvarrui/JavaPackager'
+					url = 'https://github.com/javapackager/JavaPackager'
 					scm {
-						connection = 'scm:git:git://github.com/fvarrui/JavaPackager.git'
-						developerConnection = 'scm:git:git@github.com:fvarrui/fvarrui.git'
-						url = 'https://github.com/fvarrui/JavaPackager'
+						connection = 'scm:git:git://github.com/javapackager/JavaPackager.git'
+						developerConnection = 'scm:git:git@github.com:javapackager/JavaPackager.git'
+						url = 'https://github.com/javapackager/JavaPackager'
 					}
 					licenses {
 						license {

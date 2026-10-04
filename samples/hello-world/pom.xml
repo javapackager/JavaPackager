@@ -23,7 +23,7 @@
 	<build>
 		<plugins>
 			<plugin>
-				<groupId>io.github.fvarrui</groupId>
+				<groupId>io.github.javapackager</groupId>
 				<artifactId>javapackager</artifactId>
 				<version>${javapackager.version}</version>
 				<executions>

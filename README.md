@@ -1,12 +1,15 @@
 # JavaPackager
 
-[![Maven Central](http://img.shields.io/maven-central/v/io.github.fvarrui/javapackager)](https://central.sonatype.com/search?smo=true&q=a%3Ajavapackager+g%3Aio.github.fvarrui)
+[![Maven Central](http://img.shields.io/maven-central/v/io.github.javapackager/javapackager)](https://central.sonatype.com/search?smo=true&q=a%3Ajavapackager+g%3Aio.github.javapackager)
 [![GPL-3.0](https://img.shields.io/badge/license-GPL--3.0-%250778B9.svg)](https://www.gnu.org/licenses/gpl-3.0.html)
 
 JavaPackager is a hybrid plugin for **Maven** and **Gradle** which provides an easy way to package Java applications in native Windows, MacOS or GNU/Linux executables, and generate installers for them.
 
 > [!IMPORTANT] 
 > See [JavaPackager changes and fixes](https://github.com/fvarrui/JavaPackager/releases).
+
+> [!WARNING]
+> Since 1.7.7 the plugin's `groupId` is `io.github.javapackager` (it was `io.github.fvarrui` up to 1.7.6). Update it in your `pom.xml` or `build.gradle` when upgrading.
 
 ## Project maintainers needed
 
@@ -35,7 +38,7 @@ Add the following `plugin` tag to your `pom.xml`:
 
 ```xml
 <plugin>
-    <groupId>io.github.fvarrui</groupId>
+    <groupId>io.github.javapackager</groupId>
     <artifactId>javapackager</artifactId>
     <version>{latest.version}</version>
     <executions>
@@ -86,7 +89,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'io.github.fvarrui:javapackager:{latest.version}'
+        classpath 'io.github.javapackager:javapackager:{latest.version}'
     }
 }
 
@@ -304,7 +307,7 @@ And then bundle this file with your app:
 
 ## How to use SNAPSHOT versions
 
-[Here](https://oss.sonatype.org/content/repositories/snapshots/io/github/fvarrui/javapackager/) you can find the uploaded JavaPackager SNAPSHOT versions.
+[Here](https://central.sonatype.com/repository/maven-snapshots//io/github/fvarrui/javapackager/) you can find the uploaded JavaPackager SNAPSHOT versions.
 
 ### Maven
 
@@ -315,7 +318,7 @@ Add the plugin repository to your `pom.xml`:
     <pluginRepository>
         <id>nexus</id>
         <name>nexus-snapshot-repository</name>
-        <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        <url>https://central.sonatype.com/repository/maven-snapshots/</url>
         <snapshots>
             <enabled>true</enabled>
             <updatePolicy>always</updatePolicy>
@@ -331,7 +334,7 @@ And then you can use the latest SNAPSHOT version:
 
 ```xml
 <plugin>    
-    <groupId>io.github.fvarrui</groupId>
+    <groupId>io.github.javapackager</groupId>
     <artifactId>javapackager</artifactId>
     <version>{javapackager.version}-SNAPSHOT</version>
     [...]
@@ -342,7 +345,7 @@ Or a specific SNAPSHOT version (specifying its timestamp and index):
 
 ```xml
 <plugin>
-    <groupId>io.github.fvarrui</groupId>
+    <groupId>io.github.javapackager</groupId>
     <artifactId>javapackager</artifactId>
     <version>{javapackager.version}-{timestamp}-{index}</version>
     [...]
@@ -359,11 +362,11 @@ Add the plugin repository to your `build.gradle` and use the latest SNAPSHOT ver
 buildscript {
     repositories {
         maven {
-            url "https://oss.sonatype.org/content/repositories/snapshots"
+            url "https://central.sonatype.com/repository/maven-snapshots/"
         }
     }
     dependencies {
-        classpath 'io.github.fvarrui:javapackager:{javapackager.version}-SNAPSHOT'
+        classpath 'io.github.javapackager:javapackager:{javapackager.version}-SNAPSHOT'
     }
 }
 ```
@@ -374,7 +377,7 @@ Or set a specific SNAPSHOT version specifying its timestamp and index:
 buildscript {
     [...]
     dependencies {
-        classpath 'io.github.fvarrui:javapackager:{javapackager.version}-{timestamp}-{index}'
+        classpath 'io.github.javapackager:javapackager:{javapackager.version}-{timestamp}-{index}'
     }
 }
 ```

@@ -2,7 +2,7 @@
 
 ## What
 
-JavaPackager is a hybrid Maven/Gradle plugin, published as a single artifact (`io.github.fvarrui:javapackager`), that packages Java applications as native Windows, macOS or GNU/Linux apps and generates installers for them.
+JavaPackager is a hybrid Maven/Gradle plugin, published as a single artifact (`io.github.javapackager:javapackager`, `io.github.fvarrui:javapackager` up to 1.7.6), that packages Java applications as native Windows, macOS or GNU/Linux apps and generates installers for them.
 
 ## What it does
 
