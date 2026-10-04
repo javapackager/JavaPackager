@@ -13,6 +13,7 @@ Publish 2.0.0 from `devel`, with release notes that warn about the breaking chan
 - 2026-10-04: issues #305, #421, #463, #470, #473, #477 commented and labelled `fixed`; #448, #449, #389, #398 asked to test `2.0.0-SNAPSHOT` (label `feedback`).
 - 2026-10-04: #484 commented and labelled `fixed`; #369 asked to test `2.0.0-SNAPSHOT` build 5 (label `feedback`).
 - 2026-10-04: answered and closed #380, #452 (not planned), #375, #466 (answered), #362, #408 (duplicates of #266); #393 and #482 answered and labelled `feedback` (#393: close if no reply in a few weeks).
+- 2026-10-04: PR #489 (Till Seifert) cherry-picked as 656bd94 and closed; PR #487 (Jacob, draft) commented, its install-and-open macOS test ported in 168e68c, asked Jacob to close it.
 
 ## Changes
 
