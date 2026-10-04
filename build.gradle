@@ -87,7 +87,8 @@ publishing {
 	repositories {
 		maven {
             def releasesRepoUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
-            def snapshotsRepoUrl = "https://oss.sonatype.org/content/repositories/snapshots"
+            // snapshots go to the Central Portal (OSSRH was shut down); credentials are a Central Portal user token
+            def snapshotsRepoUrl = "https://central.sonatype.com/repository/maven-snapshots/"
 			name = "OSSRH"
             url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl			
 			credentials {
@@ -188,8 +189,8 @@ publishToMavenLocal.dependsOn(build)
 // Signature of publication
 signing {
 	setRequired {
-		// signing is only required if the artifacts are to be published
-		gradle.taskGraph.allTasks.any { it instanceof PublishToMavenRepository }
+		// signing is only required if release artifacts are to be published (snapshots aren't validated)
+		!version.endsWith('SNAPSHOT') && gradle.taskGraph.allTasks.any { it instanceof PublishToMavenRepository }
 	}
 	sign publishing.publications.pluginMaven
 }
