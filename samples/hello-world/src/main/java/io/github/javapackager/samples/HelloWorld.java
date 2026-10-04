@@ -11,6 +11,7 @@ public class HelloWorld {
 		System.out.println("java.version=" + System.getProperty("java.version"));
 		System.out.println("args=" + java.util.Arrays.toString(args));
 		System.out.println("smoke.prop=" + System.getProperty("smoke.prop"));
+		System.out.println("java.class.path=" + System.getProperty("java.class.path"));
 	}
 
 }

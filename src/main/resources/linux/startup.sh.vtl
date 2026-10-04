@@ -69,9 +69,15 @@ JVMDefaultOptions+=("$vmArg")
 JVMOptionsFile="$SCRIPTPATH/${info.name}.l4j.ini"
 #[[[ -f "${JVMOptionsFile}" ] && while read -r -a option; do JVMDefaultOptions+=("${option[@]}"); done <<< "$(sed -e "/^#.*$/d" -e "/^[[:space:]]*$/d" "${JVMOptionsFile}")"]]#
 
+#if ($info.classpath)
+# -jar ignores any other classpath: with extra entries, run the main class (the JAR manifest's Class-Path still applies)
 JVMClassPath="$BINARY"
 #foreach ($classpath in $info.classpaths)
 JVMClassPath+=":${classpath}"
+#end
+JVMLaunch=(-cp "$JVMClassPath" "${info.mainClass}")
+#else
+JVMLaunch=(-jar "$BINARY")
 #end
 
 AppArguments=()
@@ -89,8 +95,8 @@ Bootstrap="$SCRIPTPATH/scripts/${info.bootstrapFile.name}" && [ -x "$Bootstrap" 
 #end
 
 #if ($info.administratorRequired)
-#[[pkexec env DISPLAY="$DISPLAY" XAUTHORITY="$XAUTHORITY" GDKBACKEND=x11 "${JAVA}" "${JVMDefaultOptions[@]}" -jar "${JVMClassPath}" "${AppArguments[@]}" "$@"]]#
+#[[pkexec env DISPLAY="$DISPLAY" XAUTHORITY="$XAUTHORITY" GDKBACKEND=x11 "${JAVA}" "${JVMDefaultOptions[@]}" "${JVMLaunch[@]}" "${AppArguments[@]}" "$@"]]#
 #else
-#[["${JAVA}" "${JVMDefaultOptions[@]}" -jar "${JVMClassPath}" "${AppArguments[@]}" "$@"]]#
+#[["${JAVA}" "${JVMDefaultOptions[@]}" "${JVMLaunch[@]}" "${AppArguments[@]}" "$@"]]#
 #end
 exit 0

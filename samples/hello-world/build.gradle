@@ -25,6 +25,7 @@ javapackager {
 	bundleJre = true
 	generateInstaller = true
 	administratorRequired = project.administratorRequired.toBoolean()
+	classpath = 'extra'
 	vmArgs = [ '-Dsmoke.prop=hello world' ]
 	appArgs = [ '--foo', 'hello world' ]
 	macConfig {

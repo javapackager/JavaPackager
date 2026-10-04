@@ -7,8 +7,10 @@ import java.io.File;
 import java.util.List;
 import java.util.Map;
 
+import org.gradle.api.GradleException;
 import org.gradle.api.Project;
 import org.gradle.api.file.DuplicatesStrategy;
+import org.gradle.api.plugins.ExtensionContainer;
 import org.gradle.api.provider.Provider;
 import org.gradle.api.tasks.Input;
 import org.gradle.api.tasks.InputDirectory;
@@ -618,7 +620,7 @@ public class PackageTask extends AbstractPackageTask {
 	// ===============
 
 	// read at configuration time: Task.getProject() is deprecated at execution time
-	private final PackagePluginExtension extension = getProject().getExtensions().findByType(PackagePluginExtension.class);
+	private final ExtensionContainer extensions = getProject().getExtensions();
 
 	private final Provider<String> projectVersion = projectVersion(getProject());
 
@@ -629,6 +631,12 @@ public class PackageTask extends AbstractPackageTask {
 	@SuppressWarnings("unchecked")
 	@Override
 	protected Packager createPackager() throws Exception {
+
+		// looked up here, not when the task is created, so the plugin can be applied after registering the task
+		PackagePluginExtension extension = extensions.findByType(PackagePluginExtension.class);
+		if (extension == null || Context.getGradleContext() == null) {
+			throw new GradleException("JavaPackager plugin isn't applied: add id 'io.github.javapackager' to the plugins block (or apply plugin: 'io.github.javapackager') to use " + PackageTask.class.getName());
+		}
 
 		Context.getGradleContext().setDuplicatesStrategy(defaultIfNull(duplicatesStrategy, extension.getDuplicatesStrategy()));
 		

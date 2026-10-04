@@ -37,6 +37,7 @@
 							<bundleJre>true</bundleJre>
 							<generateInstaller>true</generateInstaller>
 							<administratorRequired>${administratorRequired}</administratorRequired>
+							<classpath>extra</classpath>
 							<vmArgs>
 								<vmArg>-Dsmoke.prop=hello world</vmArg>
 							</vmArgs>
