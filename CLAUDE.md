@@ -24,3 +24,14 @@ There are no unit tests, so there is no way to run a single test. `src/it/simple
 `compileJava` triggers `generatePluginDescriptor`, which runs an embedded Maven against the generated POM to produce `META-INF/maven/plugin.xml` from the `@Mojo`/`@Parameter` annotations.
 
 Publishing uses a Central Portal user token in the `ossrhUsername`/`ossrhPassword` properties (`~/.gradle/gradle.properties`). Snapshots: `./gradlew publish` (Central Portal snapshots repo). Releases: `./gradlew releaseToCentral` (Portal OSSRH Staging API, then manual Publish in the Portal). The version is set in `build.gradle`.
+
+## Project skills and agents
+
+| Skill or agent | Use it to |
+| --- | --- |
+| `ci-status` | Wait for the latest smoke tests run and summarize failures per job |
+| `triage-issues` (with the `issue-triager` agent) | Classify open GitHub issues against `devel`, in parallel, read-only |
+| `issue-update` | Draft and post "fixed in devel", "please test" or "released" comments, with labels |
+| `check-deps` | Find outdated dependencies, check Java 8 bytecode and declared vs resolved versions |
+| `release` | Release notes, `releaseToCentral`, verification and closing issues |
+| `minispec-feature`, `minispec-bugfix`, `minispec-adr`, `minispec-implement` | MiniSpec notes and implementation |
