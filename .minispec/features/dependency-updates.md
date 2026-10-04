@@ -29,7 +29,7 @@ Step 2: updates within the same major line (one commit, validated by the smoke t
 | `velocity-engine-core` | 2.3 | 2.4.1 |
 | `jdeb` | 1.9 | 1.14 |
 | `mojo-executor` | 2.3.0 | 2.4.1 |
-| `plexus-utils` | 3.5.1 | 3.6.2 |
+| `plexus-utils` | 3.5.1 | 4.1.0 (jdeb 1.14 needs 4.x, plus `plexus-xml` 3.1.0) |
 | `launch4j` (Gradle library) | 3.0.5 | 3.0.7 |
 | `launch4j-maven-plugin` (pinned in `maven/CreateWindowsExeLaunch4j`) | 2.4.1 | 2.7.0 (#465) |
 | `maven-plugin-plugin` / `maven-plugin-annotations` | 3.9.0 / 3.6.0 | 3.16.0 |
@@ -45,7 +45,7 @@ Step 2: updates within the same major line (one commit, validated by the smoke t
 
 - `jsign-core` 6.0 → 7.x: major; check API changes and Java 8 support.
 - `launch4j` (Gradle library) 4.0.0: major. Done in `gradle-9-deprecations`.
-- `com.gradle.plugin-publish` 1.1.0 → 2.x: major.
+- `com.gradle.plugin-publish` 1.1.0 → 1.3.1 done; 2.x: major.
 - Gradle wrapper 8.14.3 → 9.x: needs Java 17 to run Gradle.
 - `io.codearte.nexus-staging`: remove when releases move to the Central Portal (`release-2-0-0.md`).
 - `redline` 1.2.10: already the latest but looks unmaintained; consider a replacement.
