@@ -32,6 +32,9 @@ gradlePlugin {
 	}
 }
 
+// maven-plugin-plugin generates the Maven plugin descriptor (see generatePluginDescriptor)
+def mavenPluginPluginVersion = '3.16.0'
+
 configurations {
 	mavenEmbedder
 }
@@ -54,6 +57,7 @@ dependencies {
 	implementation 'edu.sc.seis.launch4j:launch4j:3.0.7'
 
 	compileOnly 'org.apache.maven.plugin-tools:maven-plugin-annotations:3.16.0'
+	compileOnly 'javax.inject:javax.inject:1' // provided by Maven at runtime
 
 	mavenEmbedder 'org.apache.maven:maven-embedder:3.9.16'
 	mavenEmbedder 'org.apache.maven:maven-compat:3.9.16'	
@@ -111,6 +115,7 @@ publishing {
 							appendNode('plugins').appendNode('plugin').with {
 								appendNode('groupId', 'org.apache.maven.plugins')
 								appendNode('artifactId', 'maven-plugin-plugin')
+								appendNode('version', mavenPluginPluginVersion)
 								appendNode('configuration').appendNode('goalPrefix', 'javapackager')
 							}
 						}
@@ -193,7 +198,7 @@ tasks.register('generatePluginDescriptor', JavaExec) {
 			'--errors',
 			'--batch-mode',
 			'--file', generatePomFileForPluginMavenPublication.destination,
-			'org.apache.maven.plugins:maven-plugin-plugin:3.16.0:descriptor',
+			"org.apache.maven.plugins:maven-plugin-plugin:${mavenPluginPluginVersion}:descriptor",
 			'-Dproject.build.sourceEncoding=' + compileJava.options.encoding
 	]
 	doLast {

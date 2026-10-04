@@ -8,12 +8,13 @@ import java.io.File;
 import java.util.List;
 import java.util.Map;
 
+import javax.inject.Inject;
+
 import io.github.javapackager.model.*;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.BuildPluginManager;
 import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
@@ -38,8 +39,12 @@ public class PackageMojo extends AbstractMojo {
 	@Parameter(defaultValue = "${session}", readonly = true)
 	private MavenSession mavenSession;
 
-	@Component
-	private BuildPluginManager pluginManager;
+	private final BuildPluginManager pluginManager;
+
+	@Inject
+	public PackageMojo(BuildPluginManager pluginManager) {
+		this.pluginManager = pluginManager;
+	}
 	
 	// plugin parameters
 	
