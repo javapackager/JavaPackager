@@ -16,6 +16,7 @@ Publish 2.0.0 from `devel`, with release notes that warn about the breaking chan
 - 2026-10-04: PR #489 (Till Seifert) cherry-picked as 656bd94 and closed; PR #487 (Jacob, draft) commented, its install-and-open macOS test ported in 168e68c, asked Jacob to close it.
 - 2026-10-04: issue cleanup. Closed as answered or stale: #436, #435, #368, #381, #403, #382, #338. Duplicates: #377 → #474, #371 → #338, #404 → #384, #336 → #334. `wontfix`: #240, #247, #199. Removed stale `working on` from #229, #216, #345, #344, #431. #444 fixed (77047b7), labelled `fixed`. #439 (jdeps split packages since 1.7.6) left open: possible real bug.
 - 2026-10-04: #439 fixed (b554f4a), asked to test `2.0.0-SNAPSHOT` build 7 (label `feedback`).
+- 2026-10-04: no Gradle Plugin Portal publishing (1.x never was there either): Gradle users get the plugin and its marker from Maven Central, as the README explains. `releaseToCentral` rehearsed with a local, uncommitted `2.0.0-rc1`: signed, uploaded, HTTP 200; the deployment must be checked (Validated) and dropped in the Portal, never published.
 
 ## Changes
 
