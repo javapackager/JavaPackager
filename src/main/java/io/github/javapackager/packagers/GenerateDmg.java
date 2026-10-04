@@ -22,7 +22,7 @@ import io.github.javapackager.utils.VelocityUtils;
  */
 public class GenerateDmg extends ArtifactGenerator<MacPackager> {
 
-	private static final int HDIUTIL_ATTEMPTS = 3;
+	private static final int HDIUTIL_ATTEMPTS = 5;
 
 	public GenerateDmg() {
 		super("DMG image");
