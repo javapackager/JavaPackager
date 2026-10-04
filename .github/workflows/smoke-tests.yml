@@ -50,11 +50,19 @@ jobs:
       - name: Package sample app
         working-directory: samples/hello-world
         run: |
-          mvn -B package \
-            -Djavapackager.version=${{ steps.plugin.outputs.version }} \
-            -DmacStartup=${{ matrix.macStartup }} \
-            -DadministratorRequired=${{ matrix.admin }} \
-            2>&1 | tee build.log
+          if [ "${{ matrix.tool }}" = gradle ]; then
+            ../../gradlew package --no-daemon \
+              -PjavapackagerVersion=${{ steps.plugin.outputs.version }} \
+              -PmacStartup=${{ matrix.macStartup }} \
+              -PadministratorRequired=${{ matrix.admin }} \
+              2>&1 | tee build.log
+          else
+            mvn -B package \
+              -Djavapackager.version=${{ steps.plugin.outputs.version }} \
+              -DmacStartup=${{ matrix.macStartup }} \
+              -DadministratorRequired=${{ matrix.admin }} \
+              2>&1 | tee build.log
+          fi
           exit "${PIPESTATUS[0]}"
 
       - name: Check generated app
