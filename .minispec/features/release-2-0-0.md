@@ -14,6 +14,7 @@ Publish 2.0.0 from `devel`, with release notes that warn about the breaking chan
 - 2026-10-04: #484 commented and labelled `fixed`; #369 asked to test `2.0.0-SNAPSHOT` build 5 (label `feedback`).
 - 2026-10-04: answered and closed #380, #452 (not planned), #375, #466 (answered), #362, #408 (duplicates of #266); #393 and #482 answered and labelled `feedback` (#393: close if no reply in a few weeks).
 - 2026-10-04: PR #489 (Till Seifert) cherry-picked as 656bd94 and closed; PR #487 (Jacob, draft) commented, its install-and-open macOS test ported in 168e68c, asked Jacob to close it.
+- 2026-10-04: issue cleanup. Closed as answered or stale: #436, #435, #368, #381, #403, #382, #338. Duplicates: #377 → #474, #371 → #338, #404 → #384, #336 → #334. `wontfix`: #240, #247, #199. Removed stale `working on` from #229, #216, #345, #344, #431. #444 fixed (77047b7), labelled `fixed`. #439 (jdeps split packages since 1.7.6) left open: possible real bug.
 
 ## Changes
 
