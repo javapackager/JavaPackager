@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Checks the macOS app generated from samples/hello-world.
-# Usage: check-macos-app.sh <target dir> <macStartup> <administratorRequired>
+# Usage: check-macos-app.sh <output dir: target (Maven) or build (Gradle)> <macStartup> <administratorRequired>
 set -u
 
 TARGET="$1"

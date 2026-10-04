@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Checks the GNU/Linux app generated from samples/hello-world.
-# Usage: check-linux-app.sh <target dir>
+# Usage: check-linux-app.sh <output dir: target (Maven) or build (Gradle)>
 set -u
 
 TARGET="$1"

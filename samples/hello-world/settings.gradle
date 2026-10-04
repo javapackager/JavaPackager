@@ -1,0 +1,12 @@
+pluginManagement {
+	repositories {
+		mavenLocal()
+		gradlePluginPortal()
+		mavenCentral()
+	}
+	plugins {
+		id 'io.github.javapackager' version "${javapackagerVersion}"
+	}
+}
+
+rootProject.name = 'hello-world'

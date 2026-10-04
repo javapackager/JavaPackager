@@ -9,7 +9,7 @@ on:
 
 jobs:
   macos:
-    name: ${{ matrix.os }} / ${{ matrix.macStartup }}${{ matrix.admin && ' / admin' || '' }}
+    name: ${{ matrix.os }} / ${{ matrix.tool }} / ${{ matrix.macStartup }}${{ matrix.admin && ' / admin' || '' }}
     runs-on: ${{ matrix.os }}
     timeout-minutes: 30
     strategy:
@@ -18,10 +18,18 @@ jobs:
         os: [ macos-14, macos-15 ]
         macStartup: [ UNIVERSAL, ARM64, SCRIPT ]
         admin: [ false ]
+        tool: [ maven ]
         include:
           - os: macos-15
             macStartup: SCRIPT
             admin: true
+            tool: maven
+          - os: macos-15
+            macStartup: UNIVERSAL
+            admin: false
+            tool: gradle
+    env:
+      OUT: samples/hello-world/${{ matrix.tool == 'gradle' && 'build' || 'target' }}
 
     steps:
       - uses: actions/checkout@v5
@@ -50,23 +58,29 @@ jobs:
           exit "${PIPESTATUS[0]}"
 
       - name: Check generated app
-        run: bash .github/scripts/check-macos-app.sh samples/hello-world/target ${{ matrix.macStartup }} ${{ matrix.admin }}
+        run: bash .github/scripts/check-macos-app.sh "$OUT" ${{ matrix.macStartup }} ${{ matrix.admin }}
 
       - name: Upload artifacts
         if: always()
         uses: actions/upload-artifact@v5
         with:
-          name: hello-world-${{ matrix.os }}-${{ matrix.macStartup }}${{ matrix.admin && '-admin' || '' }}
+          name: hello-world-${{ matrix.os }}-${{ matrix.tool }}-${{ matrix.macStartup }}${{ matrix.admin && '-admin' || '' }}
           path: |
             samples/hello-world/build.log
-            samples/hello-world/target/*.dmg
-            samples/hello-world/target/*.pkg
+            ${{ env.OUT }}/*.dmg
+            ${{ env.OUT }}/*.pkg
           if-no-files-found: ignore
 
   linux:
-    name: ubuntu-latest
+    name: ubuntu-latest / ${{ matrix.tool }}
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        tool: [ maven, gradle ]
+    env:
+      OUT: samples/hello-world/${{ matrix.tool == 'gradle' && 'build' || 'target' }}
 
     steps:
       - uses: actions/checkout@v5
@@ -90,28 +104,38 @@ jobs:
       - name: Package sample app
         working-directory: samples/hello-world
         run: |
-          mvn -B package -Djavapackager.version=${{ steps.plugin.outputs.version }} 2>&1 | tee build.log
+          if [ "${{ matrix.tool }}" = gradle ]; then
+            ../../gradlew package --no-daemon -PjavapackagerVersion=${{ steps.plugin.outputs.version }} 2>&1 | tee build.log
+          else
+            mvn -B package -Djavapackager.version=${{ steps.plugin.outputs.version }} 2>&1 | tee build.log
+          fi
           exit "${PIPESTATUS[0]}"
 
       - name: Check generated app
-        run: bash .github/scripts/check-linux-app.sh samples/hello-world/target
+        run: bash .github/scripts/check-linux-app.sh "$OUT"
 
       - name: Upload artifacts
         if: always()
         uses: actions/upload-artifact@v5
         with:
-          name: hello-world-ubuntu-latest
+          name: hello-world-ubuntu-latest-${{ matrix.tool }}
           path: |
             samples/hello-world/build.log
-            samples/hello-world/target/*.deb
-            samples/hello-world/target/*.rpm
-            samples/hello-world/target/*.AppImage
+            ${{ env.OUT }}/*.deb
+            ${{ env.OUT }}/*.rpm
+            ${{ env.OUT }}/*.AppImage
           if-no-files-found: ignore
 
   windows:
-    name: windows-latest
+    name: windows-latest / ${{ matrix.tool }}
     runs-on: windows-latest
     timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        tool: [ maven, gradle ]
+    env:
+      OUT: samples/hello-world/${{ matrix.tool == 'gradle' && 'build' || 'target' }}
     defaults:
       run:
         shell: bash
@@ -149,20 +173,24 @@ jobs:
         run: |
           command -v iscc
           wix --version
-          mvn -B package -Djavapackager.version=${{ steps.plugin.outputs.version }} 2>&1 | tee build.log
+          if [ "${{ matrix.tool }}" = gradle ]; then
+            ../../gradlew package --no-daemon -PjavapackagerVersion=${{ steps.plugin.outputs.version }} 2>&1 | tee build.log
+          else
+            mvn -B package -Djavapackager.version=${{ steps.plugin.outputs.version }} 2>&1 | tee build.log
+          fi
           exit "${PIPESTATUS[0]}"
 
       - name: Check generated app
-        run: bash .github/scripts/check-windows-app.sh samples/hello-world/target
+        run: bash .github/scripts/check-windows-app.sh "$OUT"
 
       - name: Upload artifacts
         if: always()
         uses: actions/upload-artifact@v5
         with:
-          name: hello-world-windows-latest
+          name: hello-world-windows-latest-${{ matrix.tool }}
           path: |
             samples/hello-world/build.log
-            samples/hello-world/target/*.exe
-            samples/hello-world/target/*.msi
-            samples/hello-world/target/*.msm
+            ${{ env.OUT }}/*.exe
+            ${{ env.OUT }}/*.msi
+            ${{ env.OUT }}/*.msm
           if-no-files-found: ignore

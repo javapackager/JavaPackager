@@ -405,7 +405,7 @@ cd JavaPackager
 > [!IMPORTANT]
 > Build the plugin with a JDK 17 or newer (a JRE is not enough). The plugin itself targets Java 8.
 
-Every push to `devel` and `master` runs the smoke tests (`.github/workflows/smoke-tests.yml`): they package [`samples/hello-world`](samples/hello-world) on GNU/Linux, Windows and macOS and check the generated apps and installers.
+Every push to `devel` and `master` runs the smoke tests (`.github/workflows/smoke-tests.yml`): they package [`samples/hello-world`](samples/hello-world) with the Maven and the Gradle plugin on GNU/Linux, Windows and macOS and check the generated apps and installers.
 
 ## How to publish the plugin to Maven Central
 

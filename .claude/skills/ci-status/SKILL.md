@@ -5,7 +5,7 @@ description: Wait for the latest smoke tests run (or a given run id) of javapack
 
 # CI status
 
-The smoke tests (`.github/workflows/smoke-tests.yml`) package `samples/hello-world` on GNU/Linux, Windows and macOS (every `macStartup`, plus an `administratorRequired` job) and run `.github/scripts/check-*-app.sh`.
+The smoke tests (`.github/workflows/smoke-tests.yml`) package `samples/hello-world` on GNU/Linux, Windows and macOS (every `macStartup`, plus an `administratorRequired` job) with Maven, and once per platform with Gradle (output in `build/` instead of `target/`), and run `.github/scripts/check-*-app.sh`.
 
 ## Steps
 

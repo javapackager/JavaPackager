@@ -12,8 +12,9 @@ Package the sample app through the Gradle plugin in CI, so the Gradle side is te
 
 ## Changes
 
-- Add `samples/hello-world/build.gradle` and `settings.gradle` that apply the plugin from Maven local (`buildscript { repositories { mavenLocal(); mavenCentral(); gradlePluginPortal() } }`) with the same settings as the Maven sample.
-- Add a job (at least `ubuntu-latest`, ideally all three OSes) that runs `publishToMavenLocal`, then `gradle packageMyApp` in the sample, then the existing `check-*-app.sh` script.
+- One sample project for both build tools: `samples/hello-world` gets `build.gradle`, `settings.gradle` and `gradle.properties` next to `pom.xml`, sharing the sources and the settings (name, version, `vmArgs`, `appArgs`, `macStartup`, `administratorRequired`, console header). Maven writes to `target/`, Gradle to `build/`. The old javapackager/HelloWorldMaven and HelloWorldGradle repos are superseded by it.
+- The plugin is resolved from Maven local through `pluginManagement`, with its version in the `javapackagerVersion` property (CI passes the version it built). No wrapper in the sample: it runs with the root wrapper (`./gradlew -p samples/hello-world package`).
+- The smoke tests get a `tool` dimension: Linux and Windows run Maven and Gradle; macOS runs Gradle once (macos-15, UNIVERSAL). The `check-*-app.sh` scripts get `build` instead of `target`.
 
 ## Acceptance
 

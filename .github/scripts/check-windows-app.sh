@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Checks the Windows app generated from samples/hello-world (run with Git Bash).
-# Usage: check-windows-app.sh <target dir>
+# Usage: check-windows-app.sh <output dir: target (Maven) or build (Gradle)>
 set -u
 
 TARGET="$1"

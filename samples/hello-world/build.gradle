@@ -1,0 +1,36 @@
+// Same app and settings as pom.xml, packaged with the Gradle plugin: gradle package
+
+import io.github.javapackager.model.MacStartup
+
+plugins {
+	id 'io.github.javapackager'
+}
+
+group = 'io.github.javapackager.samples'
+version = '1.0.0'
+description = 'Sample app used by JavaPackager smoke tests'
+
+repositories {
+	mavenCentral()
+}
+
+tasks.withType(JavaCompile).configureEach {
+	options.encoding = 'UTF-8'
+	options.release = 11
+}
+
+javapackager {
+	name = 'HelloWorld'
+	mainClass = 'io.github.javapackager.samples.HelloWorld'
+	bundleJre = true
+	generateInstaller = true
+	administratorRequired = project.administratorRequired.toBoolean()
+	vmArgs = [ '-Dsmoke.prop=hello world' ]
+	appArgs = [ '--foo', 'hello world' ]
+	macConfig {
+		macStartup = MacStartup.valueOf(project.macStartup)
+	}
+	winConfig {
+		headerType = 'console'
+	}
+}
