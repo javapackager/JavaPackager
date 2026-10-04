@@ -211,6 +211,11 @@ public class BundleJre extends ArtifactGenerator<Packager> {
 		
 		File jdeps = new File(packagingJdk, "/bin/jdeps");
 		
+		// libs folder doesn't exist if the app has no dependencies (jdeps would print a warning mixed with the modules)
+		if (libsFolder != null && !libsFolder.exists()) {
+			libsFolder = null;
+		}
+		
 		List<File> modulePaths = getModulePaths(jarFile, libsFolder, additionalModulePaths);
 		List<String> modulesList;
 		
@@ -292,7 +297,7 @@ public class BundleJre extends ArtifactGenerator<Packager> {
 	private List<File> getModulePaths(File jarFile, File libsFolder, List<File> additionalModulePaths) {
 		List<File> modulePaths = new ArrayList<>();
 		modulePaths.add(jarFile);
-		modulePaths.add(libsFolder);
+		if (libsFolder != null) modulePaths.add(libsFolder);
 		modulePaths.addAll(
 				additionalModulePaths
 					.stream()
