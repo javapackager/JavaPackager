@@ -12,8 +12,6 @@ jobs:
     name: ${{ matrix.os }} / ${{ matrix.macStartup }}${{ matrix.admin && ' / admin' || '' }}
     runs-on: ${{ matrix.os }}
     timeout-minutes: 30
-    # administratorRequired is a known failure (issues #473/#398) until fixed
-    continue-on-error: ${{ matrix.admin }}
     strategy:
       fail-fast: false
       matrix:

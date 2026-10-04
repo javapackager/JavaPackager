@@ -29,6 +29,11 @@ if [ -x "$EXE" ]; then pass "executable present: $EXE"; else fail "executable mi
 # launcher stub (also called by the 'startup' script when administratorRequired=true, issues #473/#398)
 if [ -x "$STUB" ]; then pass "launcher present: $STUB"; else fail "launcher missing: $STUB"; fi
 
+# with administratorRequired=true, the 'startup' script must invoke the launcher
+if [ "$ADMIN" = "true" ]; then
+	if grep -q "SCRIPTPATH/$(basename "$STUB")" "$MACOS/startup"; then pass "startup script invokes $(basename "$STUB")"; else fail "startup script doesn't invoke $(basename "$STUB")"; cat "$MACOS/startup"; fi
+fi
+
 # compiled launchers must contain native arm64 code (issues #448/#449)
 if [ "$MAC_STARTUP" != "SCRIPT" ] && [ -f "$STUB" ]; then
 	file "$STUB"

@@ -34,6 +34,7 @@ public class MacPackager extends Packager {
 	private File javaFolder;
 	private File macOSFolder;
 	private File jreBundleFolder;
+	private File launcher;
 	
 	public MacPackager() {		
 		super();
@@ -42,6 +43,10 @@ public class MacPackager extends Packager {
 
 	public File getAppFile() {
 		return appFile;
+	}
+
+	public File getLauncher() {
+		return launcher;
 	}
 
 	@Override
@@ -121,12 +126,21 @@ public class MacPackager extends Packager {
 	}
 
 	private void processStartupScript() throws Exception {
-		
+
+		// copies the launcher (custom or precompiled) to Contents/MacOS
+		File customLauncher = macConfig.getCustomLauncher();
+		if (customLauncher != null && customLauncher.canRead() && customLauncher.isFile()) {
+			FileUtils.copyFileToFolder(customLauncher, macOSFolder);
+			this.launcher = new File(macOSFolder, customLauncher.getName());
+		} else {
+			this.launcher = preparePrecompiledStartupStub();
+		}
+		launcher.setExecutable(true, false);
+
 		if (this.administratorRequired) {
 
 			// We need a helper script ("startup") in this case,
-			// which invokes the launcher script/ executable with administrator rights.
-			// TODO: admin script depends on launcher file name 'universalJavaApplicationStub'
+			// which invokes the launcher with administrator rights.
 
 			// sets startup file
 			this.executable = new File(macOSFolder, "startup");
@@ -136,13 +150,8 @@ public class MacPackager extends Packager {
 			
 		} else {
 
-			File launcher = macConfig.getCustomLauncher();
-			if (launcher != null && launcher.canRead() && launcher.isFile()){
-				FileUtils.copyFileToFolder(launcher, macOSFolder);
-				this.executable = new File(macOSFolder, launcher.getName());
-			} else {
-				this.executable = preparePrecompiledStartupStub();
-			}
+			this.executable = launcher;
+
 		}
 		
 		executable.setExecutable(true, false);
