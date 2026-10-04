@@ -13,6 +13,7 @@
 # @url       https://github.com/tofi86/universalJavaApplicationStub              #
 # @date      2023-02-04                                                          #
 # @version   3.3.0                                                               #
+# Maintained in JavaPackager since 1.7.7 (originally from tofi86's repo)         #
 #                                                                                #
 ##################################################################################
 #                                                                                #
@@ -233,7 +234,9 @@ if [ $exitcode -eq 0 ]; then
 	IFS=$'\t\n'
 	MainArgs_RAW=$(plist_get_java ':Arguments' | xargs)
 	if [[ $MainArgs_RAW == *Array* ]] ; then
-		MainArgs=($(xargs -n1 <<<$(plist_get_java ':Arguments' | tr -d '\n' | sed -E 's/Array \{ *(.*) *\}/\1/g' | sed 's/  */ /g')))
+		# one element per line (PlistBuddy indents them with 4 spaces), so elements with spaces are kept whole
+		MainArgs=()
+		while IFS= read -r MainArg; do MainArgs+=("${MainArg}"); done < <(plist_get_java ':Arguments' | sed -e '1d' -e '$d' -e 's/^    //')
 	else
 		MainArgs=($(xargs -n1 <<<$(plist_get_java ':Arguments')))
 	fi

@@ -10,5 +10,6 @@
 - Template names and the variables they use are public API: users override them from `assetsDir`. Renaming a template or changing its variables is a breaking change.
 - Log through `utils/Logger`, never `System.out`.
 - Run external tools through `utils/CommandUtils`.
-- Bundled native binaries in `src/main/resources` are not edited by hand. `updateWhyJavaLauncher` refreshes `JavaLauncher.exe`; `updateUniversalJavaApplicationStub` only matters for `universalJavaApplicationStub.sh`.
+- Bundled native binaries in `src/main/resources` are not edited by hand. `updateWhyJavaLauncher` refreshes `JavaLauncher.exe`.
+- `mac/universalJavaApplicationStub.sh` is maintained in this repo (ADR-001): edit it here and keep its MIT license header.
 - A fix is verified by packaging on the affected OS; record how in the bugfix note.
