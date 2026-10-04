@@ -16,3 +16,9 @@ DMG generation sometimes fails with `hdiutil: create failed - Resource busy`. Th
 
 - The failure is intermittent, so it can't be reproduced on demand.
 - The macOS smoke tests must stay green. If the error shows up again, the build log must show the `hdiutil ... failed (attempt n of 3), retrying` warning, followed by a DMG.
+- Run 37166331226: 7/7 green, no retries needed.
+
+## Not done
+
+- `hdiutil detach -force` was considered and rejected: no `detach` has failed so far, and the first `detach` could unmount a user's own volume that happens to have the same name. If logs show `detach` failing all 3 attempts, add `-force` only to the final `detach`.
+- `hdiutil create -srcfolder` unmounts internally and can't be forced. Avoiding that needs a blank image + `ditto` + our own `detach`, which means computing the image size. Only worth doing if `create` keeps failing despite the retries.
