@@ -81,26 +81,19 @@ mvn package
 
 ### Package your app with Gradle
 
-Apply JavaPackager plugin in `build.gradle` using legacy mode (because at the moment it's only available in Maven Central repository):
+Apply JavaPackager plugin in `build.gradle` (it's resolved from Maven Central through the Gradle Plugin Portal, so no extra repositories are needed):
 
 ```groovy
-buildscript {
-    repositories {
-        mavenCentral()
-        gradlePluginPortal() // needed by the Launch4j dependency
-    }
-    dependencies {
-        classpath 'io.github.javapackager:javapackager:{latest.version}'
-    }
+plugins {
+    id 'java'
+    id 'io.github.javapackager' version '{latest.version}'
 }
-
-apply plugin: 'io.github.javapackager'
 ```
 
-Create your packaging task:
+Configure the default `package` task with the `javapackager` extension:
 
 ```groovy
-task packageMyApp(type: io.github.javapackager.gradle.PackageTask, dependsOn: build) {
+javapackager {
     // mandatory
     mainClass = 'path.to.your.mainClass'
     // optional
@@ -122,14 +115,23 @@ task packageMyApp(type: io.github.javapackager.gradle.PackageTask, dependsOn: bu
 }
 ```
 
-> [!TIP] 
-> See [Gradle plugin configuration samples](docs/gradle/plugin-configuration-samples.md) to know more.
-
 And execute the next command in project's root folder:
 
 ```bash
-gradle packageMyApp
+gradle package
 ```
+
+To package the app more than once (e.g. for several platforms), register your own tasks: their properties override the ones in the `javapackager` extension.
+
+```groovy
+tasks.register('packageForWindows', io.github.javapackager.gradle.PackageTask) {
+    dependsOn build
+    platform = 'windows'
+}
+```
+
+> [!TIP] 
+> See [Gradle plugin configuration samples](docs/gradle/plugin-configuration-samples.md) to know more.
 
 ### Generated artifacts
 
@@ -358,31 +360,28 @@ Or a specific SNAPSHOT version (specifying its timestamp and index):
 
 ### Gradle
 
-Add the plugin repository to your `build.gradle` and use the latest SNAPSHOT version:
+Add the snapshots repository to your `settings.gradle`:
 
 ```groovy
-buildscript {
+pluginManagement {
     repositories {
         maven {
-            url "https://central.sonatype.com/repository/maven-snapshots/"
+            url = 'https://central.sonatype.com/repository/maven-snapshots/'
         }
-    }
-    dependencies {
-        classpath 'io.github.javapackager:javapackager:{javapackager.version}-SNAPSHOT'
+        gradlePluginPortal()
     }
 }
 ```
 
-Or set a specific SNAPSHOT version specifying its timestamp and index:
+And use the latest SNAPSHOT version in your `build.gradle`:
 
 ```groovy
-buildscript {
-    [...]
-    dependencies {
-        classpath 'io.github.javapackager:javapackager:{javapackager.version}-{timestamp}-{index}'
-    }
+plugins {
+    id 'io.github.javapackager' version '{javapackager.version}-SNAPSHOT'
 }
 ```
+
+Or set a specific SNAPSHOT version specifying its timestamp and index: `{javapackager.version}-{timestamp}-{index}`.
 
 > SNAPSHOT version example: `1.7.2-20230505.095442-5`.
 
