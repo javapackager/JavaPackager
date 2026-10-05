@@ -49,6 +49,7 @@ public class BundleJre extends ArtifactGenerator<Packager> {
 		List<String> requiredModules = packager.getModules();
 		List<String> additionalModules = packager.getAdditionalModules();
 		List<File> additionalModulePaths = packager.getAdditionalModulePaths();
+		List<String> additionalJlinkArgs = packager.getAdditionalJlinkArgs();
 		File currentJdk = packager.getPackagingJdk();
 		
 		Logger.infoIndent("Bundling JRE ... with " + currentJdk);
@@ -167,7 +168,8 @@ public class BundleJre extends ArtifactGenerator<Packager> {
 					"--no-man-pages", 
 					"--strip-debug",
 					"--release-info", releaseInfo, 
-					(jlinkVersion < 21 ? "--compress=2" : null)
+					(VersionUtils.getJavaMajorVersion() < 21 ? "--compress=2" : null),
+					additionalJlinkArgs
 				);
 	
 			// sets execution permissions on executables in jre

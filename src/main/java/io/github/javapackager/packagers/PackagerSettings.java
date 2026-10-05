@@ -66,6 +66,7 @@ public class PackagerSettings {
 	protected String jreMinVersion;
 	protected Manifest manifest;
 	protected List<File> additionalModulePaths;
+	protected List<String> additionalJlinkArgs;
 	protected List<FileAssociation> fileAssociations;
 	protected File packagingJdk;
 	protected Scripts scripts;
@@ -406,6 +407,14 @@ public class PackagerSettings {
 	 */
 	public List<File> getAdditionalModulePaths() {
 		return additionalModulePaths;
+	}
+
+	/**
+	 * Get additional jlink arguments
+	 * @return Additional jlink arguments
+	 */
+	public List<String> getAdditionalJlinkArgs() {
+		return additionalJlinkArgs;
 	}
 
 	/**
@@ -868,6 +877,16 @@ public class PackagerSettings {
 	}
 
 	/**
+	 * Set additional jlink arguments
+	 * @param additionalJlinkArgs Additional jlink arguments list
+	 * @return Packager settings
+	 */
+	public PackagerSettings additionalJlinkArgs(List<String> additionalJlinkArgs) {
+		this.additionalJlinkArgs = additionalJlinkArgs;
+		return this;
+	}
+
+	/**
 	 * Set file associations
 	 * @param fileAssociations File associations list
 	 * @return Packager settings
@@ -943,7 +962,8 @@ public class PackagerSettings {
 				+ ", createZipball=" + createZipball + ", zipballName=" + zipballName + ", extra=" + extra
 				+ ", useResourcesAsWorkingDir=" + useResourcesAsWorkingDir + ", assetsDir=" + assetsDir+ ", classpath="
 				+ classpath	+ ", jreMinVersion=" + jreMinVersion + ", manifest=" + manifest + ", additionalModulePaths="
-				+ additionalModulePaths + ", fileAssociations=" + fileAssociations + ", packagingJdk=" + packagingJdk
+				+ additionalModulePaths + ", additionalJlinkArgs="
+				+ additionalJlinkArgs + ", fileAssociations=" + fileAssociations + ", packagingJdk=" + packagingJdk
 				+ ", scripts=" + scripts + ", arch=" + arch + ", templates=" + templates + "]";
 	}
 	
