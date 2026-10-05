@@ -168,7 +168,7 @@ public class BundleJre extends ArtifactGenerator<Packager> {
 					"--no-man-pages", 
 					"--strip-debug",
 					"--release-info", releaseInfo, 
-					(VersionUtils.getJavaMajorVersion() < 21 ? "--compress=2" : null),
+					(jlinkVersion < 21 ? "--compress=2" : null),
 					additionalJlinkArgs
 				);
 	
