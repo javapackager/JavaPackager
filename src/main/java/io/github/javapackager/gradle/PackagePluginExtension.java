@@ -29,6 +29,7 @@ public class PackagePluginExtension extends PackagerSettings {
 		super();
 		this.project = project;
 		this.platform = Platform.auto;
+		this.additionalJlinkArgs = new ArrayList<>();
 		this.additionalModules = new ArrayList<>();
 		this.additionalModulePaths = new ArrayList<>();
 		this.additionalResources = new ArrayList<>();

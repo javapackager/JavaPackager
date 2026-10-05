@@ -310,6 +310,12 @@ public class PackageMojo extends AbstractMojo {
 	private List<File> additionalModulePaths;
 	
 	/**
+	 * Additional arguments passed to jlink when generating a customized JRE
+	 */
+	@Parameter(property = "additionalJlinkArgs", required = false)
+	private List<String> additionalJlinkArgs;
+	
+	/**
 	 * Packaging JDK
 	 */
 	@Parameter(defaultValue = "${java.home}", property = "packagingJdk", required = false)
@@ -353,6 +359,7 @@ public class PackageMojo extends AbstractMojo {
 			Packager packager = 
 				(Packager) PackagerFactory
 					.createPackager(platform)
+						.additionalJlinkArgs(additionalJlinkArgs)
 						.additionalModules(additionalModules)
 						.additionalModulePaths(additionalModulePaths)
 						.additionalResources(additionalResources)

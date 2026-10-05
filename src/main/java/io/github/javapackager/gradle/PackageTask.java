@@ -551,6 +551,18 @@ public class PackageTask extends AbstractPackageTask {
 
 	@Input
 	@Optional
+	private List<String> additionalJlinkArgs;
+
+	public List<String> getAdditionalJlinkArgs() {
+		return additionalJlinkArgs;
+	}
+
+	public void setAdditionalJlinkArgs(List<String> additionalJlinkArgs) {
+		this.additionalJlinkArgs = additionalJlinkArgs;
+	}
+
+	@Input
+	@Optional
 	private List<FileAssociation> fileAssociations;
 	
 	public List<FileAssociation> getFileAssociations() {
@@ -643,6 +655,7 @@ public class PackageTask extends AbstractPackageTask {
 		return
 			(Packager) PackagerFactory
 				.createPackager(defaultIfNull(platform, extension.getPlatform()))
+					.additionalJlinkArgs(defaultIfNull(additionalJlinkArgs, extension.getAdditionalJlinkArgs()))
 					.additionalModules(defaultIfNull(additionalModules, extension.getAdditionalModules()))
 					.additionalModulePaths(defaultIfNull(additionalModulePaths, extension.getAdditionalModulePaths()))
 					.additionalResources(defaultIfNull(additionalResources, extension.getAdditionalResources()))
