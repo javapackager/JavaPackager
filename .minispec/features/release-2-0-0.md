@@ -20,6 +20,7 @@ Publish 2.0.0 from `devel`, with release notes that warn about the breaking chan
 - 2026-10-04: #483 (shared JRE for several EXEs) answered with a tested workaround (Why launcher + `why-ini.vtl` override with `jvm_install=../jre`; backslashes fail), label `feedback`; kept open as an enhancement for 2.1 (external JRE option for the three Windows launchers).
 - 2026-10-05: labels tidied (`enhancement` on #465, #345, #344, #384; `working on` removed from #398); #431 kept open as an `enhancement` (deep signing of native libraries inside dependency JARs, promised in the thread) instead of being closed.
 - 2026-10-05: PR #491 (Till Seifert, `additionalJlinkArgs`) tested on branch `pr/491` with JDK 11, 17, 21, 25: arguments applied, the user's `--compress` wins, `--include-locales` needs `jdk.localedata` in `additionalModules`, `--compress=zip-N` only on JDK 21+. Squash-merged as 9df353a (README note and packaging-JDK compression restored in 5c7b235). It revealed a customized JRE failing on JDK 24+ without jmods (`fix-jdk24-no-jmods`).
+- 2026-10-05: #490 (Gradle Plugin Portal) answered: `plugins.gradle.org/m2` redirects to Maven Central, so the `plugins {}` block works without `pluginManagement` (tested with `2.0.0-rc1`). README Gradle setup rewritten (f1d58a7); #490 kept open as a low-priority `enhancement` (Portal search listing).
 
 ## Changes
 
