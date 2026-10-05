@@ -36,6 +36,22 @@ public class JDKUtils {
 	}
 
 	/**
+	 * Returns the major version of the specified JDK, read from its "release" file, or the
+	 * running Java's one if it can't be read
+	 *
+	 * @param jdkPath JDK directory path
+	 * @return JDK major version
+	 * @throws IOException release file could not be read
+	 */
+	public static int getJavaMajorVersion(File jdkPath) throws IOException {
+		Map<String, String> releaseMap = getRelease(jdkPath);
+		if (releaseMap != null && releaseMap.containsKey("JAVA_VERSION")) {
+			return VersionUtils.getJavaMajorVersion(releaseMap.get("JAVA_VERSION"));
+		}
+		return VersionUtils.getJavaMajorVersion();
+	}
+
+	/**
 	 * Checks if the platform specified in the "release" map matches the required
 	 * platform
 	 * 

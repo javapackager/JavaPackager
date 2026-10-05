@@ -51,7 +51,16 @@ public class VersionUtils {
 	 * @return Java runtime major version
 	 */
 	public static int getJavaMajorVersion() {
-		Integer [] parsed = parseVersion(System.getProperty("java.version"));
+		return getJavaMajorVersion(System.getProperty("java.version"));
+	}
+
+	/**
+	 * Returns the major version of a Java version string (e.g.: 8 for "1.8.0_392", 17 for "17.0.9")
+	 * @param version Java version string
+	 * @return Java major version
+	 */
+	public static int getJavaMajorVersion(String version) {
+		Integer [] parsed = parseVersion(version);
 		int major = parsed[0];
 		if (major >= 2) return major;
 		return parsed[1];

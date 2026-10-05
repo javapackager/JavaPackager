@@ -82,13 +82,19 @@ jobs:
           if-no-files-found: ignore
 
   linux:
-    name: ubuntu-latest / ${{ matrix.tool }}
+    name: ubuntu-latest / ${{ matrix.tool }}${{ matrix.java && format(' / JDK {0}', matrix.java) || '' }}
     runs-on: ubuntu-latest
     timeout-minutes: 30
     strategy:
       fail-fast: false
       matrix:
         tool: [ maven, gradle ]
+        # empty: the JDK 17 used to build the plugin; declared so the include below adds a job instead of extending one
+        java: [ '' ]
+        include:
+          # packaging with a JDK 24+ without jmods (JEP 493): jlink links from the run-time image
+          - tool: maven
+            java: 25
     env:
       OUT: samples/hello-world/${{ matrix.tool == 'gradle' && 'build' || 'target' }}
       # empty local Maven repo: the plugin is installed there and the sample resolves everything else like a user would (#444)
@@ -113,6 +119,13 @@ jobs:
         id: plugin
         run: echo "version=$(./gradlew properties -q --no-daemon | awk '/^version:/ {print $2}' | tr -d '\r')" >> "$GITHUB_OUTPUT"
 
+      - name: Set up packaging JDK ${{ matrix.java }}
+        if: matrix.java
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: ${{ matrix.java }}
+
       - name: Package sample app
         working-directory: samples/hello-world
         run: |
@@ -130,7 +143,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v5
         with:
-          name: hello-world-ubuntu-latest-${{ matrix.tool }}
+          name: hello-world-ubuntu-latest-${{ matrix.tool }}${{ matrix.java && format('-jdk{0}', matrix.java) || '' }}
           path: |
             samples/hello-world/build.log
             ${{ env.OUT }}/*.deb

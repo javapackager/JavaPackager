@@ -129,12 +129,20 @@ public class BundleJre extends ArtifactGenerator<Packager> {
 
 			Logger.info("Creating JRE with next modules included: " + modules);
 
+			// version of the jlink that runs, which may not be the running Java's one
+			int jlinkVersion = JDKUtils.getJavaMajorVersion(currentJdk);
+
+			// JDK 24+ may come without jmods (JEP 493): its jlink then links the modules from its own run-time image
 			File modulesDir = new File(jdkPath, "jmods");
-			if (!modulesDir.exists()) {
-				throw new Exception("jmods folder doesn't exist: " + modulesDir);
+			boolean samePlatformJdk = jdkPath.getCanonicalFile().equals(currentJdk.getCanonicalFile());
+			boolean linkFromRuntime = !modulesDir.exists() && samePlatformJdk && jlinkVersion >= 24;
+			if (linkFromRuntime) {
+				Logger.info("Using " + currentJdk + " run-time image modules (no jmods folder)");
+			} else if (!modulesDir.exists()) {
+				throw new Exception("jmods folder doesn't exist: " + modulesDir + (samePlatformJdk ? "" : " (a JDK for another platform must include its jmods folder)"));
+			} else {
+				Logger.info("Using " + modulesDir + " modules directory");
 			}
-			
-			Logger.info("Using " + modulesDir + " modules directory");
 	
 			if (destinationFolder.exists()) FileUtils.removeFolder(destinationFolder);
 			
@@ -147,13 +155,13 @@ public class BundleJre extends ArtifactGenerator<Packager> {
 			File jlink = new File(currentJdk, "/bin/jlink");
 			
 			List<File> modulePaths = new ArrayList<File>();
-			modulePaths.add(modulesDir);
+			if (!linkFromRuntime) modulePaths.add(modulesDir);
 			modulePaths.addAll(additionalModulePaths);
 			
 			// generates customized jre using modules
 			execute(
 					jlink, 
-					"--module-path=" + StringUtils.join(modulePaths, File.pathSeparator), 
+					(modulePaths.isEmpty() ? null : "--module-path=" + StringUtils.join(modulePaths, File.pathSeparator)), 
 					"--add-modules", modules, 
 					"--output", destinationFolder, 
 					"--no-header-files", 
