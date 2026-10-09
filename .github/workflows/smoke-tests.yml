@@ -34,7 +34,7 @@ jobs:
       M2_REPO: ${{ github.workspace }}/build/m2-smoke
 
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
 
       - uses: actions/setup-java@v5
         with:
@@ -101,7 +101,7 @@ jobs:
       M2_REPO: ${{ github.workspace }}/build/m2-smoke
 
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
 
       - uses: actions/setup-java@v5
         with:
@@ -168,7 +168,7 @@ jobs:
         shell: bash
 
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
 
       - uses: actions/setup-java@v5
         with:
