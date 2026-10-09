@@ -58,8 +58,8 @@ dependencies {
 	compileOnly 'org.apache.maven.plugin-tools:maven-plugin-annotations:3.16.0'
 	compileOnly 'javax.inject:javax.inject:1' // provided by Maven at runtime
 
-	mavenEmbedder 'org.apache.maven:maven-embedder:3.9.16'
-	mavenEmbedder 'org.apache.maven:maven-compat:3.9.16'	
+	mavenEmbedder 'org.apache.maven:maven-embedder:3.10.0'
+	mavenEmbedder 'org.apache.maven:maven-compat:3.10.0'	
 	mavenEmbedder 'org.slf4j:slf4j-simple:1.7.36'
 	mavenEmbedder 'org.apache.maven.resolver:maven-resolver-connector-basic:1.9.27'
 	mavenEmbedder 'org.apache.maven.resolver:maven-resolver-transport-wagon:1.9.27'
