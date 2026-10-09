@@ -61,8 +61,8 @@ dependencies {
 	mavenEmbedder 'org.apache.maven:maven-embedder:3.9.16'
 	mavenEmbedder 'org.apache.maven:maven-compat:3.9.16'	
 	mavenEmbedder 'org.slf4j:slf4j-simple:1.7.36'
-	mavenEmbedder 'org.apache.maven.resolver:maven-resolver-connector-basic:1.9.27'
-	mavenEmbedder 'org.apache.maven.resolver:maven-resolver-transport-wagon:1.9.27'
+	mavenEmbedder 'org.apache.maven.resolver:maven-resolver-connector-basic:2.0.24'
+	mavenEmbedder 'org.apache.maven.resolver:maven-resolver-transport-wagon:2.0.24'
 	mavenEmbedder 'org.apache.maven.wagon:wagon-http:3.5.3'
 	mavenEmbedder 'org.apache.maven.wagon:wagon-provider-api:3.5.3'
 }
