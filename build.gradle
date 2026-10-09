@@ -2,7 +2,7 @@ plugins {
 	id 'java'    
 	id 'maven-publish'
 	id 'java-gradle-plugin'
-	id 'com.gradle.plugin-publish' version '1.3.1'
+	id 'com.gradle.plugin-publish' version '2.2.1'
 	id 'eclipse'
 	id 'de.undercouch.download' version '5.7.0'
 	id 'signing'
