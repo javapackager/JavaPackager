@@ -72,7 +72,7 @@ jobs:
 
       - name: Upload artifacts
         if: always()
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: hello-world-${{ matrix.os }}-${{ matrix.tool }}-${{ matrix.macStartup }}${{ matrix.admin && '-admin' || '' }}
           path: |
@@ -141,7 +141,7 @@ jobs:
 
       - name: Upload artifacts
         if: always()
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: hello-world-ubuntu-latest-${{ matrix.tool }}${{ matrix.java && format('-jdk{0}', matrix.java) || '' }}
           path: |
@@ -212,7 +212,7 @@ jobs:
 
       - name: Upload artifacts
         if: always()
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: hello-world-windows-latest-${{ matrix.tool }}
           path: |
