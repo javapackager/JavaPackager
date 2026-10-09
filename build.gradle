@@ -39,8 +39,8 @@ configurations {
 }
 
 dependencies {
-	implementation 'org.apache.maven:maven-plugin-api:3.6.0'
-	implementation 'org.apache.maven:maven-core:3.6.0'
+	implementation 'org.apache.maven:maven-plugin-api:3.10.0'
+	implementation 'org.apache.maven:maven-core:3.10.0'
 	// jdeb requires plexus-utils 4, which moved Xpp3Dom to plexus-xml (3.x is the Maven 3 compatible line)
 	implementation 'org.codehaus.plexus:plexus-utils:4.1.0'
 	implementation 'org.codehaus.plexus:plexus-xml:3.1.0'
