@@ -1,12 +1,15 @@
 # JavaPackager
 
-[![Maven Central](http://img.shields.io/maven-central/v/io.github.fvarrui/javapackager)](https://central.sonatype.com/search?smo=true&q=a%3Ajavapackager+g%3Aio.github.fvarrui)
+[![Maven Central](http://img.shields.io/maven-central/v/io.github.javapackager/javapackager)](https://central.sonatype.com/search?smo=true&q=a%3Ajavapackager+g%3Aio.github.javapackager)
 [![GPL-3.0](https://img.shields.io/badge/license-GPL--3.0-%250778B9.svg)](https://www.gnu.org/licenses/gpl-3.0.html)
 
 JavaPackager is a hybrid plugin for **Maven** and **Gradle** which provides an easy way to package Java applications in native Windows, MacOS or GNU/Linux executables, and generate installers for them.
 
 > [!IMPORTANT] 
 > See [JavaPackager changes and fixes](https://github.com/fvarrui/JavaPackager/releases).
+
+> [!WARNING]
+> Since 2.0.0 the plugin's `groupId` is `io.github.javapackager`, the Gradle plugin id is `io.github.javapackager` and the Gradle task type is `io.github.javapackager.gradle.PackageTask` (up to 1.7.6: `io.github.fvarrui`, `io.github.fvarrui.javapackager.plugin` and `io.github.fvarrui.javapackager.gradle.PackageTask`). Update them in your `pom.xml` or `build.gradle` when upgrading.
 
 ## Project maintainers needed
 
@@ -35,7 +38,7 @@ Add the following `plugin` tag to your `pom.xml`:
 
 ```xml
 <plugin>
-    <groupId>io.github.fvarrui</groupId>
+    <groupId>io.github.javapackager</groupId>
     <artifactId>javapackager</artifactId>
     <version>{latest.version}</version>
     <executions>
@@ -78,25 +81,19 @@ mvn package
 
 ### Package your app with Gradle
 
-Apply JavaPackager plugin in `build.gradle` using legacy mode (because at the moment it's only available in Maven Central repository):
+Apply JavaPackager plugin in `build.gradle` (it's resolved from Maven Central through the Gradle Plugin Portal, so no extra repositories are needed):
 
 ```groovy
-buildscript {
-    repositories {
-        mavenCentral()
-    }
-    dependencies {
-        classpath 'io.github.fvarrui:javapackager:{latest.version}'
-    }
+plugins {
+    id 'java'
+    id 'io.github.javapackager' version '{latest.version}'
 }
-
-apply plugin: 'io.github.fvarrui.javapackager.plugin'
 ```
 
-Create your packaging task:
+Configure the default `package` task with the `javapackager` extension:
 
 ```groovy
-task packageMyApp(type: io.github.fvarrui.javapackager.gradle.PackageTask, dependsOn: build) {
+javapackager {
     // mandatory
     mainClass = 'path.to.your.mainClass'
     // optional
@@ -118,14 +115,23 @@ task packageMyApp(type: io.github.fvarrui.javapackager.gradle.PackageTask, depen
 }
 ```
 
-> [!TIP] 
-> See [Gradle plugin configuration samples](docs/gradle/plugin-configuration-samples.md) to know more.
-
 And execute the next command in project's root folder:
 
 ```bash
-gradle packageMyApp
+gradle package
 ```
+
+To package the app more than once (e.g. for several platforms), register your own tasks: their properties override the ones in the `javapackager` extension.
+
+```groovy
+tasks.register('packageForWindows', io.github.javapackager.gradle.PackageTask) {
+    dependsOn build
+    platform = 'windows'
+}
+```
+
+> [!TIP] 
+> See [Gradle plugin configuration samples](docs/gradle/plugin-configuration-samples.md) to know more.
 
 ### Generated artifacts
 
@@ -139,8 +145,8 @@ By default it will generate next artifacts in `${outputDirectory} ` folder:
 | `${name}_${version}.deb`                | DEB package file.                                                | All       |                                                                                                  |
 | `${name}_${version}.rpm`                | RPM package file.                                                | All       |                                                                                                  |
 | `${name}_${version}.exe`                | Setup file.                                                      | Windows   | [Inno Setup](http://www.jrsoftware.org/isinfo.php) (`iscc` command must be in PATH variable)     |
-| `${name}_${version}.msi`                | MSI installer file.                                              | Windows   | [WiX Toolset](https://wixtoolset.org/) (`candle` and `light` commands must be in PATH variable)  |
-| `${name}_${version}.msm`                | MSI merge module file.                                           | Windows   | [WiX Toolset](https://wixtoolset.org/) ( `candle` and `light` commands must be in PATH variable) |
+| `${name}_${version}.msi`                | MSI installer file.                                              | Windows   | [WiX Toolset](https://wixtoolset.org/) 3 (`candle` and `light`) or 4+ (`wix`) in PATH variable |
+| `${name}_${version}.msm`                | MSI merge module file.                                           | Windows   | [WiX Toolset](https://wixtoolset.org/) 3 (`candle` and `light`) or 4+ (`wix`) in PATH variable |
 | `${name}_${version}.dmg`                | Disk image file (uses **hdiutil**).                              | MacOS     |                                                                                                  |
 | `${name}_${version}.pkg`                | PKG installer file (uses **pkgbuild**).                          | MacOS     |                                                                                                  |
 | `${name}-${version}-${platform}.zip`    | Zipball containing generated directory `${name}`.                | All       |                                                                                                  |
@@ -153,7 +159,8 @@ By default it will generate next artifacts in `${outputDirectory} ` folder:
 ### Plugin configuration properties
 
 | Property                   | Mandatory          | Default value                                                                                                                                      | Description                                                                                                                                                                               |
-| -------------------------- | ------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+|----------------------------|--------------------|----------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `additionalJlinkArgs`      | :x:                | `[]`                                                                                                                                               | Additional arguments appended to the `jlink` call when generating a customized JRE, e.g. `--include-locales=en,es` (add `jdk.localedata` to `additionalModules` too) or `--compress=0`. Valid options depend on the packaging JDK version: e.g. `--compress=zip-6` needs JDK 21+.                                                     |
 | `additionalModulePaths`    | :x:                | `[]`                                                                                                                                               | Additional module paths for `jdeps`.                                                                                                                                                      |
 | `additionalModules`        | :x:                | `[]`                                                                                                                                               | Additional modules to the ones identified by `jdeps` or the specified with `modules` property.                                                                                            |
 | `additionalResources`      | :x:                | `[]`                                                                                                                                               | Additional files and folders to include in the bundled app.                                                                                                                               |
@@ -194,6 +201,7 @@ By default it will generate next artifacts in `${outputDirectory} ` folder:
 | `useResourcesAsWorkingDir` | :x:                | `true`                                                                                                                                             | Uses app resources folder as default working directory (always `true` on MacOS).                                                                                                          |
 | `version`                  | :x:                | `${project.version}`                                                                                                                               | App version.                                                                                                                                                                              |
 | `vmArgs`                   | :x:                | `[]`                                                                                                                                               | VM arguments.                                                                                                                                                                             |
+| `appArgs`                  | :x:                | `[]`                                                                                                                                               | Additional arguments when launching the application.                                                                                                                                      |
 
 > [!IMPORTANT]
 > Some default values depends on the used building tool.
@@ -303,7 +311,7 @@ And then bundle this file with your app:
 
 ## How to use SNAPSHOT versions
 
-[Here](https://oss.sonatype.org/content/repositories/snapshots/io/github/fvarrui/javapackager/) you can find the uploaded JavaPackager SNAPSHOT versions.
+[Here](https://central.sonatype.com/repository/maven-snapshots/io/github/javapackager/javapackager/) you can find the uploaded JavaPackager SNAPSHOT versions.
 
 ### Maven
 
@@ -314,7 +322,7 @@ Add the plugin repository to your `pom.xml`:
     <pluginRepository>
         <id>nexus</id>
         <name>nexus-snapshot-repository</name>
-        <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        <url>https://central.sonatype.com/repository/maven-snapshots/</url>
         <snapshots>
             <enabled>true</enabled>
             <updatePolicy>always</updatePolicy>
@@ -330,7 +338,7 @@ And then you can use the latest SNAPSHOT version:
 
 ```xml
 <plugin>    
-    <groupId>io.github.fvarrui</groupId>
+    <groupId>io.github.javapackager</groupId>
     <artifactId>javapackager</artifactId>
     <version>{javapackager.version}-SNAPSHOT</version>
     [...]
@@ -341,7 +349,7 @@ Or a specific SNAPSHOT version (specifying its timestamp and index):
 
 ```xml
 <plugin>
-    <groupId>io.github.fvarrui</groupId>
+    <groupId>io.github.javapackager</groupId>
     <artifactId>javapackager</artifactId>
     <version>{javapackager.version}-{timestamp}-{index}</version>
     [...]
@@ -352,31 +360,28 @@ Or a specific SNAPSHOT version (specifying its timestamp and index):
 
 ### Gradle
 
-Add the plugin repository to your `build.gradle` and use the latest SNAPSHOT version:
+Add the snapshots repository to your `settings.gradle`:
 
 ```groovy
-buildscript {
+pluginManagement {
     repositories {
         maven {
-            url "https://oss.sonatype.org/content/repositories/snapshots"
+            url = 'https://central.sonatype.com/repository/maven-snapshots/'
         }
-    }
-    dependencies {
-        classpath 'io.github.fvarrui:javapackager:{javapackager.version}-SNAPSHOT'
+        gradlePluginPortal()
     }
 }
 ```
 
-Or set a specific SNAPSHOT version specifying its timestamp and index:
+And use the latest SNAPSHOT version in your `build.gradle`:
 
 ```groovy
-buildscript {
-    [...]
-    dependencies {
-        classpath 'io.github.fvarrui:javapackager:{javapackager.version}-{timestamp}-{index}'
-    }
+plugins {
+    id 'io.github.javapackager' version '{javapackager.version}-SNAPSHOT'
 }
 ```
+
+Or set a specific SNAPSHOT version specifying its timestamp and index: `{javapackager.version}-{timestamp}-{index}`.
 
 > SNAPSHOT version example: `1.7.2-20230505.095442-5`.
 
@@ -387,7 +392,7 @@ Execute next commands in BASH (GNU/Linux or macOS) or CMD (Windows):
 1. Download source code and change to the project directory:
 
 ```bash
-git clone https://github.com/fvarrui/JavaPackager.git [--branch devel]
+git clone https://github.com/javapackager/JavaPackager.git [--branch devel]
 cd JavaPackager
 ```
 
@@ -398,12 +403,24 @@ cd JavaPackager
 ```
 
 > [!IMPORTANT]
-> It is recommended to build the plugin with Java 19.
+> Build the plugin with a JDK 17 or newer (a JRE is not enough). The plugin itself targets Java 8.
 
-## How to release the plugin to Maven Central
+Every push to `devel` and `master` runs the smoke tests (`.github/workflows/smoke-tests.yml`): they package [`samples/hello-world`](samples/hello-world) with the Maven and the Gradle plugin on GNU/Linux, Windows and macOS and check the generated apps and installers.
 
-Run next command (ommit `./` on Windows):
+## How to publish the plugin to Maven Central
+
+Publishing uses a [Central Portal user token](https://central.sonatype.com/usertoken), set as `ossrhUsername` and `ossrhPassword` in `~/.gradle/gradle.properties`.
+
+To publish a `-SNAPSHOT` version (ommit `./` on Windows):
 
 ```bash
-./gradlew publish closeAndReleaseRepository
+./gradlew publish
 ```
+
+To publish a release (a version without `-SNAPSHOT`, signed with your GPG key):
+
+```bash
+./gradlew releaseToCentral
+```
+
+It uploads the release to the Central Portal, where it waits in [Deployments](https://central.sonatype.com/publishing/deployments) until you review it and click **Publish**.

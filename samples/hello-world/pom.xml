@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>io.github.javapackager.samples</groupId>
+	<artifactId>hello-world</artifactId>
+	<version>1.0.0</version>
+	<name>HelloWorld</name>
+	<description>Sample app used by JavaPackager smoke tests</description>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<maven.compiler.release>11</maven.compiler.release>
+		<!-- overridden from CI with the snapshot built from this repo -->
+		<javapackager.version>2.0.0</javapackager.version>
+		<macStartup>SCRIPT</macStartup>
+		<administratorRequired>false</administratorRequired>
+	</properties>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>io.github.javapackager</groupId>
+				<artifactId>javapackager</artifactId>
+				<version>${javapackager.version}</version>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>package</goal>
+						</goals>
+						<configuration>
+							<mainClass>io.github.javapackager.samples.HelloWorld</mainClass>
+							<bundleJre>true</bundleJre>
+							<generateInstaller>true</generateInstaller>
+							<administratorRequired>${administratorRequired}</administratorRequired>
+							<classpath>extra</classpath>
+							<createTarball>true</createTarball>
+							<createZipball>true</createZipball>
+							<vmArgs>
+								<vmArg>-Dsmoke.prop=hello world</vmArg>
+							</vmArgs>
+							<appArgs>
+								<appArg>--foo</appArg>
+								<appArg>hello world</appArg>
+							</appArgs>
+							<macConfig>
+								<macStartup>${macStartup}</macStartup>
+							</macConfig>
+							<winConfig>
+								<headerType>console</headerType>
+							</winConfig>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>

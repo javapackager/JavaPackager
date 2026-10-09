@@ -1,0 +1,19 @@
+# ADR-001: Maintain the macOS script launcher in this repo
+
+## Decision
+
+`src/main/resources/mac/universalJavaApplicationStub.sh`, the launcher used with `macStartup=SCRIPT`, is maintained directly in JavaPackager. It is no longer downloaded from the `fvarrui/universalJavaApplicationStub` fork: the `updateUniversalJavaApplicationStub` Gradle task is removed, and the script is removed from that repo, which keeps only the native launcher (ADR-004).
+
+## Motivation
+
+- The fork existed to merge upstream changes from `tofi86/universalJavaApplicationStub`, which is deprecated. Nothing will come from upstream any more.
+- The download task fetched the `.sh` script and three shc-compiled versions of it that are no longer used. The native launchers (`nativeJavaApplicationStub*`) were never fetched by that task.
+- Fixes to the script (e.g. `appArgs` with spaces, #305) took two repos, a fork release and a download. Now they take one commit, verified by the macOS `SCRIPT` smoke test jobs on the same push.
+- Rejected: keeping the script in the fork (extra process with no upstream to merge) and patching the downloaded file locally (the next download would overwrite it).
+
+## Consequences
+
+- The script is edited here like any other resource, and its MIT license header (Copyright Tobias Fischer) must be kept. A header line records that it has been maintained here since 2.0.0.
+- Any fix to the script must be checked by the `SCRIPT` jobs of `.github/workflows/smoke-tests.yml`.
+- The script now reads the `Arguments` and `VMOptions` arrays one element per line, so values with spaces are kept whole.
+- `macStartup` defaults to `UNIVERSAL` since 2.0.0 (ADR-002), so the script is now opt-in.

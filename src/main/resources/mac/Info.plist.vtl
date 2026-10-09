@@ -123,6 +123,14 @@
 #else
 			<false/>
 #end
+#if ($info.appArgs)
+			<key>Arguments</key>
+			<array>
+#foreach ($appArg in $info.appArgs)
+				<string>$appArg</string>
+#end
+			</array>
+#end
 		</dict>
 		<key>LSEnvironment</key>
 		<dict>

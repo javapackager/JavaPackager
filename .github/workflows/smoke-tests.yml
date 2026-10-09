@@ -1,0 +1,223 @@
+name: Smoke tests
+
+on:
+  push:
+    branches: [ devel, master ]
+  pull_request:
+    branches: [ devel, master ]
+  workflow_dispatch:
+
+jobs:
+  macos:
+    name: ${{ matrix.os }} / ${{ matrix.tool }} / ${{ matrix.macStartup }}${{ matrix.admin && ' / admin' || '' }}
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ macos-14, macos-15 ]
+        macStartup: [ UNIVERSAL, ARM64, SCRIPT ]
+        admin: [ false ]
+        tool: [ maven ]
+        include:
+          - os: macos-15
+            macStartup: SCRIPT
+            admin: true
+            tool: maven
+          - os: macos-15
+            macStartup: UNIVERSAL
+            admin: false
+            tool: gradle
+    env:
+      OUT: samples/hello-world/${{ matrix.tool == 'gradle' && 'build' || 'target' }}
+      # empty local Maven repo: the plugin is installed there and the sample resolves everything else like a user would (#444)
+      M2_REPO: ${{ github.workspace }}/build/m2-smoke
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: 17
+          cache: gradle
+
+      - name: Build and install plugin to Maven local
+        run: ./gradlew publishToMavenLocal --no-daemon "-Dmaven.repo.local=$M2_REPO"
+
+      - name: Get plugin version
+        id: plugin
+        run: echo "version=$(./gradlew properties -q --no-daemon | awk '/^version:/ {print $2}' | tr -d '\r')" >> "$GITHUB_OUTPUT"
+
+      - name: Package sample app
+        working-directory: samples/hello-world
+        run: |
+          if [ "${{ matrix.tool }}" = gradle ]; then
+            ../../gradlew package --no-daemon "-Dmaven.repo.local=$M2_REPO" \
+              -PjavapackagerVersion=${{ steps.plugin.outputs.version }} \
+              -PmacStartup=${{ matrix.macStartup }} \
+              -PadministratorRequired=${{ matrix.admin }} \
+              2>&1 | tee build.log
+          else
+            mvn -B "-Dmaven.repo.local=$M2_REPO" package \
+              -Djavapackager.version=${{ steps.plugin.outputs.version }} \
+              -DmacStartup=${{ matrix.macStartup }} \
+              -DadministratorRequired=${{ matrix.admin }} \
+              2>&1 | tee build.log
+          fi
+          exit "${PIPESTATUS[0]}"
+
+      - name: Check generated app
+        run: bash .github/scripts/check-macos-app.sh "$OUT" ${{ matrix.macStartup }} ${{ matrix.admin }}
+
+      - name: Upload artifacts
+        if: always()
+        uses: actions/upload-artifact@v5
+        with:
+          name: hello-world-${{ matrix.os }}-${{ matrix.tool }}-${{ matrix.macStartup }}${{ matrix.admin && '-admin' || '' }}
+          path: |
+            samples/hello-world/build.log
+            ${{ env.OUT }}/*.dmg
+            ${{ env.OUT }}/*.pkg
+          if-no-files-found: ignore
+
+  linux:
+    name: ubuntu-latest / ${{ matrix.tool }}${{ matrix.java && format(' / JDK {0}', matrix.java) || '' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        tool: [ maven, gradle ]
+        # empty: the JDK 17 used to build the plugin; declared so the include below adds a job instead of extending one
+        java: [ '' ]
+        include:
+          # packaging with a JDK 24+ without jmods (JEP 493): jlink links from the run-time image
+          - tool: maven
+            java: 25
+    env:
+      OUT: samples/hello-world/${{ matrix.tool == 'gradle' && 'build' || 'target' }}
+      # empty local Maven repo: the plugin is installed there and the sample resolves everything else like a user would (#444)
+      M2_REPO: ${{ github.workspace }}/build/m2-smoke
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: 17
+          cache: gradle
+
+      - name: Install FUSE 2 (needed by appimagetool)
+        run: sudo apt-get update && sudo apt-get install -y libfuse2t64
+
+      - name: Build and install plugin to Maven local
+        run: ./gradlew publishToMavenLocal --no-daemon "-Dmaven.repo.local=$M2_REPO"
+
+      - name: Get plugin version
+        id: plugin
+        run: echo "version=$(./gradlew properties -q --no-daemon | awk '/^version:/ {print $2}' | tr -d '\r')" >> "$GITHUB_OUTPUT"
+
+      - name: Set up packaging JDK ${{ matrix.java }}
+        if: matrix.java
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: ${{ matrix.java }}
+
+      - name: Package sample app
+        working-directory: samples/hello-world
+        run: |
+          if [ "${{ matrix.tool }}" = gradle ]; then
+            ../../gradlew package --no-daemon "-Dmaven.repo.local=$M2_REPO" -PjavapackagerVersion=${{ steps.plugin.outputs.version }} 2>&1 | tee build.log
+          else
+            mvn -B "-Dmaven.repo.local=$M2_REPO" package -Djavapackager.version=${{ steps.plugin.outputs.version }} 2>&1 | tee build.log
+          fi
+          exit "${PIPESTATUS[0]}"
+
+      - name: Check generated app
+        run: bash .github/scripts/check-linux-app.sh "$OUT"
+
+      - name: Upload artifacts
+        if: always()
+        uses: actions/upload-artifact@v5
+        with:
+          name: hello-world-ubuntu-latest-${{ matrix.tool }}${{ matrix.java && format('-jdk{0}', matrix.java) || '' }}
+          path: |
+            samples/hello-world/build.log
+            ${{ env.OUT }}/*.deb
+            ${{ env.OUT }}/*.rpm
+            ${{ env.OUT }}/*.AppImage
+          if-no-files-found: ignore
+
+  windows:
+    name: windows-latest / ${{ matrix.tool }}
+    runs-on: windows-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        tool: [ maven, gradle ]
+    env:
+      OUT: samples/hello-world/${{ matrix.tool == 'gradle' && 'build' || 'target' }}
+      # empty local Maven repo: the plugin is installed there and the sample resolves everything else like a user would (#444)
+      M2_REPO: ${{ github.workspace }}/build/m2-smoke
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: 17
+          cache: gradle
+
+      - name: Install Inno Setup (if missing)
+        run: |
+          if ! command -v iscc > /dev/null; then
+            choco install innosetup -y --no-progress
+          fi
+          echo "C:\\Program Files (x86)\\Inno Setup 6" >> "$GITHUB_PATH"
+
+      - name: Install WiX 5
+        run: |
+          dotnet tool install --global wix --version 5.0.2
+          echo "$USERPROFILE\\.dotnet\\tools" >> "$GITHUB_PATH"
+
+      - name: Build and install plugin to Maven local
+        run: ./gradlew publishToMavenLocal --no-daemon "-Dmaven.repo.local=$M2_REPO"
+
+      - name: Get plugin version
+        id: plugin
+        run: echo "version=$(./gradlew properties -q --no-daemon | awk '/^version:/ {print $2}' | tr -d '\r')" >> "$GITHUB_OUTPUT"
+
+      - name: Package sample app
+        working-directory: samples/hello-world
+        run: |
+          command -v iscc
+          wix --version
+          if [ "${{ matrix.tool }}" = gradle ]; then
+            ../../gradlew package --no-daemon "-Dmaven.repo.local=$M2_REPO" -PjavapackagerVersion=${{ steps.plugin.outputs.version }} 2>&1 | tee build.log
+          else
+            mvn -B "-Dmaven.repo.local=$M2_REPO" package -Djavapackager.version=${{ steps.plugin.outputs.version }} 2>&1 | tee build.log
+          fi
+          exit "${PIPESTATUS[0]}"
+
+      - name: Check generated app
+        run: bash .github/scripts/check-windows-app.sh "$OUT"
+
+      - name: Upload artifacts
+        if: always()
+        uses: actions/upload-artifact@v5
+        with:
+          name: hello-world-windows-latest-${{ matrix.tool }}
+          path: |
+            samples/hello-world/build.log
+            ${{ env.OUT }}/*.exe
+            ${{ env.OUT }}/*.msi
+            ${{ env.OUT }}/*.msm
+          if-no-files-found: ignore

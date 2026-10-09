@@ -71,7 +71,7 @@
 | `hardenedCodesign` | :x:       | `true`        | If it is set to `true`, enable [hardened runtime](https://developer.apple.com/documentation/security/hardened_runtime) if MacOS version >= 10.13.6. |
 | `notarizeApp`      | :x:       | `false`       | If it is set to `true`, generated app will be submitted to apple for notarization and the ticket will be stapled.                                   |
 | `keyChainProfile`  | :x:       |               | Profile name originally provided to `xcrun notarytool store-credentials`. Must be set if `notarizeApp` is `true`.
-| `macStartup`       | :x:       | `SCRIPT`      | App startup type, using a `SCRIPT` or a binary (compiled version of the script: `UNIVERSAL`, `X86_64` or `ARM64`).                                  |
+| `macStartup`       | :x:       | `UNIVERSAL`   | App startup type: a native launcher (`UNIVERSAL`, `X86_64` or `ARM64`) or a bash `SCRIPT`. Default was `SCRIPT` until 1.7.6. |
 
 ## DMG generation properties
 

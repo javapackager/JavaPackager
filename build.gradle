@@ -2,10 +2,9 @@ plugins {
 	id 'java'    
 	id 'maven-publish'
 	id 'java-gradle-plugin'
-	id 'com.gradle.plugin-publish' version '1.1.0'
-	id 'io.codearte.nexus-staging' version '0.21.2'
+	id 'com.gradle.plugin-publish' version '1.3.1'
 	id 'eclipse'
-	id 'de.undercouch.download' version '5.0.4'
+	id 'de.undercouch.download' version '5.7.0'
 	id 'signing'
 }
 
@@ -13,24 +12,27 @@ repositories {
 	mavenLocal()
 	mavenCentral()
 	maven { 
-		url 'https://plugins.gradle.org/m2/'
+		url = uri('https://plugins.gradle.org/m2/')
 	}
 }
 
 gradlePlugin {
-	website = 'http://github.com/fvarrui/JavaPackager'
-	vcsUrl = 'http://github.com/fvarrui/JavaPackager.git'
+	website = 'http://github.com/javapackager/JavaPackager'
+	vcsUrl = 'http://github.com/javapackager/JavaPackager.git'
 	description = 'Packages Java applications as native Windows, MacOS or GNU/Linux executables and creates installers for them'
 
 	plugins {
 		create("javaPackagerPlugin") {
-			id = 'io.github.fvarrui.javapackager.plugin'
+			id = 'io.github.javapackager'
 			displayName = 'JavaPackager'
-			implementationClass = 'io.github.fvarrui.javapackager.gradle.PackagePlugin'
+			implementationClass = 'io.github.javapackager.gradle.PackagePlugin'
 			tags.set(['java', 'packager', 'gradle-plugin', 'maven-plugin', 'native', 'installer', 'debian-packages', 'rpm-packages', 'dmg', 'maven', 'gradle', 'distribution', 'javapackager', 'linux-executables', 'deb', 'rpm', 'native-windows', 'java-applications', 'pkg', 'msi'])
 		}
 	}
 }
+
+// maven-plugin-plugin generates the Maven plugin descriptor (see generatePluginDescriptor)
+def mavenPluginPluginVersion = '3.16.0'
 
 configurations {
 	mavenEmbedder
@@ -38,39 +40,45 @@ configurations {
 
 dependencies {
 	implementation 'org.apache.maven:maven-plugin-api:3.6.0'
-	implementation 'org.codehaus.plexus:plexus-utils:3.5.1'
-	implementation 'org.twdata.maven:mojo-executor:2.3.0'
-	implementation 'commons-io:commons-io:2.16.1'
-	implementation 'org.apache.commons:commons-lang3:3.9'
-	implementation 'org.apache.commons:commons-collections4:4.3'
-	implementation 'org.apache.commons:commons-compress:1.21'
-	implementation 'org.apache.velocity:velocity-engine-core:2.3'
-	implementation 'org.vafer:jdeb:1.9'
+	implementation 'org.apache.maven:maven-core:3.6.0'
+	// jdeb requires plexus-utils 4, which moved Xpp3Dom to plexus-xml (3.x is the Maven 3 compatible line)
+	implementation 'org.codehaus.plexus:plexus-utils:4.1.0'
+	implementation 'org.codehaus.plexus:plexus-xml:3.1.0'
+	implementation 'org.twdata.maven:mojo-executor:2.4.1'
+	implementation 'commons-io:commons-io:2.22.0'
+	implementation 'org.apache.commons:commons-lang3:3.21.0'
+	implementation 'org.apache.commons:commons-collections4:4.6.0'
+	implementation 'org.apache.commons:commons-compress:1.28.0'
+	implementation 'org.apache.velocity:velocity-engine-core:2.4.1'
+	implementation 'org.vafer:jdeb:1.14'
 	implementation 'net.jsign:jsign-core:6.0'
 	implementation 'org.redline-rpm:redline:1.2.10'
-	implementation 'edu.sc.seis.launch4j:launch4j:3.0.5'
+	implementation 'edu.sc.seis.launch4j:launch4j:4.0.0'
 
-	testImplementation 'junit:junit:4.13.1'
+	compileOnly 'org.apache.maven.plugin-tools:maven-plugin-annotations:3.16.0'
+	compileOnly 'javax.inject:javax.inject:1' // provided by Maven at runtime
 
-	compileOnly 'org.apache.maven.plugin-tools:maven-plugin-annotations:3.6.0'
-
-	mavenEmbedder 'org.apache.maven:maven-embedder:3.6.0'
-	mavenEmbedder 'org.apache.maven:maven-compat:3.6.0'	
-	mavenEmbedder 'org.slf4j:slf4j-simple:1.7.30'
-	mavenEmbedder 'org.eclipse.aether:aether-connector-basic:1.1.0'
-	mavenEmbedder 'org.eclipse.aether:aether-transport-wagon:1.1.0'
-	mavenEmbedder 'org.apache.maven.wagon:wagon-http:3.4.1'
-	mavenEmbedder 'org.apache.maven.wagon:wagon-provider-api:3.4.1'
+	mavenEmbedder 'org.apache.maven:maven-embedder:3.9.16'
+	mavenEmbedder 'org.apache.maven:maven-compat:3.9.16'	
+	mavenEmbedder 'org.slf4j:slf4j-simple:1.7.36'
+	mavenEmbedder 'org.apache.maven.resolver:maven-resolver-connector-basic:1.9.27'
+	mavenEmbedder 'org.apache.maven.resolver:maven-resolver-transport-wagon:1.9.27'
+	mavenEmbedder 'org.apache.maven.wagon:wagon-http:3.5.3'
+	mavenEmbedder 'org.apache.maven.wagon:wagon-provider-api:3.5.3'
 }
 
-group = 'io.github.fvarrui'
-version = '1.7.6'
+group = 'io.github.javapackager'
+version = '2.0.0'
 description = 'Hybrid Maven/Gradle plugin to package Java applications as native Windows, Mac OS X or GNU/Linux executables and create installers for them'
 
-sourceCompatibility = JavaVersion.VERSION_1_8
-targetCompatibility = JavaVersion.VERSION_1_8
+java {
+	sourceCompatibility = JavaVersion.VERSION_1_8
+	targetCompatibility = JavaVersion.VERSION_1_8
+}
 
 compileJava.options.encoding = 'UTF-8'
+// Java 8 target is deliberate: don't warn that it's obsolete on newer JDKs
+compileJava.options.compilerArgs << '-Xlint:-options'
 
 // suppress javadoc warnings
 javadoc.options.addStringOption('Xdoclint:none', '-quiet')
@@ -80,13 +88,15 @@ java {
 	withJavadocJar()
 }
 
-// OSSRH publication
+// Maven Central publication (Central Portal)
 publishing {
 	repositories {
 		maven {
-            def releasesRepoUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
-            def snapshotsRepoUrl = "https://oss.sonatype.org/content/repositories/snapshots"
-			name = "OSSRH"
+            // credentials are a Central Portal user token; releases use the Portal OSSRH Staging API
+            // and must be uploaded to the Portal afterwards (see releaseToCentral)
+            def releasesRepoUrl = "https://ossrh-staging-api.central.sonatype.com/service/local/staging/deploy/maven2/"
+            def snapshotsRepoUrl = "https://central.sonatype.com/repository/maven-snapshots/"
+			name = "MavenCentral"
             url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl			
 			credentials {
 				username = project.findProperty("ossrhUsername") ?: ''
@@ -103,13 +113,32 @@ publishing {
 						.with {
 							appendNode('directory', directory)
 							appendNode('outputDirectory', outputDirectory)
+							// keeps the 'javapackager:' goal prefix (maven-plugin-plugin can't compute it from the artifactId)
+							appendNode('plugins').appendNode('plugin').with {
+								appendNode('groupId', 'org.apache.maven.plugins')
+								appendNode('artifactId', 'maven-plugin-plugin')
+								appendNode('version', mavenPluginPluginVersion)
+								appendNode('configuration').appendNode('goalPrefix', 'javapackager')
+							}
 						}
-				asNode().appendNode('repositories').appendNode('repository')
-						.with {
-							appendNode('id', 'gradle')
-							appendNode('name', 'Gradle Plugin Portal')
-							appendNode('url', 'https://plugins.gradle.org/m2/')
-						}						
+				// Maven provides its own API to plugins: maven-plugin-api and maven-core must be 'provided' and
+				// mojo-executor and jdeb (also Maven plugins) must not bring other Maven versions.
+				// The launch4j Gradle library is only used by the Gradle plugin and only published on the
+				// Gradle Plugin Portal, so it's left out of the POM: Maven users only need Maven Central (#444).
+				// (Gradle consumers use the .module file, so they are not affected)
+				def dependencies = asNode().dependencies[0]
+				dependencies.dependency.findAll { it.groupId.text() == 'edu.sc.seis.launch4j' }.each { dependencies.remove(it) }
+				dependencies.dependency.each { dep ->
+					def artifactId = dep.artifactId.text()
+					if (artifactId in ['maven-plugin-api', 'maven-core']) {
+						dep.scope[0].value = 'provided'
+					} else if (artifactId in ['mojo-executor', 'jdeb']) {
+						dep.appendNode('exclusions').appendNode('exclusion').with {
+							appendNode('groupId', 'org.apache.maven')
+							appendNode('artifactId', '*')
+						}
+					}
+				}
 			}
 			pom {
 				name = project.name
@@ -127,11 +156,11 @@ publishing {
 				pom {
 					version = project.version
 					description = project.description
-					url = 'https://github.com/fvarrui/JavaPackager'
+					url = 'https://github.com/javapackager/JavaPackager'
 					scm {
-						connection = 'scm:git:git://github.com/fvarrui/JavaPackager.git'
-						developerConnection = 'scm:git:git@github.com:fvarrui/fvarrui.git'
-						url = 'https://github.com/fvarrui/JavaPackager'
+						connection = 'scm:git:git://github.com/javapackager/JavaPackager.git'
+						developerConnection = 'scm:git:git@github.com:javapackager/JavaPackager.git'
+						url = 'https://github.com/javapackager/JavaPackager'
 					}
 					licenses {
 						license {
@@ -169,7 +198,7 @@ tasks.register('generatePluginDescriptor', JavaExec) {
 			'--errors',
 			'--batch-mode',
 			'--file', generatePomFileForPluginMavenPublication.destination,
-			'org.apache.maven.plugins:maven-plugin-plugin:3.9.0:descriptor',
+			"org.apache.maven.plugins:maven-plugin-plugin:${mavenPluginPluginVersion}:descriptor",
 			'-Dproject.build.sourceEncoding=' + compileJava.options.encoding
 	]
 	doLast {
@@ -186,26 +215,45 @@ publishToMavenLocal.dependsOn(build)
 // Signature of publication
 signing {
 	setRequired {
-		// signing is only required if the artifacts are to be published
-		gradle.taskGraph.allTasks.any { it instanceof PublishToMavenRepository }
+		// signing is only required if release artifacts are to be published (snapshots aren't validated)
+		!version.endsWith('SNAPSHOT') && gradle.taskGraph.allTasks.any { it instanceof PublishToMavenRepository }
 	}
-	sign publishing.publications.pluginMaven
+	// all publications (plugin and Gradle plugin marker): Maven Central rejects unsigned release artifacts
+	sign publishing.publications
 }
 
-nexusStaging {
-	username = project.findProperty('ossrhUsername') ?: ''
-	password = project.findProperty('ossrhPassword') ?: ''
+// Publishes a release and uploads it to the Central Portal, where it waits to be published manually
+// (https://central.sonatype.com/publishing/deployments). Snapshots only need 'publish'.
+tasks.register('releaseToCentral') {
+	group 'publishing'
+	description 'Publishes the release to the Central Portal (OSSRH Staging API) and uploads it for manual publishing.'
+	dependsOn 'publish'
+	doLast {
+		if (version.endsWith('SNAPSHOT')) {
+			throw new GradleException("releaseToCentral is for releases; use 'publish' for ${version}")
+		}
+		def token = "${project.findProperty('ossrhUsername') ?: ''}:${project.findProperty('ossrhPassword') ?: ''}".bytes.encodeBase64().toString()
+		def url = new URL("https://ossrh-staging-api.central.sonatype.com/manual/upload/defaultRepository/${project.group}?publishing_type=user_managed")
+		def connection = (HttpURLConnection) url.openConnection()
+		connection.requestMethod = 'POST'
+		connection.setRequestProperty('Authorization', "Bearer ${token}")
+		def status = connection.responseCode
+		def response = (status < 400 ? connection.inputStream : connection.errorStream)?.text
+		if (status >= 400) {
+			throw new GradleException("Central Portal upload failed (HTTP ${status}): ${response}")
+		}
+		logger.lifecycle("Uploaded to the Central Portal (HTTP ${status}). Review and publish it at https://central.sonatype.com/publishing/deployments")
+	}
 }
 
-tasks.register('updateUniversalJavaApplicationStub', Download) {
-	def version = '20230601.235708'
+tasks.register('updateNativeJavaApplicationStub', Download) {
+	def version = '20251202.010109'
 	group 'Update assets'
-	description 'Downloads compiled and scripted versions of universalJavaApplicationStub to src/main/resources/mac overriding the existing ones.'
+	description 'Downloads the native macOS launchers (nativeJavaApplicationStub) to src/main/resources/mac and overwrites the existing ones.'
 	src([
-			"https://github.com/fvarrui/universalJavaApplicationStub/releases/download/${version}/universalJavaApplicationStub.sh",
-			"https://github.com/fvarrui/universalJavaApplicationStub/releases/download/${version}/universalJavaApplicationStub.x86_64",
-			"https://github.com/fvarrui/universalJavaApplicationStub/releases/download/${version}/universalJavaApplicationStub.arm64",
-			"https://github.com/fvarrui/universalJavaApplicationStub/releases/download/${version}/universalJavaApplicationStub"
+			"https://github.com/javapackager/nativeJavaApplicationStub/releases/download/${version}/nativeJavaApplicationStub",
+			"https://github.com/javapackager/nativeJavaApplicationStub/releases/download/${version}/nativeJavaApplicationStub.arm64",
+			"https://github.com/javapackager/nativeJavaApplicationStub/releases/download/${version}/nativeJavaApplicationStub.x86_64"
 	])
 	dest file('src/main/resources/mac')
 	overwrite true

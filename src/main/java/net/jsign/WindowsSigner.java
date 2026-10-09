@@ -1,7 +1,7 @@
 package net.jsign;
 
-import io.github.fvarrui.javapackager.model.WindowsSigning;
-import io.github.fvarrui.javapackager.utils.Logger;
+import io.github.javapackager.model.WindowsSigning;
+import io.github.javapackager.utils.Logger;
 
 import java.io.File;
 
