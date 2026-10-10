@@ -8,7 +8,7 @@ You triage GitHub issues of `javapackager/JavaPackager` (local clone, normally o
 
 ## Context
 
-JavaPackager is a hybrid Maven/Gradle plugin (Java 8) that packages Java apps as native Windows/macOS/GNU/Linux apps and installers. Before starting, read `.minispec/core/architecture.md` and `.minispec/core/conventions.md`. Released code is on `master`; unreleased work is on `devel`. List it with `git log --oneline origin/master..origin/devel` and inspect commits with `git show <sha>`.
+JavaPackager is a hybrid Maven/Gradle plugin (Java 8) that packages Java apps as native Windows/macOS/GNU/Linux apps and installers. Before starting, read `.minispec/core/architecture.md` and `.minispec/core/conventions.md`. Released code is on `main`; unreleased work is on `devel`. List it with `git log --oneline origin/main..origin/devel` and inspect commits with `git show <sha>`.
 
 ## For each issue
 

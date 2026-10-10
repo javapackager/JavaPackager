@@ -5,11 +5,11 @@ description: Prepare and publish a JavaPackager release to Maven Central and Git
 
 # Release
 
-Publishing a release is irreversible (Maven Central never deletes versions), so confirm with the user before each outward step: pushing to `master`, `releaseToCentral`, publishing the GitHub release, and closing issues.
+Publishing a release is irreversible (Maven Central never deletes versions), so confirm with the user before each outward step: pushing to `main`, `releaseToCentral`, publishing the GitHub release, and closing issues.
 
 ## 1. Release notes
 
-- Source: `git log --oneline --no-merges origin/master..origin/devel`, the `fix-*` notes in `.minispec/features/`, the ADRs, and `release-*.md`.
+- Source: `git log --oneline --no-merges origin/main..origin/devel`, the `fix-*` notes in `.minispec/features/`, the ADRs, and `release-*.md`.
 - Audience: plugin users. In English, following the user's Markdown rules, in the style of earlier releases (`gh release view <tag> --repo javapackager/JavaPackager`).
 - Sections, in this order: Breaking changes (with a "How to upgrade" section and ready-to-copy snippets), New features, Fixed issues (`#n` references), Maintenance.
 - Leave out regressions that only existed in `devel` and never reached a release.
@@ -27,7 +27,7 @@ Publishing a release is irreversible (Maven Central never deletes versions), so 
 ## 3. Publish
 
 1. Set `version` in `build.gradle` to `X.Y.Z` (no `-SNAPSHOT`), update the sample's `javapackager.version`, commit.
-2. Merge `devel` into `master` and push (ask first). Point the draft release's target to `master`.
+2. Merge `devel` into `main` and push (ask first). Point the draft release's target to `main`.
 3. The user runs `./gradlew releaseToCentral`. It uploads through the Portal OSSRH Staging API in `user_managed` mode; then they review the deployment at https://central.sonatype.com/publishing/deployments and click **Publish**.
 4. Verify it's on Maven Central (it can take a while to appear):
 

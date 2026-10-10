@@ -2,7 +2,7 @@
 
 ## Goal
 
-Clear the Dependabot alerts on `master`: fix the ones that reach users, and fix or dismiss with a reason the ones only in the plugin's own build.
+Clear the Dependabot alerts on `main`: fix the ones that reach users, and fix or dismiss with a reason the ones only in the plugin's own build.
 
 ## Context
 
