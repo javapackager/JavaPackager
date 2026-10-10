@@ -6,7 +6,7 @@
 JavaPackager is a hybrid plugin for **Maven** and **Gradle** which provides an easy way to package Java applications in native Windows, MacOS or GNU/Linux executables, and generate installers for them.
 
 > [!IMPORTANT] 
-> See [JavaPackager changes and fixes](https://github.com/fvarrui/JavaPackager/releases).
+> See [JavaPackager changes and fixes](https://github.com/javapackager/JavaPackager/releases).
 
 > [!WARNING]
 > Since 2.0.0 the plugin's `groupId` is `io.github.javapackager`, the Gradle plugin id is `io.github.javapackager` and the Gradle task type is `io.github.javapackager.gradle.PackageTask` (up to 1.7.6: `io.github.fvarrui`, `io.github.fvarrui.javapackager.plugin` and `io.github.fvarrui.javapackager.gradle.PackageTask`). Update them in your `pom.xml` or `build.gradle` when upgrading.
@@ -15,7 +15,7 @@ JavaPackager is a hybrid plugin for **Maven** and **Gradle** which provides an e
 
 This project has been actively maintained for many years, but due to lack of time, I can no longer dedicate the attention it deserves. To keep it alive and evolving, I’m looking for contributors to help with its maintenance.  
 
-:point_right: **[Join the discussion](https://github.com/fvarrui/JavaPackager/discussions/460)**  
+:point_right: **[Join the discussion](https://github.com/javapackager/JavaPackager/discussions/460)**  
 
 Any help is welcome! Thank you for your support.
 
@@ -177,7 +177,7 @@ By default it will generate next artifacts in `${outputDirectory} ` folder:
 | `displayName`              | :x:                | `${project.name}` or `${name}`                                                                                                                     | App name to show.                                                                                                                                                                         |
 | `envPath`                  | :x:                |                                                                                                                                                    | Defines PATH environment variable in GNU/Linux and MacOS startup scripts.                                                                                                                 |
 | `extra`                    | :x:                |                                                                                                                                                    | Map with extra properties to be used in customized Velocity templates, accesible through `$info.extra` variable.                                                                          |
-| `fileAssociations`         | :x:                | [`FileAssociation[]`](https://github.com/fvarrui/JavaPackager/blob/master/src/main/java/io/github/fvarrui/javapackager/model/FileAssociation.java) | Associate file extensions or MIME types to the app.                                                                                                                                       |
+| `fileAssociations`         | :x:                | [`FileAssociation[]`](src/main/java/io/github/javapackager/model/FileAssociation.java) | Associate file extensions or MIME types to the app.                                                                                                                                       |
 | `forceInstaller`           | :x:                | `false`                                                                                                                                            | If `true`, skips operating system check when generating installers.                                                                                                                       |
 | `generateInstaller`        | :x:                | `true`                                                                                                                                             | Generates an installer for the app.                                                                                                                                                       |
 | `jdkPath`                  | :x:                | `${java.home}`                                                                                                                                     | JDK used to generate a customized JRE. It allows to bundle customized JREs for different platforms.                                                                                       |
@@ -219,7 +219,7 @@ By default it will generate next artifacts in `${outputDirectory} ` folder:
 
 ### Plugin assets
 
-Any [asset used by JavaPackager](https://github.com/fvarrui/JavaPackager/tree/master/src/main/resources), such as application icons or templates, can be replaced just by placing a file with the same name in `${assetsDir}` folder organized by platform.
+Any [asset used by JavaPackager](src/main/resources), such as application icons or templates, can be replaced just by placing a file with the same name in `${assetsDir}` folder organized by platform.
 
 ```bash
 ${assetsDir}/
@@ -243,7 +243,7 @@ ${assetsDir}/
 ```
 
 > [!WARNING] 
-> If icon is not specified , it will use an [icon by default](https://raw.githubusercontent.com/fvarrui/JavaPackager/master/src/main/resources/linux/default-icon.png) for all platforms.
+> If icon is not specified , it will use an [icon by default](src/main/resources/linux/default-icon.png) for all platforms.
 
 #### Templates
 
@@ -276,9 +276,9 @@ ${assetsDir}/
     └── wxs.vtl                        # WiX Toolset WXS template to generate MSI
 ```
 
-An object called `info` of type [`PackagerSettings`](https://github.com/fvarrui/JavaPackager/blob/master/src/main/java/io/github/fvarrui/javapackager/packagers/PackagerSettings.java) is passed to all templates with all plugin properties.
+An object called `info` of type [`PackagerSettings`](src/main/java/io/github/javapackager/packagers/PackagerSettings.java) is passed to all templates with all plugin properties.
 
-You can use [default templates](https://github.com/fvarrui/JavaPackager/tree/master/src/main/resources) as examples to create your own templates, and use the `extra` map property to add your own properties in the plugin settings to use in your custom templates (e.g. `${info.extra["myProperty"]}`).
+You can use [default templates](src/main/resources) as examples to create your own templates, and use the `extra` map property to add your own properties in the plugin settings to use in your custom templates (e.g. `${info.extra["myProperty"]}`).
 
 ### Additional JVM options at runtime
 
@@ -405,7 +405,7 @@ cd JavaPackager
 > [!IMPORTANT]
 > Build the plugin with a JDK 17 or newer (a JRE is not enough). The plugin itself targets Java 8.
 
-Every push to `devel` and `master` runs the smoke tests (`.github/workflows/smoke-tests.yml`): they package [`samples/hello-world`](samples/hello-world) with the Maven and the Gradle plugin on GNU/Linux, Windows and macOS and check the generated apps and installers.
+Every push to `devel` and `main` runs the smoke tests (`.github/workflows/smoke-tests.yml`): they package [`samples/hello-world`](samples/hello-world) with the Maven and the Gradle plugin on GNU/Linux, Windows and macOS and check the generated apps and installers.
 
 ## How to publish the plugin to Maven Central
 
