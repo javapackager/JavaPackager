@@ -6,7 +6,7 @@ Catch Velocity parse errors in `src/main/resources/**/*.vtl` in a fast CI check,
 
 ## Context
 
-- A Velocity lexical error in `linux/startup.sh.vtl` (bash `"${name[@]}"` read as a Velocity reference) broke every GNU/Linux build in `devel`. It was only found when the Linux smoke test packaged the sample (see `fix-linux-startup-velocity-arrays.md`).
+- A Velocity lexical error in `linux/startup.sh.vtl` (bash `"${name[@]}"` read as a Velocity reference) broke every GNU/Linux build in `devel`. It was only found when the Linux smoke test packaged the sample (fixed with `#[[ ]]#`, see conventions).
 - Templates are rendered at packaging time by `utils/VelocityUtils`; nothing parses them during the build.
 - Users can override templates from `assetsDir`, so templates are public API and must stay valid.
 
