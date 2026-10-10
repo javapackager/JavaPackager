@@ -68,7 +68,7 @@ dependencies {
 }
 
 group = 'io.github.javapackager'
-version = '2.0.0'
+version = '2.0.1-SNAPSHOT'
 description = 'Hybrid Maven/Gradle plugin to package Java applications as native Windows, Mac OS X or GNU/Linux executables and create installers for them'
 
 java {

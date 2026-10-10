@@ -15,7 +15,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.release>11</maven.compiler.release>
 		<!-- overridden from CI with the snapshot built from this repo -->
-		<javapackager.version>2.0.0</javapackager.version>
+		<javapackager.version>2.0.1-SNAPSHOT</javapackager.version>
 		<macStartup>SCRIPT</macStartup>
 		<administratorRequired>false</administratorRequired>
 	</properties>
