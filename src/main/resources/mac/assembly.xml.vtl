@@ -13,8 +13,8 @@
 				<exclude>Contents/MacOS/${info.executable.name}</exclude>
 				<exclude>Contents/MacOS/universalJavaApplicationStub</exclude>
 #if ($info.bundleJre)
-				<exclude>Contents/PlugIns/${info.jreDirectoryName}/Contents/Home/bin/*</exclude>
-				<exclude>Contents/PlugIns/${info.jreDirectoryName}/Contents/Home/lib/jspawnhelper</exclude>
+				<exclude>Contents/PlugIns/${info.jreDirectoryName}.jre/Contents/Home/bin/*</exclude>
+				<exclude>Contents/PlugIns/${info.jreDirectoryName}.jre/Contents/Home/lib/jspawnhelper</exclude>
 #end
 #if ($info.scripts.bootstrap)
 				<exclude>Contents/Resources/scripts/*</exclude>
@@ -28,8 +28,8 @@
 				<include>Contents/MacOS/${info.executable.name}</include>
 				<include>Contents/MacOS/universalJavaApplicationStub</include>
 #if ($info.bundleJre)
-				<include>Contents/PlugIns/${info.jreDirectoryName}/Contents/Home/bin/*</include>
-				<include>Contents/PlugIns/${info.jreDirectoryName}/Contents/Home/lib/jspawnhelper</include>
+				<include>Contents/PlugIns/${info.jreDirectoryName}.jre/Contents/Home/bin/*</include>
+				<include>Contents/PlugIns/${info.jreDirectoryName}.jre/Contents/Home/lib/jspawnhelper</include>
 #end
 #if ($info.scripts.bootstrap)
 				<include>Contents/Resources/scripts/*</include>

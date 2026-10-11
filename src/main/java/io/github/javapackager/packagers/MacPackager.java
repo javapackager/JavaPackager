@@ -9,19 +9,14 @@ import org.codehaus.plexus.util.cli.CommandLineException;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.SimpleFileVisitor;
-import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
 
 /**
  * Packager for MacOS
@@ -333,6 +328,9 @@ public class MacPackager extends Packager {
 	}
 
 	private void notarize(String keyChainProfile, File appFile) throws IOException, CommandLineException {
+		if (keyChainProfile == null || keyChainProfile.trim().isEmpty()) {
+			throw new IllegalArgumentException("'macConfig.keyChainProfile' must be set to notarize the app (a profile created with 'xcrun notarytool store-credentials')");
+		}
 		Path zippedApp = null;
 		try {
 			zippedApp = zipApp(appFile);
@@ -357,19 +355,10 @@ public class MacPackager extends Packager {
 		CommandUtils.execute("xcrun", stapleArgs);
 	}
 
-	private Path zipApp(File appFile) throws IOException {
+	private Path zipApp(File appFile) throws IOException, CommandLineException {
+		// ditto keeps symbolic links and permissions, so the zip matches the signed app
 		Path zipPath = assetsFolder.toPath().resolve(appFile.getName() + "-notarization.zip");
-		try(ZipOutputStream zos = new ZipOutputStream(Files.newOutputStream(zipPath))) {
-			Path sourcePath = appFile.toPath();
-			Files.walkFileTree(sourcePath, new SimpleFileVisitor<Path>() {
-				public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-					zos.putNextEntry(new ZipEntry(sourcePath.getParent().relativize(file).toString()));
-					Files.copy(file, zos);
-					zos.closeEntry();
-					return FileVisitResult.CONTINUE;
-				}
-			});
-		}
+		CommandUtils.execute("ditto", "-c", "-k", "--keepParent", appFile, zipPath.toFile());
 		return zipPath;
 	}
 }

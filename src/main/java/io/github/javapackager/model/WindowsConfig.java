@@ -5,12 +5,14 @@ import static org.apache.commons.lang3.StringUtils.defaultIfBlank;
 
 import java.io.File;
 import java.io.Serializable;
+import java.nio.charset.StandardCharsets;
 import java.util.LinkedHashMap;
 import java.util.UUID;
 
 import org.apache.commons.collections4.MapUtils;
 
 import io.github.javapackager.packagers.Packager;
+import io.github.javapackager.utils.Logger;
 
 /**
  * JavaPackager Windows specific configuration
@@ -338,11 +340,35 @@ public class WindowsConfig implements Serializable {
 	 * 
 	 * @param packager Packager
 	 */
+	/**
+	 * Converts the app version into a Windows version (x.x.x.x), valid for EXE version info and MSI product versions:
+	 * the leading digits of up to four parts, e.g. 2.0.1-SNAPSHOT becomes 2.0.1.0
+	 * 
+	 * @param version App version
+	 * @return Windows version, or 1.0.0.0 if the app version can't be converted
+	 */
+	static String toWindowsVersion(String version) {
+		String[] parts = ("" + version).split("[.-]");
+		int[] numbers = new int[4];
+		for (int i = 0; i < numbers.length && i < parts.length; i++) {
+			String digits = parts[i].replaceAll("^(\\d*).*$", "$1");
+			if (digits.isEmpty() || digits.length() > 5) break;
+			numbers[i] = Integer.parseInt(digits);
+		}
+		// MSI product versions: major and minor up to 255, build up to 65535
+		if (numbers[0] == 0 || numbers[0] > 255 || numbers[1] > 255 || numbers[2] > 65535 || numbers[3] > 65535) {
+			Logger.warn("Version " + version + " can't be used as Windows version: using 1.0.0.0 (set winConfig.productVersion and winConfig.fileVersion)");
+			return "1.0.0.0";
+		}
+		return numbers[0] + "." + numbers[1] + "." + numbers[2] + "." + numbers[3];
+	}
+
 	public void setDefaults(Packager packager) {
 		this.setHeaderType(defaultIfNull(this.getHeaderType(), HeaderType.gui));
-		this.setFileVersion(defaultIfBlank(this.getFileVersion(), "1.0.0.0"));
+		String windowsVersion = toWindowsVersion(packager.getVersion());
+		this.setFileVersion(defaultIfBlank(this.getFileVersion(), windowsVersion));
 		this.setTxtFileVersion(defaultIfBlank(this.getTxtFileVersion(), "" + packager.getVersion()));
-		this.setProductVersion(defaultIfBlank(this.getProductVersion(), "1.0.0.0"));
+		this.setProductVersion(defaultIfBlank(this.getProductVersion(), windowsVersion));
 		this.setShortcutName(defaultIfBlank(this.getShortcutName(), packager.getDisplayName()));
 		this.setTxtProductVersion(defaultIfBlank(this.getTxtProductVersion(), "" + packager.getVersion()));
 		this.setCompanyName(defaultIfBlank(this.getCompanyName(), packager.getOrganizationName()));
@@ -352,7 +378,12 @@ public class WindowsConfig implements Serializable {
 		this.setProductName(defaultIfBlank(this.getProductName(), packager.getName()));
 		this.setInternalName(defaultIfBlank(this.getInternalName(), packager.getName()));
 		this.setOriginalFilename(defaultIfBlank(this.getOriginalFilename(), packager.getName() + ".exe"));
-		this.setMsiUpgradeCode(defaultIfBlank(this.getMsiUpgradeCode(), UUID.randomUUID().toString()));
+		// a stable upgrade code, so a new MSI of the same app upgrades the installed one
+		if (this.getMsiUpgradeCode() == null || this.getMsiUpgradeCode().trim().isEmpty()) {
+			String seed = "javapackager:" + packager.getOrganizationName() + ":" + packager.getName();
+			this.setMsiUpgradeCode(UUID.nameUUIDFromBytes(seed.getBytes(StandardCharsets.UTF_8)).toString());
+			Logger.info("MSI upgrade code: " + this.getMsiUpgradeCode() + " (set winConfig.msiUpgradeCode to keep it if the app name or organization change)");
+		}
 		// init setup languages
 		if (MapUtils.isEmpty(this.getSetupLanguages())) {
 			this.getSetupLanguages().put("english", "compiler:Default.isl");

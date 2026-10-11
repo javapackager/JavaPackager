@@ -283,6 +283,11 @@ public abstract class Packager extends PackagerSettings {
 	 */
 	protected File resolveIcon(File iconFile, String name, File assetsFolder) throws Exception {
 
+		String iconExtension = IconUtils.getIconFileExtensionByPlatform(platform);
+
+		// the common iconFile is used if no specific icon is set and it has the target platform's format
+		File commonIconFile = iconFile;
+
 		// searchs for specific icons
 		switch (platform) {
 		case linux:
@@ -297,7 +302,13 @@ public abstract class Packager extends PackagerSettings {
 		default:
 		}
 
-		String iconExtension = IconUtils.getIconFileExtensionByPlatform(platform);
+		if (iconFile == null && FileUtils.exists(commonIconFile)) {
+			if (commonIconFile.getName().toLowerCase().endsWith(iconExtension)) {
+				iconFile = commonIconFile;
+			} else {
+				Logger.warn("'iconFile' ignored: " + platform + " needs a " + iconExtension + " icon (" + commonIconFile + ")");
+			}
+		}
 
 		// if not specific icon specified for target platform, searchs for an icon in
 		// "${assetsDir}" folder

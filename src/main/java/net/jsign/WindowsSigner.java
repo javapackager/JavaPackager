@@ -46,7 +46,10 @@ public class WindowsSigner {
             helper.name(displayName);
             helper.url(url);
             helper.alg(signing.getAlg());
-            helper.keystore("" + signing.getKeystore());
+            // without a keystore, jsign uses certfile and keyfile
+            if (signing.getKeystore() != null) {
+                helper.keystore(signing.getKeystore().getPath());
+            }
             helper.storepass(signing.getStorepass());
             helper.storetype(signing.getStoretype());
             helper.alias(signing.getAlias());

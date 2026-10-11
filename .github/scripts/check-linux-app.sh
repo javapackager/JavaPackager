@@ -29,6 +29,10 @@ if [ -x "$EXE" ]; then
 	if echo "$OUTPUT" | grep -qF "args=[--foo, hello world]"; then pass "appArgs received"; else fail "appArgs not received as configured"; fi
 	if echo "$OUTPUT" | grep -qF "smoke.prop=hello world"; then pass "vmArgs received"; else fail "vmArgs not received as configured"; fi
 	if echo "$OUTPUT" | grep -qE "^java.class.path=.*:extra$"; then pass "classpath received"; else fail "classpath not received as configured"; fi
+	# the startup script passes the app's exit code on (#507)
+	"$EXE" --exit=3 > /dev/null 2>&1
+	CODE=$?
+	if [ "$CODE" = 3 ]; then pass "exit code passed on"; else fail "exit code not passed on: expected 3, got $CODE"; fi
 fi
 
 # installers

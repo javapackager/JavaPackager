@@ -283,8 +283,44 @@ public class PackageTask extends AbstractPackageTask {
 
 	@InputFile
 	@Optional
+	private File iconFile;
+
+	public File getIconFile() {
+		return iconFile;
+	}
+
+	public void setIconFile(File iconFile) {
+		this.iconFile = iconFile;
+	}
+
+	@Input
+	@Optional
+	private String tarballName;
+
+	public String getTarballName() {
+		return tarballName;
+	}
+
+	public void setTarballName(String tarballName) {
+		this.tarballName = tarballName;
+	}
+
+	@Input
+	@Optional
+	private String zipballName;
+
+	public String getZipballName() {
+		return zipballName;
+	}
+
+	public void setZipballName(String zipballName) {
+		this.zipballName = zipballName;
+	}
+
+	@InputFile
+	@Optional
 	private File licenseFile;
-	
+
 	public File getLicenseFile() {
 		return licenseFile;
 	}
@@ -666,7 +702,10 @@ public class PackageTask extends AbstractPackageTask {
 					.classpath(defaultIfNull(classpath, extension.getClasspath()))
 					.copyDependencies(defaultIfNull(copyDependencies, extension.getCopyDependencies()))
 					.createTarball(defaultIfNull(createTarball, extension.getCreateTarball()))
+					.tarballName(defaultIfNull(tarballName, extension.getTarballName()))
 					.createZipball(defaultIfNull(createZipball, extension.getCreateZipball()))
+					.zipballName(defaultIfNull(zipballName, extension.getZipballName()))
+					.iconFile(defaultIfNull(iconFile, extension.getIconFile()))
 					.customizedJre(defaultIfNull(customizedJre, extension.getCustomizedJre()))
 					.description(defaultIfNull(appDescription, extension.getDescription()))
 					.displayName(defaultIfNull(displayName, extension.getDisplayName()))

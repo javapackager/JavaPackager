@@ -25,8 +25,9 @@ Each platform needs its own icon format:
 JavaPackager looks for the icon in this order:
 
 1. The platform's icon property, if set.
-2. The file named after the app in `assetsDir`, e.g. `assets/windows/MyApp.ico` for an app named `MyApp`.
-3. A default icon (a coffee cup) if there's none.
+2. The common `iconFile` property, if it has the platform's format.
+3. The file named after the app in `assetsDir`, e.g. `assets/windows/MyApp.ico` for an app named `MyApp`.
+4. A default icon (a coffee cup) if there's none.
 
 So the simplest way is to name your icons after your app and put them in `assetsDir`:
 
@@ -49,7 +50,6 @@ Some tools to create icons:
 - ICNS: [MacIcns](https://github.com/EasyG0ing1/MacIcns), or `iconutil` on macOS.
 - ICO: most image editors, or online converters.
 
-The common `iconFile` property is not used: set the icon per platform.
 
 ## Other assets
 

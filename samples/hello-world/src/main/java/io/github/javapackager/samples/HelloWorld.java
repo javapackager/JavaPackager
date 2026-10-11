@@ -12,6 +12,12 @@ public class HelloWorld {
 		System.out.println("args=" + java.util.Arrays.toString(args));
 		System.out.println("smoke.prop=" + System.getProperty("smoke.prop"));
 		System.out.println("java.class.path=" + System.getProperty("java.class.path"));
+		// --exit=N ends with exit code N, to check that launchers pass it on
+		for (String arg : args) {
+			if (arg.startsWith("--exit=")) {
+				System.exit(Integer.parseInt(arg.substring("--exit=".length())));
+			}
+		}
 	}
 
 }

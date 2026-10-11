@@ -28,6 +28,6 @@
 #if($info.licenseFile)
         <WixVariable Id="WixUILicenseRtf" Value="LICENSE"/>
 #end
-        <MajorUpgrade AllowDowngrades="no" AllowSameVersionUpgrades="no" DowngradeErrorMessage="A later version of ${info.winConfig.productName} is already installed. Setup will now exit." IgnoreRemoveFailure="no"/>
+        <MajorUpgrade AllowDowngrades="no" AllowSameVersionUpgrades="yes" DowngradeErrorMessage="A later version of ${info.winConfig.productName} is already installed. Setup will now exit." IgnoreRemoveFailure="no"/>
     </#if($info.wixMajorVersion > 3)Package#{else}Product#end>
 </Wix>

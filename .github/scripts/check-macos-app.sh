@@ -69,6 +69,15 @@ for ext in zip tar.gz; do
 	if [ -f "$FILE" ]; then pass "$ext bundle generated: $FILE"; else fail "$ext bundle not generated: $FILE"; ls "$TARGET"; fi
 done
 
+# the bundled JRE's executables keep mode 755 in the tarball (#508)
+TARBALL="$TARGET/${NAME}-${VERSION}-mac.tar.gz"
+if [ -f "$TARBALL" ]; then
+	for f in bin/java lib/jspawnhelper; do
+		MODE="$(tar -tvzf "$TARBALL" | grep "jre.jre/Contents/Home/$f\$" | awk '{print $1}')"
+		if [[ "$MODE" == -rwxr-xr-x* ]]; then pass "tarball JRE $f is executable ($MODE)"; else fail "tarball JRE $f is not executable: '$MODE'"; fi
+	done
+fi
+
 # install the app like a user and open it through Launch Services, as the Finder does
 # (based on javapackager/JavaPackager#487 by Jacob Burroughs). CI only: needs sudo and writes to /Applications
 INSTALLED="/Applications/$NAME.app"

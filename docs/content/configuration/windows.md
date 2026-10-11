@@ -52,7 +52,7 @@ javapackager {
 | `generateSetup` | `true` | Generates the Inno Setup installer `${name}_${version}.exe`. Needs `iscc`. |
 | `generateMsi` | `true` | Generates the MSI installer `${name}_${version}.msi`. Needs WiX. |
 | `generateMsm` | `false` | Generates the MSI merge module `${name}_${version}.msm`. It's also generated whenever `generateMsi` is `true`, because the MSI is built from it. |
-| `msiUpgradeCode` | random, on every build | `UpgradeCode` of the MSI. Set a fixed GUID so a new MSI upgrades the installed version. |
+| `msiUpgradeCode` | derived from `organizationName` and `name` | `UpgradeCode` of the MSI: a new MSI with the same code upgrades the installed version. The build logs it; set it to keep it if the app name or organization change. |
 | `signing` | | Code signing configuration. See [code signing](../guides/code-signing.md#windows). |
 | `registry` | | Registry values written by the installers. See [Registry entries](#registry-entries). |
 
@@ -67,9 +67,9 @@ Installers can only be built on Windows; on other platforms they are skipped, un
 | `vmLocation` | `bin/client/jvm.dll` or `bin/server/jvm.dll` | `jvm.dll` path relative to the bundled JRE. WinRun4J only, with `bundleJre`. |
 | `companyName` | `organizationName` | Company name in the EXE version info. |
 | `fileDescription` | `description` | File description in the EXE version info. |
-| `fileVersion` | `1.0.0.0` | File version (`x.x.x.x`). |
+| `fileVersion` | `version` as `x.x.x.x` | File version (`x.x.x.x`). |
 | `txtFileVersion` | `version` | File version as text. Launch4j with Maven only. |
-| `productVersion` | `1.0.0.0` | Product version (`x.x.x.x`). Also the MSI version: increase it for MSI upgrades. |
+| `productVersion` | `version` as `x.x.x.x` | Product version (`x.x.x.x`). Also the MSI version. |
 | `txtProductVersion` | `version` | Product version as text. Launch4j only. |
 | `productName` | `name` | Product name. |
 | `internalName` | `name` | Internal name. |
@@ -136,7 +136,7 @@ The MSI and the MSM are built with [WiX Toolset](https://wixtoolset.org/). If `w
 The MSM (merge module) contains the whole app, a Start menu shortcut and the registry entries; you can merge it into your own MSI. The MSI installs that module for all users in `Program Files` (x64).
 
 :::caution MSI upgrades
-For a new MSI to upgrade an installed version, keep the same `msiUpgradeCode` in every release (by default it's a new random GUID on every build) and increase `productVersion` (it defaults to `1.0.0.0`, it isn't taken from `version`). Downgrades and reinstalling the same version are refused.
+A new MSI upgrades the installed version when both have the same `msiUpgradeCode`. By default it's derived from `organizationName` and `name`, so it only changes if they do: if you rename the app or the organization, set `msiUpgradeCode` to the previous code (the build logs it). The MSI version is `productVersion`, by default `version` as `x.x.x.x` (e.g. `2.1.0-SNAPSHOT` becomes `2.1.0.0`); if `version` doesn't fit an MSI version (major and minor up to 255), it's `1.0.0.0` and you should set it. Installing an older version over a newer one is refused.
 :::
 
 The MSI doesn't create a desktop shortcut nor register file associations.

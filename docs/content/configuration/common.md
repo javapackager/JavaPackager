@@ -22,6 +22,7 @@ When a default differs between Maven and Gradle, both are given.
 | `organizationName` | Maven: the project's organization, or `ACME` | Organization: DEB maintainer, Windows publisher and version info, macOS copyright. |
 | `organizationUrl` | Maven: the project's organization URL | Organization website (Setup). |
 | `organizationEmail` | | Organization email (DEB maintainer). |
+| `iconFile` | | App icon, used on the platforms whose format it has (`.png` GNU/Linux, `.icns` macOS, `.ico` Windows) when the platform's icon property isn't set. See [icons and assets](../guides/icons-and-assets.md). |
 | `licenseFile` | Maven: the project's first license URL (downloaded), or `LICENSE`. Gradle: `LICENSE` in the root project | License copied into the app and shown by the Windows installers. |
 
 ## Packaging
@@ -35,9 +36,9 @@ When a default differs between Maven and Gradle, both are given.
 | `generateInstaller` | `true` | Generates the installers. Each one can also be disabled in its platform config. |
 | `forceInstaller` | `false` | Builds the AppImage, DMG, PKG, Setup, MSI and MSM even when the target platform isn't the one running the build. They need their native tools, so it rarely works. |
 | `createZipball` | `false` | Creates `${name}-${version}-${platform}.zip` with the app folder. |
-| `zipballName` | `${name}-${version}-${platform}` | Zipball name, without extension. Maven only. |
+| `zipballName` | `${name}-${version}-${platform}` | Zipball name, without extension. |
 | `createTarball` | `false` | Creates `${name}-${version}-${platform}.tar.gz` with the app folder. |
-| `tarballName` | `${name}-${version}-${platform}` | Tarball name, without extension. Maven only. |
+| `tarballName` | `${name}-${version}-${platform}` | Tarball name, without extension. |
 
 ## App contents
 
@@ -144,8 +145,3 @@ The script is copied into the app's `scripts` folder.
 | Windows | A `${name}.vbs` script runs it, and then the EXE; installer shortcuts point to the `.vbs`. |
 
 On Windows, use a script Windows can run (`.bat`, `.cmd`, `.vbs`...). `scripts` also accepts `preInstall` and `postInstall`, but they aren't implemented yet and are ignored.
-
-## Not working as expected
-
-- `iconFile` is ignored: set the icon with `linuxConfig.pngFile`, `macConfig.icnsFile` and `winConfig.icoFile`, or put it in `assetsDir` (see [icons and assets](../guides/icons-and-assets.md)).
-- `zipballName` and `tarballName` are ignored by the Gradle plugin.

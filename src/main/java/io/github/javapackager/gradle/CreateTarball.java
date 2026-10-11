@@ -84,14 +84,16 @@ public class CreateTarball extends ArtifactGenerator<Packager> {
 				copySpec.include(appFile.getName() + "/**");
 				copySpec.exclude(appFile.getName() + "/Contents/MacOS/" + executable.getName());
 				copySpec.exclude(appFile.getName() + "/Contents/MacOS/universalJavaApplicationStub");
-				copySpec.exclude(appFile.getName() + "/Contents/PlugIns/" + jreDirectoryName + "/Contents/Home/bin/*");
+				copySpec.exclude(appFile.getName() + "/Contents/PlugIns/" + jreDirectoryName + ".jre/Contents/Home/bin/*");
+				copySpec.exclude(appFile.getName() + "/Contents/PlugIns/" + jreDirectoryName + ".jre/Contents/Home/lib/jspawnhelper");
 				copySpec.exclude(appFile.getName() + "/Contents/Resources/scripts/*");
 				
 			});
 			tarTask.from(appFolder, copySpec -> {
 				copySpec.include(appFile.getName() + "/Contents/MacOS/" + executable.getName());
 				copySpec.include(appFile.getName() + "/Contents/MacOS/universalJavaApplicationStub");
-				copySpec.include(appFile.getName() + "/Contents/PlugIns/" + jreDirectoryName + "/Contents/Home/bin/*");
+				copySpec.include(appFile.getName() + "/Contents/PlugIns/" + jreDirectoryName + ".jre/Contents/Home/bin/*");
+				copySpec.include(appFile.getName() + "/Contents/PlugIns/" + jreDirectoryName + ".jre/Contents/Home/lib/jspawnhelper");
 				copySpec.include(appFile.getName() + "/Contents/Resources/scripts/*");
 				copySpec.filePermissions(p -> p.unix("755"));
 			});
