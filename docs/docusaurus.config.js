@@ -5,7 +5,13 @@ import {themes as prismThemes} from 'prism-react-renderer';
 const config = {
   title: 'JavaPackager',
   tagline: 'Package Java apps as native Windows, macOS and GNU/Linux apps and installers, with Maven or Gradle',
-  favicon: 'img/logo.png',
+  favicon: 'img/favicon.ico',
+
+  headTags: [
+    {tagName: 'link', attributes: {rel: 'icon', type: 'image/png', sizes: '32x32', href: '/JavaPackager/img/favicon-32x32.png'}},
+    {tagName: 'link', attributes: {rel: 'icon', type: 'image/png', sizes: '192x192', href: '/JavaPackager/img/icon-192.png'}},
+    {tagName: 'link', attributes: {rel: 'apple-touch-icon', sizes: '180x180', href: '/JavaPackager/img/apple-touch-icon.png'}},
+  ],
 
   url: 'https://javapackager.github.io',
   baseUrl: '/JavaPackager/',
@@ -48,6 +54,7 @@ const config = {
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
+      image: 'img/social-card.png',
       colorMode: {
         respectPrefersColorScheme: true,
       },
