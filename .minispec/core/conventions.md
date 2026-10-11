@@ -9,7 +9,7 @@
 - Platform-specific options go in `WindowsConfig`, `MacConfig` or `LinuxConfig`, not in `PackagerSettings`.
 - New artifacts are `ArtifactGenerator` subclasses. Platform and external-tool checks go in `skip()`, not in `doApply()`.
 - Template names and the variables they use are public API: users override them from `assetsDir`. Renaming a template or changing its variables is a breaking change.
-- In `.vtl` templates, Velocity reads bash `${name[@]}` as its own reference and fails: wrap such lines in `#[[ ... ]]#` (they must not contain Velocity references). `${#name[@]}` is fine.
+- In `.vtl` templates, Velocity reads bash `${name[@]}` as its own reference and fails: wrap such lines in `#[[ ... ]]#` (they must not contain Velocity references). `${#name[@]}` is fine. `./gradlew checkTemplates` (CI job `templates`) parses every template and checks the rendered startup scripts with `bash -n`; extend `src/templateCheck` when a shell template gains settings.
 - Dependency versions: Maven consumers get the version declared in `build.gradle` (nearest wins), Gradle the highest in the graph. Declare the version Gradle resolves, so both use the same jar (`check-deps` skill).
 - The published POM is edited in `pom.withXml`: Maven APIs (`maven-plugin-api`, `maven-core`) are `provided`, Maven plugins used as libraries (`mojo-executor`, `jdeb`) exclude `org.apache.maven:*`, and Gradle-only dependencies (the launch4j Gradle library) and repositories stay out. Gradle consumers use the `.module` file instead.
 - JDK-dependent options (`jlink`, `jdeps`) follow the packaging JDK's version (`JDKUtils.getJavaMajorVersion(File)`), not the Java running Maven or Gradle (`jdeps` still uses the running one). JDK 24+ may come without `jmods` (JEP 493).

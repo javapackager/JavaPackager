@@ -8,6 +8,24 @@ on:
   workflow_dispatch:
 
 jobs:
+  templates:
+    name: templates
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: 17
+          cache: gradle
+
+      # every Velocity template parses, and the startup scripts render to valid Bash
+      - name: Check templates
+        run: ./gradlew checkTemplates --no-daemon
+
   macos:
     name: ${{ matrix.os }} / ${{ matrix.tool }} / ${{ matrix.macStartup }}${{ matrix.admin && ' / admin' || '' }}
     runs-on: ${{ matrix.os }}

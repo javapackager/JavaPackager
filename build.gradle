@@ -269,3 +269,31 @@ tasks.register('updateWhyJavaLauncher', Download) {
 	dest file('src/main/resources/windows')
 	overwrite true
 }
+
+// checkTemplates: every Velocity template parses, and the shell templates render to valid Bash (src/templateCheck)
+sourceSets {
+	templateCheck
+}
+
+configurations {
+	templateCheckImplementation.extendsFrom implementation
+}
+
+compileTemplateCheckJava.options.encoding = 'UTF-8'
+compileTemplateCheckJava.options.compilerArgs << '-Xlint:-options'
+
+tasks.register('checkTemplates', JavaExec) {
+	group = 'verification'
+	description = 'Checks that every Velocity template parses and the shell templates render to valid Bash (Bash checks skipped on Windows).'
+	classpath = sourceSets.templateCheck.runtimeClasspath
+	mainClass = 'io.github.javapackager.TemplateCheck'
+	def templates = file('src/main/resources')
+	def output = layout.buildDirectory.dir('template-check')
+	inputs.dir(templates)
+	outputs.dir(output)
+	args templates.absolutePath, output.get().asFile.absolutePath
+}
+
+tasks.named('check') {
+	dependsOn 'checkTemplates'
+}

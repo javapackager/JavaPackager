@@ -16,6 +16,7 @@ Use the wrapper (`./gradlew` or `gradlew.bat` on Windows).
 | --- | --- |
 | `./gradlew build` | Compile, generate the Maven plugin descriptor and build the jars |
 | `./gradlew clean build` | Rebuild from scratch when the Maven plugin descriptor looks stale |
+| `./gradlew checkTemplates` | Check that every Velocity template parses and the startup scripts render to valid Bash (also run by `check`; Bash checks skipped on Windows) |
 | `./gradlew publishToMavenLocal` | Install the plugin into `~/.m2` to test it from a sample Maven/Gradle project |
 | `./gradlew updateNativeJavaApplicationStub` | Re-download the native macOS launchers (`nativeJavaApplicationStub*`) into `src/main/resources/mac` from a [javapackager/nativeJavaApplicationStub](https://github.com/javapackager/nativeJavaApplicationStub) release |
 | `./gradlew updateWhyJavaLauncher` | Re-download `JavaLauncher.exe` into `src/main/resources/windows` |
