@@ -8,6 +8,7 @@ Fix the bugs found while documenting 2.0.0 (#501, #502, #504 to #510), clear the
 
 - The docs review (2026-10-11) checked every property against the code and found the bugs below; each one has its own issue.
 - `dependabot-alerts.md` holds the Dependabot part; the template check is done (`./gradlew checkTemplates`, CI job `templates`).
+- 2026-10-11: smoke tests green (14/14, 0fb875d); `2.0.1-SNAPSHOT` build 1 published (20261011.135945); #501, #502, #504 to #510 commented "fixed in devel" and labelled `fixed`. Dependabot: PRs #492, #493, #495 to #498 applied (closed by Dependabot), #494 and #499 closed (would require Maven 3.10); alerts #1, #2, #4, #5 (Maven API, compile-only) and #27 (`braces`, no fix, docs build only) dismissed; the rest close when 2.0.1 reaches `main`.
 
 ## Changes
 
