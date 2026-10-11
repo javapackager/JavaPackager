@@ -19,8 +19,11 @@ Use the wrapper (`./gradlew` or `gradlew.bat` on Windows).
 | `./gradlew publishToMavenLocal` | Install the plugin into `~/.m2` to test it from a sample Maven/Gradle project |
 | `./gradlew updateNativeJavaApplicationStub` | Re-download the native macOS launchers (`nativeJavaApplicationStub*`) into `src/main/resources/mac` from a [javapackager/nativeJavaApplicationStub](https://github.com/javapackager/nativeJavaApplicationStub) release |
 | `./gradlew updateWhyJavaLauncher` | Re-download `JavaLauncher.exe` into `src/main/resources/windows` |
+| `cd docs && npm install && npm start` | Preview the user documentation site (Docusaurus, Node.js 20+); `npm run build` fails on broken links |
 
 There are no unit tests, so there is no way to run a single test. Changes are verified by the smoke tests in `.github/workflows/smoke-tests.yml`, which run on every push to `devel`/`main`: they package `samples/hello-world` (one sample with both `pom.xml` and `build.gradle`) with Maven on GNU/Linux, Windows and macOS (each `macStartup`) and with Gradle on each platform, and run `.github/scripts/check-*-app.sh`. Build with a JDK 17+ (a JRE can't compile).
+
+User documentation is a Docusaurus site: pages in `docs/content/`, sidebar in `docs/sidebars.js`. It is published to GitHub Pages (https://javapackager.github.io/JavaPackager/) by `.github/workflows/docs.yml` on push to `main`, so it documents the latest release. `README.md` is only a quick start that links to it.
 
 `compileJava` triggers `generatePluginDescriptor`, which runs an embedded Maven against the generated POM to produce `META-INF/maven/plugin.xml` from the `@Mojo`/`@Parameter` annotations.
 

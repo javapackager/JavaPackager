@@ -1,0 +1,30 @@
+/* JavaPackager docs theme: coffee tones taken from the default app icon */
+
+:root {
+  --ifm-color-primary: #8a5a2b;
+  --ifm-color-primary-dark: #7c5127;
+  --ifm-color-primary-darker: #754c25;
+  --ifm-color-primary-darkest: #603f1e;
+  --ifm-color-primary-light: #98632f;
+  --ifm-color-primary-lighter: #9f6831;
+  --ifm-color-primary-lightest: #b47a3f;
+  --ifm-code-font-size: 95%;
+  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
+}
+
+[data-theme='dark'] {
+  --ifm-color-primary: #d9a066;
+  --ifm-color-primary-dark: #d38f4b;
+  --ifm-color-primary-darker: #d0873e;
+  --ifm-color-primary-darkest: #b06d2b;
+  --ifm-color-primary-light: #dfb181;
+  --ifm-color-primary-lighter: #e2b98e;
+  --ifm-color-primary-lightest: #ebcfb1;
+  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
+}
+
+/* wide reference tables scroll instead of squeezing the text */
+.markdown table {
+  display: block;
+  overflow-x: auto;
+}

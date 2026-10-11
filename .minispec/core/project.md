@@ -15,7 +15,7 @@ JavaPackager is a hybrid Maven/Gradle plugin, published as a single artifact (`i
 ## For whom
 
 - Java developers who want to distribute desktop apps without chaining several plugins.
-- Users configure it through `pom.xml` (goal `package`) or a Gradle `PackageTask`; see `README.md` and `docs/`.
+- Users configure it through `pom.xml` (goal `package`) or a Gradle `PackageTask`; see the docs site (`docs/content/`, published at https://javapackager.github.io/JavaPackager/).
 
 ## Goal
 
