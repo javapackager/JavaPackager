@@ -1,9 +1,9 @@
 **How to test `{{VERSION}}`**
 
 > [!IMPORTANT]
-> Since 2.0.0 the `groupId`, the Gradle plugin id and the Java packages are `io.github.javapackager` (see the [README in `devel`](https://github.com/javapackager/JavaPackager/blob/devel/README.md)). On macOS, `macStartup` defaults to `UNIVERSAL`.
+> Since 2.0.0 the `groupId`, the Gradle plugin id and the Java packages are `io.github.javapackager` (see [Upgrading to 2.0](https://javapackager.github.io/JavaPackager/getting-started/upgrading)).
 
-Maven, add the snapshots repository and use the new coordinates:
+Maven, add the snapshots repository and use the snapshot version:
 
 ```xml
 <pluginRepositories>
@@ -23,23 +23,23 @@ Maven, add the snapshots repository and use the new coordinates:
 </plugin>
 ```
 
-Gradle:
+Gradle, add the snapshots repository in `settings.gradle`:
 
 ```groovy
-buildscript {
+pluginManagement {
     repositories {
         maven { url = 'https://central.sonatype.com/repository/maven-snapshots/' }
-        mavenCentral()
         gradlePluginPortal()
     }
-    dependencies {
-        classpath 'io.github.javapackager:javapackager:{{VERSION}}'
-    }
-}
-
-apply plugin: 'io.github.javapackager'
-
-task packageMyApp(type: io.github.javapackager.gradle.PackageTask, dependsOn: build) {
-    [...]
 }
 ```
+
+and use the snapshot version in `build.gradle`:
+
+```groovy
+plugins {
+    id 'io.github.javapackager' version '{{VERSION}}'
+}
+```
+
+See [Snapshot versions](https://javapackager.github.io/JavaPackager/guides/snapshots) for more.
