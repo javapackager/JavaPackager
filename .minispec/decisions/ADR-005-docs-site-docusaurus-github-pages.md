@@ -14,7 +14,9 @@ The user documentation is a Docusaurus site in `docs/` (pages in `docs/content/`
 
 ## Consequences
 
-- Docs are changed in `devel` with the code, and reach the site when `devel` is merged into `main` (a fix to the docs alone can be merged earlier).
+- Which branch a docs change goes to:
+  - It documents something not released yet (a new property, a fix in `devel`): commit it in `devel` with the code; it reaches the site when `devel` is merged into `main` at the next release.
+  - It applies to the released version (a correction, an example, the apps list): commit it in `main`, which deploys the site, then merge `main` into `devel`. Never merge `devel` into `main` just for docs: it would bring the `-SNAPSHOT` version and unreleased code.
 - `.github/workflows/docs.yml` builds the site on `devel` and pull requests (broken links fail the build) and deploys it from `main`.
 - A new property or behaviour is documented in `docs/content/` (conventions), checked against the code, with Maven and Gradle syntax.
 - The site documents only the latest release; users of older versions rely on the release notes.
