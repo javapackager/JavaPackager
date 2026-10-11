@@ -4,6 +4,8 @@ sidebar_label: Introduction
 title: JavaPackager
 ---
 
+<img src={require('/img/logo.png').default} alt="JavaPackager logo" className="intro-logo" />
+
 JavaPackager is a hybrid plugin for **Maven** and **Gradle** that packages Java applications as native Windows, macOS and GNU/Linux executables, and generates installers for them.
 
 With a single plugin and a few lines of configuration you get:

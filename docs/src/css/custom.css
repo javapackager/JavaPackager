@@ -1,25 +1,25 @@
-/* JavaPackager docs theme: coffee tones taken from the default app icon */
+/* JavaPackager docs theme: the orange of the logo's box (darker in light mode, so links are readable on white) */
 
 :root {
-  --ifm-color-primary: #8a5a2b;
-  --ifm-color-primary-dark: #7c5127;
-  --ifm-color-primary-darker: #754c25;
-  --ifm-color-primary-darkest: #603f1e;
-  --ifm-color-primary-light: #98632f;
-  --ifm-color-primary-lighter: #9f6831;
-  --ifm-color-primary-lightest: #b47a3f;
+  --ifm-color-primary: #b55d00;
+  --ifm-color-primary-dark: #a35400;
+  --ifm-color-primary-darker: #9a4f00;
+  --ifm-color-primary-darkest: #7f4100;
+  --ifm-color-primary-light: #c76600;
+  --ifm-color-primary-lighter: #d06b00;
+  --ifm-color-primary-lightest: #ec7a00;
   --ifm-code-font-size: 95%;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
 }
 
 [data-theme='dark'] {
-  --ifm-color-primary: #d9a066;
-  --ifm-color-primary-dark: #d38f4b;
-  --ifm-color-primary-darker: #d0873e;
-  --ifm-color-primary-darkest: #b06d2b;
-  --ifm-color-primary-light: #dfb181;
-  --ifm-color-primary-lighter: #e2b98e;
-  --ifm-color-primary-lightest: #ebcfb1;
+  --ifm-color-primary: #f0a818;
+  --ifm-color-primary-dark: #e09a0f;
+  --ifm-color-primary-darker: #d4920e;
+  --ifm-color-primary-darkest: #ae780b;
+  --ifm-color-primary-light: #f2b235;
+  --ifm-color-primary-lighter: #f3b743;
+  --ifm-color-primary-lightest: #f5c66b;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
 }
 
@@ -27,4 +27,19 @@
 .markdown table {
   display: block;
   overflow-x: auto;
+}
+
+/* logo on the introduction page */
+.intro-logo {
+  float: right;
+  width: 160px;
+  margin: 0 0 1rem 1.5rem;
+}
+
+@media (max-width: 600px) {
+  .intro-logo {
+    float: none;
+    display: block;
+    margin: 0 auto 1rem;
+  }
 }

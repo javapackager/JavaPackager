@@ -1,8 +1,14 @@
-# JavaPackager
+<p align="center">
+  <img src="docs/static/img/logo.png" alt="JavaPackager logo" width="160">
+</p>
 
-[![Maven Central](https://img.shields.io/maven-central/v/io.github.javapackager/javapackager)](https://central.sonatype.com/artifact/io.github.javapackager/javapackager)
-[![GPL-3.0](https://img.shields.io/badge/license-GPL--3.0-%250778B9.svg)](https://www.gnu.org/licenses/gpl-3.0.html)
-[![Docs](https://img.shields.io/badge/docs-javapackager.github.io-8a5a2b)](https://javapackager.github.io/JavaPackager/)
+<h1 align="center">JavaPackager</h1>
+
+<p align="center">
+  <a href="https://central.sonatype.com/artifact/io.github.javapackager/javapackager"><img src="https://img.shields.io/maven-central/v/io.github.javapackager/javapackager" alt="Maven Central"></a>
+  <a href="https://www.gnu.org/licenses/gpl-3.0.html"><img src="https://img.shields.io/badge/license-GPL--3.0-%250778B9.svg" alt="GPL-3.0"></a>
+  <a href="https://javapackager.github.io/JavaPackager/"><img src="https://img.shields.io/badge/docs-javapackager.github.io-b55d00" alt="Docs"></a>
+</p>
 
 JavaPackager is a hybrid plugin for **Maven** and **Gradle** that packages Java applications as native Windows, macOS and GNU/Linux executables, and generates installers for them: Inno Setup, MSI, DMG, PKG, DEB, RPM and AppImage, with an optional customized JRE.
 
