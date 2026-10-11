@@ -65,10 +65,16 @@ JavaPackager has been maintained for many years, but its maintainers have little
 
 ## Apps packaged with JavaPackager
 
-- [AstroImageJ](http://astroimagej.com/)
-- [Astro Pixel Processor](https://www.astropixelprocessor.com/)
-- [GistFX](https://github.com/RedmondSims/GistFX)
-- [Spektar Design Lab](https://spektar.io/)
+| App | Description | Stars |
+| --- | --- | --- |
+| [WePush](https://github.com/rememberber/WePush) | Bulk message sender: WeChat templates, SMS, email and more | ![GitHub stars](https://img.shields.io/github/stars/rememberber/WePush?style=flat&label=%E2%98%85) |
+| [MooTool](https://github.com/rememberber/MooTool) | Handy tool set for developers | ![GitHub stars](https://img.shields.io/github/stars/rememberber/MooTool?style=flat&label=%E2%98%85) |
+| [bilibili-backup](https://github.com/hzhilong/bilibili-backup) | Backup and restore of Bilibili accounts | ![GitHub stars](https://img.shields.io/github/stars/hzhilong/bilibili-backup?style=flat&label=%E2%98%85) |
+| [RedisFX](https://github.com/tanhuang2016/RedisFX) | Lightweight Redis GUI client (JavaFX) | ![GitHub stars](https://img.shields.io/github/stars/tanhuang2016/RedisFX?style=flat&label=%E2%98%85) |
+| [RedisFront](https://github.com/dromara/RedisFront) | Cross-platform Redis client (Swing) | ![GitHub stars](https://img.shields.io/github/stars/dromara/RedisFront?style=flat&label=%E2%98%85) |
+| [MooInfo](https://github.com/rememberber/MooInfo) | System and hardware information viewer | ![GitHub stars](https://img.shields.io/github/stars/rememberber/MooInfo?style=flat&label=%E2%98%85) |
+
+See [all the apps](https://javapackager.github.io/JavaPackager/#apps-packaged-with-javapackager) packaged with JavaPackager.
 
 ## Contributing
 
