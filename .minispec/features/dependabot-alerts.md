@@ -10,6 +10,7 @@ Clear the Dependabot alerts on `main`: fix the ones that reach users, and fix or
 - Packages: Bouncy Castle (`bcprov`/`bcpkix` `jdk18on`, `bcprov`/`bcpg` `jdk15on`, 18 alerts), `maven-core` < 3.8.1, `maven-shared-utils` < 3.3.3, `aircompressor` < 2.0.3, `guava` < 32, `log4j-api` < 2.25.5.
 - Users get only what the published POM (Maven) or `.module` (Gradle) declares; the `mavenEmbedder` configuration (plugin descriptor generation) and the signing plugin never reach them.
 - Constraints: Java 8 bytecode, minimum Maven version set by `maven-plugin-api` 3.6.0, published POM shaping in `pom.withXml` (conventions).
+- 7 more alerts from the docs site's npm dependencies (`docs/package-lock.json`, transitive from Docusaurus): `tinypool`, `serialize-javascript`, `braces`, `postcss-selector-parser`, `uuid`. Build-only: the site is static HTML.
 - Follow-ups left from the 2.0.0 dependency updates: `jsign-core` 6 → 7 (check Java 8 and API), `com.gradle.plugin-publish` 2.x, Gradle wrapper 9 (needs Java 17 to run Gradle), `redline` 1.2.10 (unmaintained, look for a replacement).
 
 ## Changes
@@ -18,6 +19,7 @@ Clear the Dependabot alerts on `main`: fix the ones that reach users, and fix or
 - Published ones: update the direct dependency, or add a constraint, and check Java 8 bytecode (`check-deps` skill).
 - Build-only ones: update when cheap (e.g. the embedded Maven), otherwise dismiss with the reason.
 - Prefer `*-jdk18on` over the discontinued `*-jdk15on` Bouncy Castle artifacts.
+- Docs site: update Docusaurus, or force fixed versions with `overrides` in `docs/package.json` (then `npm run build`); dismiss the ones with no fix.
 
 ## Acceptance
 
