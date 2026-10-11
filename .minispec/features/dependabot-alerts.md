@@ -21,6 +21,14 @@ Clear the Dependabot alerts on `main`: fix the ones that reach users, and fix or
 - Prefer `*-jdk18on` over the discontinued `*-jdk15on` Bouncy Castle artifacts.
 - Docs site: update Docusaurus, or force fixed versions with `overrides` in `docs/package.json` (then `npm run build`); dismiss the ones with no fix.
 
+## Done (2026-10-11)
+
+- Bouncy Castle `jdk18on` 1.86 (`bcprov`, `bcpkix`, `bcutil`) and `log4j-api` 2.25.5 declared directly (Java 8 bytecode checked); redline's `bcpg`/`bcprov-jdk15on` excluded and replaced by `bcpg-jdk18on` 1.86; `aircompressor` excluded from jdeb.
+- `maven-plugin-api` and `maven-core` are `compileOnly` (added as `provided` in `pom.withXml`), and `org.apache.maven` is excluded from mojo-executor and jdeb in Gradle: Gradle consumers no longer get Maven, Guava or `maven-shared-utils`.
+- Embedded Maven for the descriptor: 3.10.0, resolver 2.0.24, slf4j-simple 2.0.20; plugin-publish 2.2.1; GitHub Actions `checkout` v7, `setup-java` v6, `upload-artifact` v6 (Dependabot PRs #492, #493, #495 to #498). The descriptor is the same as 2.0.0's (51 parameters, Maven 3.6.0, Java 8).
+- Docs site: `overrides` for `tinypool`, `serialize-javascript`, `postcss-selector-parser` and `uuid`; the site builds.
+- Left: dismiss the alerts with no fix or not shipped (`maven-core` < 3.8.1, compileOnly; `braces`, already the latest), and close #494/#499 (`maven-plugin-api`/`maven-core` 3.10 would require Maven 3.10, `requiredMavenVersion` comes from it).
+
 ## Acceptance
 
 - No open alert for a dependency users download, or each remaining one dismissed with a reason in #500.

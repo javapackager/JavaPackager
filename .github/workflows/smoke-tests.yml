@@ -14,9 +14,9 @@ jobs:
     timeout-minutes: 10
 
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
 
-      - uses: actions/setup-java@v5
+      - uses: actions/setup-java@v6
         with:
           distribution: temurin
           java-version: 17
@@ -52,9 +52,9 @@ jobs:
       M2_REPO: ${{ github.workspace }}/build/m2-smoke
 
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
 
-      - uses: actions/setup-java@v5
+      - uses: actions/setup-java@v6
         with:
           distribution: temurin
           java-version: 17
@@ -90,7 +90,7 @@ jobs:
 
       - name: Upload artifacts
         if: always()
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: hello-world-${{ matrix.os }}-${{ matrix.tool }}-${{ matrix.macStartup }}${{ matrix.admin && '-admin' || '' }}
           path: |
@@ -119,9 +119,9 @@ jobs:
       M2_REPO: ${{ github.workspace }}/build/m2-smoke
 
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
 
-      - uses: actions/setup-java@v5
+      - uses: actions/setup-java@v6
         with:
           distribution: temurin
           java-version: 17
@@ -139,7 +139,7 @@ jobs:
 
       - name: Set up packaging JDK ${{ matrix.java }}
         if: matrix.java
-        uses: actions/setup-java@v5
+        uses: actions/setup-java@v6
         with:
           distribution: temurin
           java-version: ${{ matrix.java }}
@@ -159,7 +159,7 @@ jobs:
 
       - name: Upload artifacts
         if: always()
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: hello-world-ubuntu-latest-${{ matrix.tool }}${{ matrix.java && format('-jdk{0}', matrix.java) || '' }}
           path: |
@@ -186,9 +186,9 @@ jobs:
         shell: bash
 
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
 
-      - uses: actions/setup-java@v5
+      - uses: actions/setup-java@v6
         with:
           distribution: temurin
           java-version: 17
@@ -230,7 +230,7 @@ jobs:
 
       - name: Upload artifacts
         if: always()
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: hello-world-windows-latest-${{ matrix.tool }}
           path: |
