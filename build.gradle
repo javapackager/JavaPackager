@@ -60,7 +60,7 @@ dependencies {
 		// only used by plexus-archiver for formats DEB packages don't use (CVE-2025-67721, #500)
 		exclude group: 'io.airlift', module: 'aircompressor'
 	}
-	implementation 'net.jsign:jsign-core:6.0'
+	implementation 'net.jsign:jsign-core:7.6'
 	implementation('org.redline-rpm:redline:1.2.10') {
 		// the discontinued jdk15on Bouncy Castle has unfixed CVEs and duplicates jsign's jdk18on classes (#500)
 		exclude group: 'org.bouncycastle', module: 'bcpg-jdk15on'
