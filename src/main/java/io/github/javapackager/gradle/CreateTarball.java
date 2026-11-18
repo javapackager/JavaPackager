@@ -63,11 +63,13 @@ public class CreateTarball extends ArtifactGenerator<Packager> {
 				copySpec.include(appFolder.getName() + "/**");
 				copySpec.exclude(appFolder.getName() + "/" + executable.getName());
 				copySpec.exclude(appFolder.getName() + "/" + jreDirectoryName + "/bin/*");
+				copySpec.exclude(appFolder.getName() + "/" + jreDirectoryName + "/lib/jspawnhelper");
 				copySpec.exclude(appFolder.getName() + "/scripts/*");
 			});
 			tarTask.from(appFolder.getParentFile(), copySpec -> {
 				copySpec.include(appFolder.getName() + "/" + executable.getName());
 				copySpec.include(appFolder.getName() + "/" + jreDirectoryName + "/bin/*");
+				copySpec.include(appFolder.getName() + "/" + jreDirectoryName + "/lib/jspawnhelper");
 				copySpec.include(appFolder.getName() + "/scripts/*");
 				copySpec.filePermissions(p -> p.unix("755"));
 			});
