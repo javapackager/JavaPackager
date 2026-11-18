@@ -33,7 +33,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ macos-14, macos-15 ]
+        os: [ macos-15, macos-26 ]
         macStartup: [ UNIVERSAL, ARM64, SCRIPT ]
         admin: [ false ]
         tool: [ maven ]
