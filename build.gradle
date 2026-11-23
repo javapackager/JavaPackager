@@ -72,7 +72,7 @@ dependencies {
 	implementation 'org.bouncycastle:bcprov-jdk18on:1.86' // jsign
 	implementation 'org.bouncycastle:bcpkix-jdk18on:1.86' // jsign
 	implementation 'org.bouncycastle:bcutil-jdk18on:1.86' // jsign
-	implementation 'org.apache.logging.log4j:log4j-api:2.25.5' // jsign (Apache POI)
+	implementation 'org.apache.logging.log4j:log4j-api:2.26.1' // jsign (Apache POI)
 	implementation 'edu.sc.seis.launch4j:launch4j:4.0.0'
 
 	compileOnly 'org.apache.maven.plugin-tools:maven-plugin-annotations:3.16.0'
